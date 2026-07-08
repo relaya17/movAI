@@ -13,7 +13,7 @@ export interface MusicGenerationResult {
   outputUrl: string;
   durationSeconds: number;
   apiCostUsd: number;
-  title?: string;
+  title?: string | undefined;
   metadata: Record<string, unknown>;
 }
 
