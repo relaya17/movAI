@@ -11,7 +11,8 @@ export default [
       "**/coverage/**",
       "**/*.config.js",
       "**/*.config.mjs",
-      "**/*.config.ts"
+      "**/*.config.ts",
+      "apps/web/scripts/**"
     ]
   },
   ...baseConfig

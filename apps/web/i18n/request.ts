@@ -17,7 +17,8 @@ export default getRequestConfig(async () => {
   const cookieLocale = cookieStore.get(LOCALE_COOKIE_NAME)?.value;
   const locale = cookieLocale && isSupportedLocale(cookieLocale) ? cookieLocale : DEFAULT_LOCALE;
 
-  const messages = (await import(`../messages/${locale}.json`)).default as AbstractIntlMessages;
+  const imported = (await import(`../messages/${locale}.json`)) as { default: AbstractIntlMessages };
+  const messages = imported.default;
 
   return { locale, messages };
 });
