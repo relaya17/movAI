@@ -1,0 +1,237 @@
+{
+  "nav": {
+    "discover": "Обзор",
+    "studio": "AI Студия ✨",
+    "upload": "Загрузить",
+    "profile": "Мой профиль",
+    "buyCredits": "Купить кредиты",
+    "giftWallet": "Кошелёк подарков",
+    "signOut": "Выйти",
+    "menuLabel": "Меню навигации"
+  },
+  "footer": {
+    "tagline": "Платформа для поиска контента на основе ИИ. Фильмы, стендап, музыка и вокал.",
+    "legalHeading": "Правовая информация",
+    "legal": {
+      "terms": "Условия использования",
+      "privacy": "Политика конфиденциальности",
+      "security": "Безопасность",
+      "cookies": "Политика cookie",
+      "dmca": "DMCA",
+      "accessibility": "Доступность"
+    },
+    "companyHeading": "Компания",
+    "company": {
+      "about": "О нас",
+      "contact": "Связаться с нами",
+      "creators": "Для авторов",
+      "help": "Центр помощи"
+    },
+    "connectHeading": "Мы в сети",
+    "comingSoon": "Скоро",
+    "rights": "Все права защищены."
+  },
+  "auth": {
+    "signIn": {
+      "titlePrefix": "Вход в ",
+      "subtitle": "Сохраняйте историю просмотров, персональные рекомендации и избранное.",
+      "noAccount": "Нет аккаунта?",
+      "signUpLink": "Регистрация",
+      "or": "или",
+      "continueWithGoogle": "Продолжить с Google",
+      "continueWithGithub": "Продолжить с GitHub",
+      "consentPrefix": "Входя, вы соглашаетесь с",
+      "termsLink": "Условиями использования",
+      "and": "и",
+      "privacyLink": "Политикой конфиденциальности",
+      "submit": "Войти",
+      "submitting": "Минутку..."
+    },
+    "signUp": {
+      "titlePrefix": "Регистрация в ",
+      "subtitle": "Минимум 8 символов для пароля. Сохраняйте историю просмотров, персональные рекомендации и избранное.",
+      "haveAccount": "Уже есть аккаунт?",
+      "signInLink": "Войти",
+      "consentPrefix": "Регистрируясь, вы соглашаетесь с",
+      "termsLink": "Условиями использования",
+      "and": "и",
+      "privacyLink": "Политикой конфиденциальности",
+      "firstName": "Имя",
+      "lastName": "Фамилия",
+      "username": "Имя пользователя",
+      "usernameHint": "Только английские буквы, цифры и нижнее подчёркивание",
+      "dateOfBirth": "Дата рождения",
+      "email": "Эл. почта",
+      "password": "Пароль",
+      "submit": "Зарегистрироваться",
+      "submitting": "Минутку..."
+    },
+    "credentialsForm": {
+      "email": "Эл. почта",
+      "password": "Пароль"
+    }
+  },
+  "gifts": {
+    "sendGift": "Отправить подарок",
+    "chooseGift": "Выберите подарок для отправки",
+    "creatorShare": "💰 50% стоимости подарка получает автор",
+    "genericError": "Ошибка при отправке подарка",
+    "epicSentMessage": "🎉 Отправлен впечатляющий подарок! 🎉",
+    "sentMessage": "Успешно отправлено!"
+  },
+  "contentTypes": {
+    "standup": "Стендап",
+    "music": "Музыка",
+    "singing": "Вокал"
+  },
+  "browse": {
+    "categoryPills": {
+      "movies": "Фильмы",
+      "showAll": "Показать всё"
+    },
+    "communityCreations": "Творчество сообщества"
+  },
+  "upload": {
+    "pageHeadingPrefix": "Загрузить контент в ",
+    "pageSubtitle": "Делитесь своим творчеством и получайте подарки от сообщества",
+    "contentTypeLabel": "Тип контента",
+    "titleLabel": "Название",
+    "titlePlaceholder": "Дайте название своему произведению",
+    "descriptionLabel": "Описание",
+    "descriptionPlaceholder": "Расскажите о своём произведении...",
+    "fileLabel": "Видеофайл",
+    "dragPrompt": "Перетащите файл сюда или нажмите для выбора",
+    "fileFormats": "MP4, MOV, AVI",
+    "giftsHeading": "Получение подарков",
+    "giftsDescription": "Зрители смогут отправлять вам подарки в знак признательности за ваш контент.",
+    "phaseCreating": "Создание записи...",
+    "phaseUploading": "Загрузка файла... {progress}%",
+    "phaseFinalizing": "Почти готово...",
+    "submit": "Загрузить",
+    "submitting": "Загрузка...",
+    "errors": {
+      "selectContentType": "Выберите тип контента",
+      "titleRequired": "Название обязательно",
+      "selectFile": "Выберите видеофайл для загрузки",
+      "createFailed": "Не удалось создать загрузку",
+      "authError": "Ошибка получения разрешения на загрузку",
+      "cloudinaryNoUrl": "Cloudinary не вернул URL файла",
+      "invalidResponse": "Неверный ответ от сервера",
+      "uploadFailedStatus": "Загрузка не удалась ({status})",
+      "networkError": "Ошибка сети при загрузке",
+      "genericUploadError": "Что-то пошло не так при загрузке"
+    }
+  },
+  "studio": {
+    "pageHeading": "Студия",
+    "pageSubtitle": "Создавайте оригинальный контент с помощью искусственного интеллекта",
+    "usage": {
+      "creditBalance": "Баланс кредитов",
+      "buyMore": "Купить ещё кредитов"
+    },
+    "tabs": {
+      "video": { "label": "Видео", "description": "Создать видео из текста или изображения" },
+      "music": { "label": "Музыка", "description": "Создать оригинальную музыку" },
+      "voice": { "label": "Голос и пение", "description": "Создать озвучку или пение" }
+    },
+    "video": {
+      "promptLabel": "Опишите видео, которое хотите создать",
+      "promptPlaceholder": "Например: городская улица ночью под дождём, мерцающие неоновые огни, чёрный спортивный автомобиль медленно проезжает мимо...",
+      "promptHint": "Совет: чем подробнее описание, тем лучше результат",
+      "styleLabel": "Стиль",
+      "styles": { "cinematic": "Кинематографичный", "anime": "Аниме", "realistic": "Реалистичный", "3d": "3D", "cartoon": "Мультяшный", "noir": "Нуар" },
+      "durationLabel": "Длительность",
+      "durations": { "5": "5 секунд", "15": "15 секунд", "30": "30 секунд", "60": "60 секунд" },
+      "proLabel": "PRO",
+      "baseImageLabel": "Базовое изображение (необязательно)",
+      "baseImagePrompt": "Перетащите изображение сюда или нажмите для загрузки",
+      "generating": "Создание видео... (это может занять около минуты)",
+      "generate": "✨ Создать видео",
+      "resultPlaceholder": "Ваше видео появится здесь",
+      "resultHint": "Ваши последние результаты сохраняются в галерее"
+    },
+    "music": {
+      "promptLabel": "Опишите музыку, которую хотите создать",
+      "promptPlaceholder": "Например: лёгкая поп-песня с акустической гитарой, бодрый темп, подходит для поездки на машине...",
+      "genreLabel": "Жанр",
+      "genres": { "pop": "Поп", "rock": "Рок", "electronic": "Электроника", "jazz": "Джаз", "classical": "Классика", "hiphop": "Хип-хоп", "ambient": "Эмбиент", "cinematic": "Кинематографичная" },
+      "moodLabel": "Настроение",
+      "moods": { "happy": "Радостное", "sad": "Грустное", "energetic": "Энергичное", "calm": "Спокойное", "dramatic": "Драматичное", "romantic": "Романтичное" },
+      "addLyricsHeading": "Добавить пение",
+      "addLyricsDescription": "Создать песню со словами и вокалом",
+      "lyricsLabel": "Текст песни (необязательно - если пусто, ИИ напишет сам)",
+      "lyricsPlaceholder": "Напишите текст песни здесь или оставьте пустым для автоматического написания...",
+      "generating": "Создание музыки...",
+      "generate": "🎵 Создать музыку",
+      "resultPlaceholder": "Ваша музыка появится здесь"
+    },
+    "voice": {
+      "typeLabel": "Тип голоса",
+      "types": {
+        "narrator": { "label": "Диктор", "description": "Профессиональный голос для озвучки" },
+        "singer_male": { "label": "Певец", "description": "Мужской голос для пения" },
+        "singer_female": { "label": "Певица", "description": "Женский голос для пения" },
+        "character": { "label": "Персонаж", "description": "Уникальные голоса для персонажей" }
+      },
+      "languageLabel": "Язык",
+      "languages": { "he": "Иврит", "en": "Английский", "ar": "Арабский", "ru": "Русский", "fr": "Французский", "es": "Испанский" },
+      "lyricsTextLabel": "Текст песни",
+      "narrationTextLabel": "Текст озвучки",
+      "lyricsPlaceholder": "Напишите текст песни здесь...",
+      "narrationPlaceholder": "Напишите текст для озвучки здесь...",
+      "charCount": "{count} / 500 символов (бесплатно) • до 5000 в Pro",
+      "cloningHeading": "Клонирование голоса",
+      "cloningDescription": "Хотите использовать свой голос? Перейдите на Pro и загрузите образец голоса для создания персонального голоса.",
+      "generating": "Создание голоса...",
+      "generate": "🎤 Создать голос",
+      "resultPlaceholder": "Ваша запись появится здесь"
+    }
+  },
+  "wallet": {
+    "pageHeadingPrefix": "Кошелёк",
+    "pageHeadingSuffix": "подарков",
+    "pageSubtitle": "Смотрите полученные подарки и историю кредитов",
+    "currentBalance": "Текущий баланс",
+    "credits": "кредитов",
+    "addCredits": "Пополнить",
+    "stats": {
+      "purchased": "Куплено",
+      "used": "Использовано",
+      "receivedFromGifts": "Получено с подарков",
+      "giftsSent": "Подарков отправлено"
+    },
+    "recentGifts": "Последние подарки",
+    "forLabel": "За",
+    "transactionHistory": "История операций",
+    "noTransactions": "Пока нет операций",
+    "balanceLabel": "Баланс"
+  },
+  "pricing": {
+    "pageHeadingPrefix": "Купить",
+    "pageHeadingSuffix": "кредиты",
+    "pageSubtitle": "Используйте кредиты для создания видео, музыки и голоса с помощью ИИ",
+    "paymentSuccess": "Оплата прошла успешно! Кредиты добавлены на ваш счёт.",
+    "paymentCanceled": "Оплата отменена. Вы можете попробовать снова в любое время.",
+    "genericError": "Ошибка при создании страницы оплаты",
+    "currentBalance": "Ваш текущий баланс",
+    "credits": "кредитов",
+    "mostPopular": "Самый популярный",
+    "bonusCredits": "+{count} бонусных кредитов!",
+    "estVideos": "~{count} видео по 30 секунд",
+    "estMusic": "~{count} музыкальных композиций",
+    "estNarrations": "~{count} озвучек (1000 символов)",
+    "processing": "Обработка...",
+    "buyNow": "Купить сейчас",
+    "costHeading": "Сколько стоит каждое создание?",
+    "costVideo": "Видео",
+    "costVideoPrice": "12 кредитов / 30 секунд",
+    "costMusic": "Музыка",
+    "costMusicPrice": "2 кредита / создание",
+    "costNarration": "Озвучка",
+    "costNarrationPrice": "1 кредит / 1000 символов",
+    "securePayment": "Безопасная оплата через Stripe"
+  },
+  "language": {
+    "label": "Язык"
+  }
+}

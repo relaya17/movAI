@@ -1,0 +1,237 @@
+{
+  "nav": {
+    "discover": "اكتشف",
+    "studio": "استوديو AI ✨",
+    "upload": "رفع",
+    "profile": "ملفي الشخصي",
+    "buyCredits": "شراء أرصدة",
+    "giftWallet": "محفظة الهدايا",
+    "signOut": "تسجيل الخروج",
+    "menuLabel": "قائمة التنقل"
+  },
+  "footer": {
+    "tagline": "منصة اكتشاف محتوى مدعومة بالذكاء الاصطناعي. اكتشف أفلامًا وستاند أب وموسيقى وغناء.",
+    "legalHeading": "معلومات قانونية",
+    "legal": {
+      "terms": "شروط الاستخدام",
+      "privacy": "سياسة الخصوصية",
+      "security": "أمان المعلومات",
+      "cookies": "سياسة ملفات تعريف الارتباط",
+      "dmca": "DMCA",
+      "accessibility": "إمكانية الوصول"
+    },
+    "companyHeading": "الشركة",
+    "company": {
+      "about": "من نحن",
+      "contact": "تواصل معنا",
+      "creators": "للمبدعين",
+      "help": "مركز المساعدة"
+    },
+    "connectHeading": "تواصل معنا",
+    "comingSoon": "قريبًا",
+    "rights": "جميع الحقوق محفوظة."
+  },
+  "auth": {
+    "signIn": {
+      "titlePrefix": "تسجيل الدخول إلى ",
+      "subtitle": "احفظ سجل المشاهدة والتوصيات الشخصية والمفضلة.",
+      "noAccount": "ليس لديك حساب؟",
+      "signUpLink": "إنشاء حساب",
+      "or": "أو",
+      "continueWithGoogle": "المتابعة باستخدام Google",
+      "continueWithGithub": "المتابعة باستخدام GitHub",
+      "consentPrefix": "بتسجيل الدخول، فإنك توافق على",
+      "termsLink": "شروط الاستخدام",
+      "and": "و",
+      "privacyLink": "سياسة الخصوصية",
+      "submit": "تسجيل الدخول",
+      "submitting": "لحظة..."
+    },
+    "signUp": {
+      "titlePrefix": "إنشاء حساب في ",
+      "subtitle": "8 أحرف على الأقل لكلمة المرور. احفظ سجل المشاهدة والتوصيات الشخصية والمفضلة.",
+      "haveAccount": "لديك حساب بالفعل؟",
+      "signInLink": "تسجيل الدخول",
+      "consentPrefix": "بإنشاء الحساب، فإنك توافق على",
+      "termsLink": "شروط الاستخدام",
+      "and": "و",
+      "privacyLink": "سياسة الخصوصية",
+      "firstName": "الاسم الأول",
+      "lastName": "اسم العائلة",
+      "username": "اسم المستخدم",
+      "usernameHint": "أحرف إنجليزية وأرقام وشرطة سفلية فقط",
+      "dateOfBirth": "تاريخ الميلاد",
+      "email": "البريد الإلكتروني",
+      "password": "كلمة المرور",
+      "submit": "إنشاء حساب",
+      "submitting": "لحظة..."
+    },
+    "credentialsForm": {
+      "email": "البريد الإلكتروني",
+      "password": "كلمة المرور"
+    }
+  },
+  "gifts": {
+    "sendGift": "إرسال هدية",
+    "chooseGift": "اختر هدية للإرسال",
+    "creatorShare": "💰 يحصل المبدع على 50% من قيمة الهدية",
+    "genericError": "خطأ في إرسال الهدية",
+    "epicSentMessage": "🎉 تم إرسال هدية رائعة! 🎉",
+    "sentMessage": "تم الإرسال بنجاح!"
+  },
+  "contentTypes": {
+    "standup": "ستاند أب",
+    "music": "موسيقى",
+    "singing": "غناء"
+  },
+  "browse": {
+    "categoryPills": {
+      "movies": "أفلام",
+      "showAll": "عرض الكل"
+    },
+    "communityCreations": "إبداعات المجتمع"
+  },
+  "upload": {
+    "pageHeadingPrefix": "رفع محتوى إلى ",
+    "pageSubtitle": "شارك إبداعاتك واحصل على هدايا من المجتمع",
+    "contentTypeLabel": "نوع المحتوى",
+    "titleLabel": "العنوان",
+    "titlePlaceholder": "أعط عملك اسمًا",
+    "descriptionLabel": "الوصف",
+    "descriptionPlaceholder": "أخبرنا عن عملك...",
+    "fileLabel": "ملف الفيديو",
+    "dragPrompt": "اسحب ملفًا هنا أو انقر للاختيار",
+    "fileFormats": "MP4, MOV, AVI",
+    "giftsHeading": "استلام الهدايا",
+    "giftsDescription": "سيتمكن المشاهدون من إرسال هدايا لك تقديرًا لمحتواك.",
+    "phaseCreating": "جارٍ إنشاء السجل...",
+    "phaseUploading": "جارٍ رفع الملف... {progress}%",
+    "phaseFinalizing": "على وشك الانتهاء...",
+    "submit": "رفع",
+    "submitting": "جارٍ الرفع...",
+    "errors": {
+      "selectContentType": "اختر نوع المحتوى",
+      "titleRequired": "العنوان مطلوب",
+      "selectFile": "اختر ملف فيديو للرفع",
+      "createFailed": "فشل إنشاء الرفع",
+      "authError": "خطأ في الحصول على إذن الرفع",
+      "cloudinaryNoUrl": "لم يُرجع Cloudinary رابط الملف",
+      "invalidResponse": "استجابة غير صالحة من الخادم",
+      "uploadFailedStatus": "فشل الرفع ({status})",
+      "networkError": "خطأ في الشبكة أثناء الرفع",
+      "genericUploadError": "حدث خطأ ما أثناء الرفع"
+    }
+  },
+  "studio": {
+    "pageHeading": "استوديو",
+    "pageSubtitle": "أنشئ محتوى أصليًا باستخدام الذكاء الاصطناعي",
+    "usage": {
+      "creditBalance": "رصيد الأرصدة",
+      "buyMore": "شراء المزيد من الأرصدة"
+    },
+    "tabs": {
+      "video": { "label": "فيديو", "description": "أنشئ فيديو من نص أو صورة" },
+      "music": { "label": "موسيقى", "description": "أنشئ موسيقى أصلية" },
+      "voice": { "label": "صوت وغناء", "description": "أنشئ تعليقًا صوتيًا أو غناءً" }
+    },
+    "video": {
+      "promptLabel": "صف الفيديو الذي تريد إنشاءه",
+      "promptPlaceholder": "مثال: شارع حضري ليلاً تحت المطر، أضواء نيون وامضة، سيارة رياضية سوداء تمر ببطء...",
+      "promptHint": "نصيحة: كلما كان الوصف أكثر تفصيلاً، كانت النتيجة أفضل",
+      "styleLabel": "النمط",
+      "styles": { "cinematic": "سينمائي", "anime": "أنمي", "realistic": "واقعي", "3d": "ثلاثي الأبعاد", "cartoon": "كرتوني", "noir": "نوار" },
+      "durationLabel": "المدة",
+      "durations": { "5": "5 ثوانٍ", "15": "15 ثانية", "30": "30 ثانية", "60": "60 ثانية" },
+      "proLabel": "PRO",
+      "baseImageLabel": "صورة أساسية (اختياري)",
+      "baseImagePrompt": "اسحب صورة هنا أو انقر للرفع",
+      "generating": "جارٍ إنشاء الفيديو... (قد يستغرق ذلك حوالي دقيقة)",
+      "generate": "✨ إنشاء فيديو",
+      "resultPlaceholder": "سيظهر الفيديو الخاص بك هنا",
+      "resultHint": "تُحفظ نتائجك الأخيرة في المعرض"
+    },
+    "music": {
+      "promptLabel": "صف الموسيقى التي تريد إنشاءها",
+      "promptPlaceholder": "مثال: أغنية بوب خفيفة بجيتار أكوستيك، إيقاع مفعم بالحيوية، مناسبة لرحلة على الطريق...",
+      "genreLabel": "النوع",
+      "genres": { "pop": "بوب", "rock": "روك", "electronic": "إلكترونية", "jazz": "جاز", "classical": "كلاسيكية", "hiphop": "هيب هوب", "ambient": "أمبيانت", "cinematic": "سينمائية" },
+      "moodLabel": "المزاج",
+      "moods": { "happy": "سعيد", "sad": "حزين", "energetic": "نشيط", "calm": "هادئ", "dramatic": "درامي", "romantic": "رومانسي" },
+      "addLyricsHeading": "إضافة غناء",
+      "addLyricsDescription": "أنشئ أغنية بكلمات وصوت",
+      "lyricsLabel": "الكلمات (اختياري - إذا تُركت فارغة، سيكتبها الذكاء الاصطناعي)",
+      "lyricsPlaceholder": "اكتب الكلمات هنا، أو اتركها فارغة للكتابة التلقائية...",
+      "generating": "جارٍ إنشاء الموسيقى...",
+      "generate": "🎵 إنشاء موسيقى",
+      "resultPlaceholder": "ستظهر موسيقاك هنا"
+    },
+    "voice": {
+      "typeLabel": "نوع الصوت",
+      "types": {
+        "narrator": { "label": "راوٍ", "description": "صوت احترافي للتعليق الصوتي" },
+        "singer_male": { "label": "مغنٍ", "description": "صوت رجالي للغناء" },
+        "singer_female": { "label": "مغنية", "description": "صوت نسائي للغناء" },
+        "character": { "label": "شخصية", "description": "أصوات فريدة للشخصيات" }
+      },
+      "languageLabel": "اللغة",
+      "languages": { "he": "العبرية", "en": "الإنجليزية", "ar": "العربية", "ru": "الروسية", "fr": "الفرنسية", "es": "الإسبانية" },
+      "lyricsTextLabel": "كلمات الأغنية",
+      "narrationTextLabel": "نص التعليق الصوتي",
+      "lyricsPlaceholder": "اكتب كلمات الأغنية هنا...",
+      "narrationPlaceholder": "اكتب نص التعليق الصوتي هنا...",
+      "charCount": "{count} / 500 حرف (مجاني) • حتى 5000 في Pro",
+      "cloningHeading": "استنساخ الصوت",
+      "cloningDescription": "تريد استخدام صوتك الخاص؟ قم بالترقية إلى Pro وارفع عينة صوتية لإنشاء صوت مخصص.",
+      "generating": "جارٍ إنشاء الصوت...",
+      "generate": "🎤 إنشاء صوت",
+      "resultPlaceholder": "ستظهر تسجيلاتك هنا"
+    }
+  },
+  "wallet": {
+    "pageHeadingPrefix": "محفظة",
+    "pageHeadingSuffix": "الهدايا",
+    "pageSubtitle": "شاهد الهدايا التي تلقيتها وسجل أرصدتك",
+    "currentBalance": "الرصيد الحالي",
+    "credits": "رصيد",
+    "addCredits": "إضافة رصيد",
+    "stats": {
+      "purchased": "تم شراؤه",
+      "used": "تم استخدامه",
+      "receivedFromGifts": "مستلم من الهدايا",
+      "giftsSent": "هدايا مرسلة"
+    },
+    "recentGifts": "أحدث الهدايا",
+    "forLabel": "مقابل",
+    "transactionHistory": "سجل العمليات",
+    "noTransactions": "لا توجد عمليات بعد",
+    "balanceLabel": "الرصيد"
+  },
+  "pricing": {
+    "pageHeadingPrefix": "شراء",
+    "pageHeadingSuffix": "أرصدة",
+    "pageSubtitle": "استخدم الأرصدة لإنشاء فيديو وموسيقى وصوت باستخدام الذكاء الاصطناعي",
+    "paymentSuccess": "تم الدفع بنجاح! تمت إضافة الأرصدة إلى حسابك.",
+    "paymentCanceled": "تم إلغاء الدفع. يمكنك المحاولة مرة أخرى في أي وقت.",
+    "genericError": "خطأ في إنشاء صفحة الدفع",
+    "currentBalance": "رصيدك الحالي",
+    "credits": "رصيد",
+    "mostPopular": "الأكثر شيوعًا",
+    "bonusCredits": "+{count} رصيد إضافي!",
+    "estVideos": "~{count} فيديو 30 ثانية",
+    "estMusic": "~{count} إبداعات موسيقية",
+    "estNarrations": "~{count} تعليقات صوتية (1000 حرف)",
+    "processing": "جارٍ المعالجة...",
+    "buyNow": "اشترِ الآن",
+    "costHeading": "كم تكلفة كل إبداع؟",
+    "costVideo": "فيديو",
+    "costVideoPrice": "12 رصيد / 30 ثانية",
+    "costMusic": "موسيقى",
+    "costMusicPrice": "2 رصيد / إبداع",
+    "costNarration": "تعليق صوتي",
+    "costNarrationPrice": "1 رصيد / 1000 حرف",
+    "securePayment": "دفع آمن عبر Stripe"
+  },
+  "language": {
+    "label": "اللغة"
+  }
+}

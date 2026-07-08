@@ -1,0 +1,1 @@
+{"extends": "@movai/config/tsconfig.base.json", "compilerOptions": {"module": "CommonJS", "moduleResolution": "Node", "experimentalDecorators": true, "emitDecoratorMetadata": true, "outDir": "dist", "rootDir": "src", "sourceMap": true, "isolatedModules": false, "strictPropertyInitialization": false}, "include": ["src"]}

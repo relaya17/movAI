@@ -1,0 +1,237 @@
+{
+  "nav": {
+    "discover": "גלה",
+    "studio": "סטודיו AI ✨",
+    "upload": "העלאה",
+    "profile": "הפרופיל שלי",
+    "buyCredits": "קנה קרדיטים",
+    "giftWallet": "ארנק מתנות",
+    "signOut": "התנתקות",
+    "menuLabel": "תפריט ניווט"
+  },
+  "footer": {
+    "tagline": "פלטפורמת גילוי תוכן מבוססת בינה מלאכותית. גלה סרטים, סטנדאפ, מוזיקה ושירה.",
+    "legalHeading": "מידע משפטי",
+    "legal": {
+      "terms": "תנאי שימוש",
+      "privacy": "מדיניות פרטיות",
+      "security": "אבטחת מידע",
+      "cookies": "מדיניות עוגיות",
+      "dmca": "DMCA",
+      "accessibility": "נגישות"
+    },
+    "companyHeading": "החברה",
+    "company": {
+      "about": "אודות",
+      "contact": "צור קשר",
+      "creators": "ליוצרים",
+      "help": "מרכז עזרה"
+    },
+    "connectHeading": "התחברו אלינו",
+    "comingSoon": "בקרוב",
+    "rights": "כל הזכויות שמורות."
+  },
+  "auth": {
+    "signIn": {
+      "titlePrefix": "התחברות ל-",
+      "subtitle": "שמרו היסטוריית צפייה, המלצות אישיות ורשימת מועדפים.",
+      "noAccount": "אין לכם חשבון?",
+      "signUpLink": "הרשמה",
+      "or": "או",
+      "continueWithGoogle": "המשך עם Google",
+      "continueWithGithub": "המשך עם GitHub",
+      "consentPrefix": "בהתחברות אתם מאשרים את",
+      "termsLink": "תנאי השימוש",
+      "and": "ואת",
+      "privacyLink": "מדיניות הפרטיות",
+      "submit": "התחברות",
+      "submitting": "רגע..."
+    },
+    "signUp": {
+      "titlePrefix": "הרשמה ל-",
+      "subtitle": "מינימום 8 תווים לסיסמה. שמרו היסטוריית צפייה, המלצות אישיות ורשימת מועדפים.",
+      "haveAccount": "כבר יש לכם חשבון?",
+      "signInLink": "התחברות",
+      "consentPrefix": "בהרשמה אתם מאשרים את",
+      "termsLink": "תנאי השימוש",
+      "and": "ואת",
+      "privacyLink": "מדיניות הפרטיות",
+      "firstName": "שם פרטי",
+      "lastName": "שם משפחה",
+      "username": "שם משתמש",
+      "usernameHint": "אותיות באנגלית, מספרים וקו תחתון בלבד",
+      "dateOfBirth": "תאריך לידה",
+      "email": "אימייל",
+      "password": "סיסמה",
+      "submit": "הרשמה",
+      "submitting": "רגע..."
+    },
+    "credentialsForm": {
+      "email": "אימייל",
+      "password": "סיסמה"
+    }
+  },
+  "gifts": {
+    "sendGift": "שלח מתנה",
+    "chooseGift": "בחר מתנה לשליחה",
+    "creatorShare": "💰 50% מהמתנה מגיע ליוצר",
+    "genericError": "שגיאה בשליחת המתנה",
+    "epicSentMessage": "🎉 מתנה מרשימה נשלחה! 🎉",
+    "sentMessage": "נשלחה בהצלחה!"
+  },
+  "contentTypes": {
+    "standup": "סטנדאפ",
+    "music": "מוזיקה",
+    "singing": "שירה"
+  },
+  "browse": {
+    "categoryPills": {
+      "movies": "סרטים",
+      "showAll": "הצג הכל"
+    },
+    "communityCreations": "יצירות הקהילה"
+  },
+  "upload": {
+    "pageHeadingPrefix": "העלאת תוכן ל-",
+    "pageSubtitle": "שתפו את היצירות שלכם וקבלו מתנות מהקהילה",
+    "contentTypeLabel": "סוג התוכן",
+    "titleLabel": "כותרת",
+    "titlePlaceholder": "תנו שם ליצירה שלכם",
+    "descriptionLabel": "תיאור",
+    "descriptionPlaceholder": "ספרו על היצירה...",
+    "fileLabel": "קובץ וידאו",
+    "dragPrompt": "גררו קובץ לכאן או לחצו לבחירה",
+    "fileFormats": "MP4, MOV, AVI",
+    "giftsHeading": "קבלת מתנות",
+    "giftsDescription": "הצופים יוכלו לשלוח לכם מתנות כהערכה על התוכן שלכם.",
+    "phaseCreating": "יוצר רשומה...",
+    "phaseUploading": "מעלה קובץ... {progress}%",
+    "phaseFinalizing": "כמעט סיימנו...",
+    "submit": "העלאה",
+    "submitting": "מעלה...",
+    "errors": {
+      "selectContentType": "בחרו סוג תוכן",
+      "titleRequired": "כותרת היא שדה חובה",
+      "selectFile": "בחרו קובץ וידאו להעלאה",
+      "createFailed": "יצירת ההעלאה נכשלה",
+      "authError": "שגיאה בקבלת הרשאת העלאה",
+      "cloudinaryNoUrl": "Cloudinary לא החזיר כתובת קובץ",
+      "invalidResponse": "תגובה לא תקינה מהשרת",
+      "uploadFailedStatus": "ההעלאה נכשלה ({status})",
+      "networkError": "שגיאת רשת בזמן ההעלאה",
+      "genericUploadError": "משהו השתבש בהעלאה"
+    }
+  },
+  "studio": {
+    "pageHeading": "סטודיו",
+    "pageSubtitle": "צרו תוכן מקורי באמצעות בינה מלאכותית",
+    "usage": {
+      "creditBalance": "יתרת קרדיטים",
+      "buyMore": "קנה עוד קרדיטים"
+    },
+    "tabs": {
+      "video": { "label": "וידאו", "description": "צור סרטון מטקסט או תמונה" },
+      "music": { "label": "מוזיקה", "description": "צור מוזיקה מקורית" },
+      "voice": { "label": "קול ושירה", "description": "צור קריינות או שירה" }
+    },
+    "video": {
+      "promptLabel": "תאר את הסרטון שתרצה ליצור",
+      "promptPlaceholder": "לדוגמה: רחוב עירוני בלילה עם גשם, אורות ניאון מהבהבים, מכונית ספורט שחורה חולפת באיטיות...",
+      "promptHint": "טיפ: ככל שהתיאור מפורט יותר, התוצאה תהיה טובה יותר",
+      "styleLabel": "סגנון",
+      "styles": { "cinematic": "קולנועי", "anime": "אנימה", "realistic": "ריאליסטי", "3d": "תלת מימד", "cartoon": "קריקטורה", "noir": "נואר" },
+      "durationLabel": "אורך",
+      "durations": { "5": "5 שניות", "15": "15 שניות", "30": "30 שניות", "60": "60 שניות" },
+      "proLabel": "PRO",
+      "baseImageLabel": "תמונת בסיס (אופציונלי)",
+      "baseImagePrompt": "גרור תמונה או לחץ להעלאה",
+      "generating": "יוצר וידאו... (זה עשוי לקחת כדקה)",
+      "generate": "✨ צור וידאו",
+      "resultPlaceholder": "הסרטון שלך יופיע כאן",
+      "resultHint": "התוצאות האחרונות שלך נשמרות בגלריה"
+    },
+    "music": {
+      "promptLabel": "תאר את המוזיקה שתרצה ליצור",
+      "promptPlaceholder": "לדוגמה: שיר פופ קליל עם גיטרה אקוסטית, קצב מרים, מתאים לנסיעה בכביש פתוח...",
+      "genreLabel": "ז׳אנר",
+      "genres": { "pop": "פופ", "rock": "רוק", "electronic": "אלקטרוני", "jazz": "ג׳אז", "classical": "קלאסי", "hiphop": "היפ הופ", "ambient": "אמביינט", "cinematic": "קולנועי" },
+      "moodLabel": "מצב רוח",
+      "moods": { "happy": "שמח", "sad": "עצוב", "energetic": "אנרגטי", "calm": "רגוע", "dramatic": "דרמטי", "romantic": "רומנטי" },
+      "addLyricsHeading": "הוסף שירה",
+      "addLyricsDescription": "צור שיר עם מילים וקול",
+      "lyricsLabel": "מילים (אופציונלי - אם ריק, הבינה תכתוב)",
+      "lyricsPlaceholder": "כתוב את המילים כאן, או השאר ריק לכתיבה אוטומטית...",
+      "generating": "יוצר מוזיקה...",
+      "generate": "🎵 צור מוזיקה",
+      "resultPlaceholder": "המוזיקה שלך תופיע כאן"
+    },
+    "voice": {
+      "typeLabel": "סוג קול",
+      "types": {
+        "narrator": { "label": "קריין", "description": "קול מקצועי לקריינות" },
+        "singer_male": { "label": "זמר", "description": "קול גברי לשירה" },
+        "singer_female": { "label": "זמרת", "description": "קול נשי לשירה" },
+        "character": { "label": "דמות", "description": "קולות ייחודיים לדמויות" }
+      },
+      "languageLabel": "שפה",
+      "languages": { "he": "עברית", "en": "אנגלית", "ar": "ערבית", "ru": "רוסית", "fr": "צרפתית", "es": "ספרדית" },
+      "lyricsTextLabel": "מילות השיר",
+      "narrationTextLabel": "טקסט לקריינות",
+      "lyricsPlaceholder": "כתוב את מילות השיר כאן...",
+      "narrationPlaceholder": "כתוב את הטקסט לקריינות כאן...",
+      "charCount": "{count} / 500 תווים (חינמי) • עד 5,000 ב-Pro",
+      "cloningHeading": "שכפול קול",
+      "cloningDescription": "רוצים להשתמש בקול שלכם? שדרגו ל-Pro והעלו דוגמה קולית ליצירת קול מותאם אישית.",
+      "generating": "יוצר קול...",
+      "generate": "🎤 צור קול",
+      "resultPlaceholder": "ההקלטה שלך תופיע כאן"
+    }
+  },
+  "wallet": {
+    "pageHeadingPrefix": "ארנק",
+    "pageHeadingSuffix": "מתנות",
+    "pageSubtitle": "צפה במתנות שקיבלת והיסטוריית הקרדיטים שלך",
+    "currentBalance": "היתרה הנוכחית",
+    "credits": "קרדיטים",
+    "addCredits": "הוסף קרדיטים",
+    "stats": {
+      "purchased": "נרכשו",
+      "used": "נוצלו",
+      "receivedFromGifts": "התקבלו ממתנות",
+      "giftsSent": "מתנות נשלחו"
+    },
+    "recentGifts": "מתנות אחרונות",
+    "forLabel": "על",
+    "transactionHistory": "היסטוריית פעולות",
+    "noTransactions": "אין פעולות עדיין",
+    "balanceLabel": "יתרה"
+  },
+  "pricing": {
+    "pageHeadingPrefix": "קנה",
+    "pageHeadingSuffix": "קרדיטים",
+    "pageSubtitle": "השתמש בקרדיטים ליצירת וידאו, מוזיקה וקול עם AI",
+    "paymentSuccess": "התשלום הושלם בהצלחה! הקרדיטים נוספו לחשבונך.",
+    "paymentCanceled": "התשלום בוטל. תוכל לנסות שוב בכל עת.",
+    "genericError": "שגיאה ביצירת עמוד תשלום",
+    "currentBalance": "היתרה הנוכחית שלך",
+    "credits": "קרדיטים",
+    "mostPopular": "הכי פופולרי",
+    "bonusCredits": "+{count} קרדיטים בונוס!",
+    "estVideos": "~{count} וידאו 30 שניות",
+    "estMusic": "~{count} יצירות מוזיקה",
+    "estNarrations": "~{count} קריינויות (1000 תווים)",
+    "processing": "מעבד...",
+    "buyNow": "קנה עכשיו",
+    "costHeading": "כמה עולה כל יצירה?",
+    "costVideo": "וידאו",
+    "costVideoPrice": "12 קרדיטים / 30 שניות",
+    "costMusic": "מוזיקה",
+    "costMusicPrice": "2 קרדיטים / יצירה",
+    "costNarration": "קריינות",
+    "costNarrationPrice": "1 קרדיט / 1000 תווים",
+    "securePayment": "תשלום מאובטח באמצעות Stripe"
+  },
+  "language": {
+    "label": "שפה"
+  }
+}

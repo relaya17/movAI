@@ -1,0 +1,188 @@
+"use server";
+
+import { auth } from "@/auth";
+import { db } from "./db";
+import {
+  createAiCreation,
+  getAiCreationById,
+  updateAiCreation,
+  spendCredits,
+  refundCredits,
+  InsufficientCreditsError,
+  type CreationType
+} from "@movai/db";
+import { REPLICATE_MODELS, startPrediction, getPredictionStatus, AiGenerationNotConfiguredError } from "./replicate";
+
+/** 12 credits / 30s of video (matches the rate advertised on /pricing), rounded up so a partial slice never rounds down to free. */
+function videoCreditCost(durationSeconds: number): number {
+  return Math.max(1, Math.ceil((durationSeconds * 12) / 30));
+}
+
+/** Flat rate per music generation (matches /pricing). */
+const MUSIC_CREDIT_COST = 2;
+
+/** 1 credit / 1000 characters of narration or lyrics (matches /pricing), minimum 1 so a short line still costs something. */
+function voiceCreditCost(textLength: number): number {
+  return Math.max(1, Math.ceil(textLength / 1000));
+}
+
+export interface StartGenerationResult {
+  creationId?: string | undefined;
+  error?: string | undefined;
+}
+
+async function requireUserId(): Promise<string | { error: string }> {
+  const session = await auth();
+  if (!session?.user?.id) return { error: "יש להתחבר כדי ליצור תוכן" };
+  return session.user.id;
+}
+
+/** Shared happy/unhappy path for all three generators: charge credits up front, record a pending creation, kick off the Replicate prediction, and roll the charge back if anything between those two steps throws. */
+async function chargeAndStart(
+  userId: string,
+  type: CreationType,
+  cost: number,
+  prompt: string,
+  settings: Record<string, unknown>,
+  model: string,
+  input: Record<string, unknown>
+): Promise<StartGenerationResult> {
+  let balanceAfterCharge: number;
+  try {
+    balanceAfterCharge = await spendCredits(db, userId, cost, `יצירת ${type === "video" ? "וידאו" : type === "music" ? "מוזיקה" : "קול"} ב-AI Studio`);
+  } catch (err) {
+    if (err instanceof InsufficientCreditsError) {
+      return { error: `אין מספיק קרדיטים (נדרשים ${err.required}, יש לך ${err.available})` };
+    }
+    throw err;
+  }
+  void balanceAfterCharge;
+
+  const creation = await createAiCreation(db, { userId, type, creditsUsed: cost, prompt, settings, apiProvider: "replicate" });
+
+  try {
+    const { predictionId } = await startPrediction(model, input);
+    await updateAiCreation(db, creation.id, { status: "processing", mergeSettings: { predictionId } });
+    return { creationId: creation.id };
+  } catch (err) {
+    const message = err instanceof AiGenerationNotConfiguredError ? "יצירת AI לא מוגדרת - חסר REPLICATE_API_TOKEN" : "שגיאה בהתחלת היצירה";
+    await updateAiCreation(db, creation.id, { status: "failed", errorMessage: message });
+    await refundCredits(db, userId, cost, `החזר - ${message}`, creation.id);
+    return { error: message };
+  }
+}
+
+export interface GenerateVideoInput {
+  prompt: string;
+  style: string;
+  durationSeconds: number;
+  baseImageUrl?: string | undefined;
+}
+
+export async function generateVideoAction(input: GenerateVideoInput): Promise<StartGenerationResult> {
+  const userId = await requireUserId();
+  if (typeof userId !== "string") return userId;
+  if (!input.prompt.trim()) return { error: "כתבו תיאור לסרטון" };
+
+  const cost = videoCreditCost(input.durationSeconds);
+  const fullPrompt = `${input.prompt.trim()}, ${input.style} style`;
+
+  return chargeAndStart(userId, "video", cost, input.prompt.trim(), { style: input.style, durationSeconds: input.durationSeconds }, REPLICATE_MODELS.video, {
+    prompt: fullPrompt,
+    ...(input.baseImageUrl ? { first_frame_image: input.baseImageUrl } : {})
+  });
+}
+
+export interface GenerateMusicInput {
+  prompt: string;
+  genre: string;
+  mood: string;
+  withLyrics: boolean;
+  lyrics?: string | undefined;
+}
+
+export async function generateMusicAction(input: GenerateMusicInput): Promise<StartGenerationResult> {
+  const userId = await requireUserId();
+  if (typeof userId !== "string") return userId;
+  if (!input.prompt.trim()) return { error: "כתבו תיאור למוזיקה" };
+
+  const fullPrompt = `${input.prompt.trim()}, ${input.genre} genre, ${input.mood} mood`;
+
+  return chargeAndStart(
+    userId,
+    "music",
+    MUSIC_CREDIT_COST,
+    input.prompt.trim(),
+    { genre: input.genre, mood: input.mood, withLyrics: input.withLyrics },
+    REPLICATE_MODELS.music,
+    {
+      prompt: fullPrompt,
+      duration: 30,
+      model_version: "stereo-melody-large"
+    }
+  );
+}
+
+export interface GenerateVoiceInput {
+  text: string;
+  voiceType: string;
+  language: string;
+}
+
+export async function generateVoiceAction(input: GenerateVoiceInput): Promise<StartGenerationResult> {
+  const userId = await requireUserId();
+  if (typeof userId !== "string") return userId;
+  if (!input.text.trim()) return { error: "כתבו טקסט ליצירה" };
+
+  const cost = voiceCreditCost(input.text.length);
+
+  return chargeAndStart(userId, "voice", cost, input.text.trim(), { voiceType: input.voiceType, language: input.language }, REPLICATE_MODELS.voice, {
+    text: input.text.trim(),
+    language: input.language
+  });
+}
+
+export interface GenerationStatusResult {
+  status: "pending" | "processing" | "completed" | "failed" | "cancelled";
+  resultUrl?: string | null | undefined;
+  error?: string | undefined;
+}
+
+/** Polled by the client every couple of seconds while a generation is in flight - checks Replicate directly only while still processing, and persists the terminal result (or refunds on failure) exactly once. */
+export async function getGenerationStatusAction(creationId: string): Promise<GenerationStatusResult> {
+  const userId = await requireUserId();
+  if (typeof userId !== "string") return { status: "failed", error: userId.error };
+
+  const creation = await getAiCreationById(db, creationId, userId);
+  if (!creation) return { status: "failed", error: "היצירה לא נמצאה" };
+
+  if (creation.status === "completed" || creation.status === "failed" || creation.status === "cancelled") {
+    return { status: creation.status, resultUrl: creation.resultUrl, error: creation.errorMessage ?? undefined };
+  }
+
+  const settings = creation.settings ? (JSON.parse(creation.settings) as Record<string, unknown>) : {};
+  const predictionId = settings.predictionId as string | undefined;
+  if (!predictionId) {
+    return { status: "processing" };
+  }
+
+  try {
+    const prediction = await getPredictionStatus(predictionId);
+
+    if (prediction.status === "succeeded") {
+      await updateAiCreation(db, creationId, { status: "completed", resultUrl: prediction.resultUrl ?? undefined });
+      return { status: "completed", resultUrl: prediction.resultUrl };
+    }
+
+    if (prediction.status === "failed" || prediction.status === "canceled") {
+      const message = prediction.error ?? "היצירה נכשלה בצד הספק";
+      await updateAiCreation(db, creationId, { status: "failed", errorMessage: message });
+      await refundCredits(db, userId, creation.creditsUsed, `החזר - ${message}`, creationId);
+      return { status: "failed", error: message };
+    }
+
+    return { status: "processing" };
+  } catch {
+    return { status: "processing" };
+  }
+}

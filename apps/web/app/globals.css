@@ -1,0 +1,37 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* prefers-reduced-motion is honored globally, not just per-component (architecture plan §6 / §16.2) */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+:focus-visible {
+  outline: 3px solid #6d28d9;
+  outline-offset: 2px;
+}
+
+/*
+ * Chrome/Edge autofill (e.g. the browser remembering the dummy test account
+ * email+password) ignores normal text-color classes and paints its own
+ * near-black text on a light yellow/white fill - unreadable on the dark auth
+ * backdrop. The box-shadow trick is the standard workaround: it lets us
+ * override the autofill background via an inset shadow (background-color
+ * itself can't be overridden) while -webkit-text-fill-color forces the text
+ * back to white.
+ */
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus {
+  -webkit-text-fill-color: #ffffff;
+  -webkit-box-shadow: 0 0 0px 1000px rgba(0, 0, 0, 0.6) inset;
+  box-shadow: 0 0 0px 1000px rgba(0, 0, 0, 0.6) inset;
+  caret-color: #ffffff;
+  transition: background-color 9999s ease-in-out 0s;
+}

@@ -1,0 +1,56 @@
+# Local development infra only - architecture plan §3 uses managed services
+# (Neon/Supabase, Upstash, self-hosted Meilisearch) in staging/production.
+# This file exists so `pnpm dev` has something to talk to on a laptop.
+name: movai
+
+services:
+  postgres:
+    image: postgres:16-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: movai
+      POSTGRES_PASSWORD: movai
+      POSTGRES_DB: movai
+    ports:
+      - "5433:5432"
+    volumes:
+      - movai_postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U movai"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  redis:
+    image: redis:7-alpine
+    restart: unless-stopped
+    ports:
+      - "6380:6379"
+    volumes:
+      - movai_redis_data:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  meilisearch:
+    image: getmeili/meilisearch:v1.11
+    restart: unless-stopped
+    environment:
+      MEILI_MASTER_KEY: movai-dev-master-key
+      MEILI_ENV: development
+    ports:
+      - "7700:7700"
+    volumes:
+      - movai_meili_data:/meili_data
+    healthcheck:
+      test: ["CMD", "wget", "--spider", "-q", "http://localhost:7700/health"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+volumes:
+  movai_postgres_data:
+  movai_redis_data:
+  movai_meili_data:

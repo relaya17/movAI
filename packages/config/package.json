@@ -1,0 +1,17 @@
+{
+  "name": "@movai/config",
+  "version": "0.1.0",
+  "private": true,
+  "main": "index.js",
+  "files": [
+    "tsconfig.base.json",
+    "eslint-preset.js",
+    "index.js"
+  ],
+  "dependencies": {
+    "@typescript-eslint/eslint-plugin": "8.18.1",
+    "@typescript-eslint/parser": "8.18.1",
+    "eslint-plugin-jsx-a11y": "6.10.2"
+  },
+  "type": "module"
+}

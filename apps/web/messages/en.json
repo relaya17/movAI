@@ -1,0 +1,237 @@
+{
+  "nav": {
+    "discover": "Discover",
+    "studio": "AI Studio ✨",
+    "upload": "Upload",
+    "profile": "My Profile",
+    "buyCredits": "Buy Credits",
+    "giftWallet": "Gift Wallet",
+    "signOut": "Sign Out",
+    "menuLabel": "Navigation menu"
+  },
+  "footer": {
+    "tagline": "AI-powered content discovery. Find movies, stand-up, music and singing.",
+    "legalHeading": "Legal",
+    "legal": {
+      "terms": "Terms of Use",
+      "privacy": "Privacy Policy",
+      "security": "Security",
+      "cookies": "Cookie Policy",
+      "dmca": "DMCA",
+      "accessibility": "Accessibility"
+    },
+    "companyHeading": "Company",
+    "company": {
+      "about": "About",
+      "contact": "Contact",
+      "creators": "For Creators",
+      "help": "Help Center"
+    },
+    "connectHeading": "Connect With Us",
+    "comingSoon": "Coming soon",
+    "rights": "All rights reserved."
+  },
+  "auth": {
+    "signIn": {
+      "titlePrefix": "Sign in to ",
+      "subtitle": "Save your watch history, personal recommendations and favorites.",
+      "noAccount": "Don't have an account?",
+      "signUpLink": "Sign up",
+      "or": "or",
+      "continueWithGoogle": "Continue with Google",
+      "continueWithGithub": "Continue with GitHub",
+      "consentPrefix": "By signing in, you agree to the",
+      "termsLink": "Terms of Use",
+      "and": "and",
+      "privacyLink": "Privacy Policy",
+      "submit": "Sign In",
+      "submitting": "One moment..."
+    },
+    "signUp": {
+      "titlePrefix": "Sign up for ",
+      "subtitle": "Minimum 8 characters for your password. Save your watch history, personal recommendations and favorites.",
+      "haveAccount": "Already have an account?",
+      "signInLink": "Sign in",
+      "consentPrefix": "By signing up, you agree to the",
+      "termsLink": "Terms of Use",
+      "and": "and",
+      "privacyLink": "Privacy Policy",
+      "firstName": "First Name",
+      "lastName": "Last Name",
+      "username": "Username",
+      "usernameHint": "English letters, numbers and underscore only",
+      "dateOfBirth": "Date of Birth",
+      "email": "Email",
+      "password": "Password",
+      "submit": "Sign Up",
+      "submitting": "One moment..."
+    },
+    "credentialsForm": {
+      "email": "Email",
+      "password": "Password"
+    }
+  },
+  "gifts": {
+    "sendGift": "Send Gift",
+    "chooseGift": "Choose a gift to send",
+    "creatorShare": "💰 50% of the gift goes to the creator",
+    "genericError": "Error sending gift",
+    "epicSentMessage": "🎉 An amazing gift was sent! 🎉",
+    "sentMessage": "Sent successfully!"
+  },
+  "contentTypes": {
+    "standup": "Stand-Up",
+    "music": "Music",
+    "singing": "Singing"
+  },
+  "browse": {
+    "categoryPills": {
+      "movies": "Movies",
+      "showAll": "Show All"
+    },
+    "communityCreations": "Community Creations"
+  },
+  "upload": {
+    "pageHeadingPrefix": "Upload content to ",
+    "pageSubtitle": "Share your creations and receive gifts from the community",
+    "contentTypeLabel": "Content Type",
+    "titleLabel": "Title",
+    "titlePlaceholder": "Give your creation a name",
+    "descriptionLabel": "Description",
+    "descriptionPlaceholder": "Tell us about your creation...",
+    "fileLabel": "Video File",
+    "dragPrompt": "Drag a file here or click to select",
+    "fileFormats": "MP4, MOV, AVI",
+    "giftsHeading": "Receiving Gifts",
+    "giftsDescription": "Viewers will be able to send you gifts to show appreciation for your content.",
+    "phaseCreating": "Creating record...",
+    "phaseUploading": "Uploading file... {progress}%",
+    "phaseFinalizing": "Almost done...",
+    "submit": "Upload",
+    "submitting": "Uploading...",
+    "errors": {
+      "selectContentType": "Choose a content type",
+      "titleRequired": "Title is required",
+      "selectFile": "Choose a video file to upload",
+      "createFailed": "Failed to create upload",
+      "authError": "Error getting upload authorization",
+      "cloudinaryNoUrl": "Cloudinary did not return a file URL",
+      "invalidResponse": "Invalid response from server",
+      "uploadFailedStatus": "Upload failed ({status})",
+      "networkError": "Network error during upload",
+      "genericUploadError": "Something went wrong during upload"
+    }
+  },
+  "studio": {
+    "pageHeading": "Studio",
+    "pageSubtitle": "Create original content using artificial intelligence",
+    "usage": {
+      "creditBalance": "Credit Balance",
+      "buyMore": "Buy More Credits"
+    },
+    "tabs": {
+      "video": { "label": "Video", "description": "Create a video from text or an image" },
+      "music": { "label": "Music", "description": "Create original music" },
+      "voice": { "label": "Voice & Singing", "description": "Create narration or singing" }
+    },
+    "video": {
+      "promptLabel": "Describe the video you want to create",
+      "promptPlaceholder": "e.g.: An urban street at night in the rain, flickering neon lights, a black sports car passing slowly...",
+      "promptHint": "Tip: the more detailed the description, the better the result",
+      "styleLabel": "Style",
+      "styles": { "cinematic": "Cinematic", "anime": "Anime", "realistic": "Realistic", "3d": "3D", "cartoon": "Cartoon", "noir": "Noir" },
+      "durationLabel": "Duration",
+      "durations": { "5": "5 seconds", "15": "15 seconds", "30": "30 seconds", "60": "60 seconds" },
+      "proLabel": "PRO",
+      "baseImageLabel": "Base Image (optional)",
+      "baseImagePrompt": "Drag an image here or click to upload",
+      "generating": "Creating video... (this may take about a minute)",
+      "generate": "✨ Create Video",
+      "resultPlaceholder": "Your video will appear here",
+      "resultHint": "Your recent results are saved in the gallery"
+    },
+    "music": {
+      "promptLabel": "Describe the music you want to create",
+      "promptPlaceholder": "e.g.: A light pop song with acoustic guitar, upbeat tempo, perfect for a road trip...",
+      "genreLabel": "Genre",
+      "genres": { "pop": "Pop", "rock": "Rock", "electronic": "Electronic", "jazz": "Jazz", "classical": "Classical", "hiphop": "Hip Hop", "ambient": "Ambient", "cinematic": "Cinematic" },
+      "moodLabel": "Mood",
+      "moods": { "happy": "Happy", "sad": "Sad", "energetic": "Energetic", "calm": "Calm", "dramatic": "Dramatic", "romantic": "Romantic" },
+      "addLyricsHeading": "Add Singing",
+      "addLyricsDescription": "Create a song with lyrics and vocals",
+      "lyricsLabel": "Lyrics (optional - if empty, the AI will write them)",
+      "lyricsPlaceholder": "Write the lyrics here, or leave empty for automatic writing...",
+      "generating": "Creating music...",
+      "generate": "🎵 Create Music",
+      "resultPlaceholder": "Your music will appear here"
+    },
+    "voice": {
+      "typeLabel": "Voice Type",
+      "types": {
+        "narrator": { "label": "Narrator", "description": "Professional narration voice" },
+        "singer_male": { "label": "Male Singer", "description": "Male singing voice" },
+        "singer_female": { "label": "Female Singer", "description": "Female singing voice" },
+        "character": { "label": "Character", "description": "Unique character voices" }
+      },
+      "languageLabel": "Language",
+      "languages": { "he": "Hebrew", "en": "English", "ar": "Arabic", "ru": "Russian", "fr": "French", "es": "Spanish" },
+      "lyricsTextLabel": "Song Lyrics",
+      "narrationTextLabel": "Narration Text",
+      "lyricsPlaceholder": "Write the song lyrics here...",
+      "narrationPlaceholder": "Write the narration text here...",
+      "charCount": "{count} / 500 characters (free) • up to 5,000 on Pro",
+      "cloningHeading": "Voice Cloning",
+      "cloningDescription": "Want to use your own voice? Upgrade to Pro and upload a voice sample to create a custom voice.",
+      "generating": "Creating voice...",
+      "generate": "🎤 Create Voice",
+      "resultPlaceholder": "Your recording will appear here"
+    }
+  },
+  "wallet": {
+    "pageHeadingPrefix": "Gift",
+    "pageHeadingSuffix": "Wallet",
+    "pageSubtitle": "View the gifts you've received and your credit history",
+    "currentBalance": "Current Balance",
+    "credits": "Credits",
+    "addCredits": "Add Credits",
+    "stats": {
+      "purchased": "Purchased",
+      "used": "Used",
+      "receivedFromGifts": "Received from gifts",
+      "giftsSent": "Gifts sent"
+    },
+    "recentGifts": "Recent Gifts",
+    "forLabel": "For",
+    "transactionHistory": "Transaction History",
+    "noTransactions": "No transactions yet",
+    "balanceLabel": "Balance"
+  },
+  "pricing": {
+    "pageHeadingPrefix": "Buy",
+    "pageHeadingSuffix": "Credits",
+    "pageSubtitle": "Use credits to create video, music and voice with AI",
+    "paymentSuccess": "Payment completed successfully! Credits have been added to your account.",
+    "paymentCanceled": "Payment was canceled. You can try again anytime.",
+    "genericError": "Error creating checkout page",
+    "currentBalance": "Your Current Balance",
+    "credits": "Credits",
+    "mostPopular": "Most Popular",
+    "bonusCredits": "+{count} bonus credits!",
+    "estVideos": "~{count} 30-second videos",
+    "estMusic": "~{count} music creations",
+    "estNarrations": "~{count} narrations (1,000 characters)",
+    "processing": "Processing...",
+    "buyNow": "Buy Now",
+    "costHeading": "How much does each creation cost?",
+    "costVideo": "Video",
+    "costVideoPrice": "12 credits / 30 seconds",
+    "costMusic": "Music",
+    "costMusicPrice": "2 credits / creation",
+    "costNarration": "Narration",
+    "costNarrationPrice": "1 credit / 1,000 characters",
+    "securePayment": "Secure payment via Stripe"
+  },
+  "language": {
+    "label": "Language"
+  }
+}

@@ -1,0 +1,237 @@
+{
+  "nav": {
+    "discover": "Descubrir",
+    "studio": "Estudio IA ✨",
+    "upload": "Subir",
+    "profile": "Mi Perfil",
+    "buyCredits": "Comprar Créditos",
+    "giftWallet": "Billetera de Regalos",
+    "signOut": "Cerrar Sesión",
+    "menuLabel": "Menú de navegación"
+  },
+  "footer": {
+    "tagline": "Plataforma de descubrimiento de contenido con IA. Encuentra películas, comedia, música y canto.",
+    "legalHeading": "Legal",
+    "legal": {
+      "terms": "Términos de Uso",
+      "privacy": "Política de Privacidad",
+      "security": "Seguridad",
+      "cookies": "Política de Cookies",
+      "dmca": "DMCA",
+      "accessibility": "Accesibilidad"
+    },
+    "companyHeading": "Empresa",
+    "company": {
+      "about": "Acerca de",
+      "contact": "Contacto",
+      "creators": "Para Creadores",
+      "help": "Centro de Ayuda"
+    },
+    "connectHeading": "Síguenos",
+    "comingSoon": "Próximamente",
+    "rights": "Todos los derechos reservados."
+  },
+  "auth": {
+    "signIn": {
+      "titlePrefix": "Iniciar sesión en ",
+      "subtitle": "Guarda tu historial de visualización, recomendaciones personales y favoritos.",
+      "noAccount": "¿No tienes una cuenta?",
+      "signUpLink": "Regístrate",
+      "or": "o",
+      "continueWithGoogle": "Continuar con Google",
+      "continueWithGithub": "Continuar con GitHub",
+      "consentPrefix": "Al iniciar sesión, aceptas los",
+      "termsLink": "Términos de Uso",
+      "and": "y la",
+      "privacyLink": "Política de Privacidad",
+      "submit": "Iniciar Sesión",
+      "submitting": "Un momento..."
+    },
+    "signUp": {
+      "titlePrefix": "Regístrate en ",
+      "subtitle": "Mínimo 8 caracteres para la contraseña. Guarda tu historial de visualización, recomendaciones personales y favoritos.",
+      "haveAccount": "¿Ya tienes una cuenta?",
+      "signInLink": "Iniciar sesión",
+      "consentPrefix": "Al registrarte, aceptas los",
+      "termsLink": "Términos de Uso",
+      "and": "y la",
+      "privacyLink": "Política de Privacidad",
+      "firstName": "Nombre",
+      "lastName": "Apellido",
+      "username": "Nombre de Usuario",
+      "usernameHint": "Solo letras en inglés, números y guion bajo",
+      "dateOfBirth": "Fecha de Nacimiento",
+      "email": "Correo Electrónico",
+      "password": "Contraseña",
+      "submit": "Registrarse",
+      "submitting": "Un momento..."
+    },
+    "credentialsForm": {
+      "email": "Correo Electrónico",
+      "password": "Contraseña"
+    }
+  },
+  "gifts": {
+    "sendGift": "Enviar Regalo",
+    "chooseGift": "Elige un regalo para enviar",
+    "creatorShare": "💰 El 50% del regalo va al creador",
+    "genericError": "Error al enviar el regalo",
+    "epicSentMessage": "🎉 ¡Se envió un regalo increíble! 🎉",
+    "sentMessage": "¡Enviado con éxito!"
+  },
+  "contentTypes": {
+    "standup": "Comedia",
+    "music": "Música",
+    "singing": "Canto"
+  },
+  "browse": {
+    "categoryPills": {
+      "movies": "Películas",
+      "showAll": "Ver Todo"
+    },
+    "communityCreations": "Creaciones de la Comunidad"
+  },
+  "upload": {
+    "pageHeadingPrefix": "Sube contenido a ",
+    "pageSubtitle": "Comparte tus creaciones y recibe regalos de la comunidad",
+    "contentTypeLabel": "Tipo de Contenido",
+    "titleLabel": "Título",
+    "titlePlaceholder": "Dale un nombre a tu creación",
+    "descriptionLabel": "Descripción",
+    "descriptionPlaceholder": "Cuéntanos sobre tu creación...",
+    "fileLabel": "Archivo de Video",
+    "dragPrompt": "Arrastra un archivo aquí o haz clic para seleccionar",
+    "fileFormats": "MP4, MOV, AVI",
+    "giftsHeading": "Recibir Regalos",
+    "giftsDescription": "Los espectadores podrán enviarte regalos como muestra de aprecio por tu contenido.",
+    "phaseCreating": "Creando registro...",
+    "phaseUploading": "Subiendo archivo... {progress}%",
+    "phaseFinalizing": "Casi listo...",
+    "submit": "Subir",
+    "submitting": "Subiendo...",
+    "errors": {
+      "selectContentType": "Elige un tipo de contenido",
+      "titleRequired": "El título es obligatorio",
+      "selectFile": "Elige un archivo de video para subir",
+      "createFailed": "Error al crear la subida",
+      "authError": "Error al obtener autorización de subida",
+      "cloudinaryNoUrl": "Cloudinary no devolvió una URL de archivo",
+      "invalidResponse": "Respuesta inválida del servidor",
+      "uploadFailedStatus": "La subida falló ({status})",
+      "networkError": "Error de red durante la subida",
+      "genericUploadError": "Algo salió mal durante la subida"
+    }
+  },
+  "studio": {
+    "pageHeading": "Estudio",
+    "pageSubtitle": "Crea contenido original con inteligencia artificial",
+    "usage": {
+      "creditBalance": "Saldo de Créditos",
+      "buyMore": "Comprar Más Créditos"
+    },
+    "tabs": {
+      "video": { "label": "Video", "description": "Crea un video a partir de texto o una imagen" },
+      "music": { "label": "Música", "description": "Crea música original" },
+      "voice": { "label": "Voz y Canto", "description": "Crea narración o canto" }
+    },
+    "video": {
+      "promptLabel": "Describe el video que quieres crear",
+      "promptPlaceholder": "Ej: Una calle urbana de noche con lluvia, luces de neón parpadeantes, un auto deportivo negro pasando lentamente...",
+      "promptHint": "Consejo: cuanto más detallada sea la descripción, mejor será el resultado",
+      "styleLabel": "Estilo",
+      "styles": { "cinematic": "Cinematográfico", "anime": "Anime", "realistic": "Realista", "3d": "3D", "cartoon": "Caricatura", "noir": "Noir" },
+      "durationLabel": "Duración",
+      "durations": { "5": "5 segundos", "15": "15 segundos", "30": "30 segundos", "60": "60 segundos" },
+      "proLabel": "PRO",
+      "baseImageLabel": "Imagen Base (opcional)",
+      "baseImagePrompt": "Arrastra una imagen aquí o haz clic para subir",
+      "generating": "Creando video... (puede tardar aprox. un minuto)",
+      "generate": "✨ Crear Video",
+      "resultPlaceholder": "Tu video aparecerá aquí",
+      "resultHint": "Tus resultados recientes se guardan en la galería"
+    },
+    "music": {
+      "promptLabel": "Describe la música que quieres crear",
+      "promptPlaceholder": "Ej: Una canción pop ligera con guitarra acústica, ritmo animado, perfecta para un viaje por carretera...",
+      "genreLabel": "Género",
+      "genres": { "pop": "Pop", "rock": "Rock", "electronic": "Electrónica", "jazz": "Jazz", "classical": "Clásica", "hiphop": "Hip Hop", "ambient": "Ambient", "cinematic": "Cinematográfica" },
+      "moodLabel": "Estado de Ánimo",
+      "moods": { "happy": "Feliz", "sad": "Triste", "energetic": "Enérgico", "calm": "Tranquilo", "dramatic": "Dramático", "romantic": "Romántico" },
+      "addLyricsHeading": "Añadir Canto",
+      "addLyricsDescription": "Crea una canción con letra y voz",
+      "lyricsLabel": "Letra (opcional - si está vacío, la IA la escribirá)",
+      "lyricsPlaceholder": "Escribe la letra aquí, o déjalo vacío para escritura automática...",
+      "generating": "Creando música...",
+      "generate": "🎵 Crear Música",
+      "resultPlaceholder": "Tu música aparecerá aquí"
+    },
+    "voice": {
+      "typeLabel": "Tipo de Voz",
+      "types": {
+        "narrator": { "label": "Narrador", "description": "Voz profesional para narración" },
+        "singer_male": { "label": "Cantante Masculino", "description": "Voz masculina para canto" },
+        "singer_female": { "label": "Cantante Femenina", "description": "Voz femenina para canto" },
+        "character": { "label": "Personaje", "description": "Voces únicas para personajes" }
+      },
+      "languageLabel": "Idioma",
+      "languages": { "he": "Hebreo", "en": "Inglés", "ar": "Árabe", "ru": "Ruso", "fr": "Francés", "es": "Español" },
+      "lyricsTextLabel": "Letra de la Canción",
+      "narrationTextLabel": "Texto de Narración",
+      "lyricsPlaceholder": "Escribe la letra de la canción aquí...",
+      "narrationPlaceholder": "Escribe el texto de narración aquí...",
+      "charCount": "{count} / 500 caracteres (gratis) • hasta 5.000 en Pro",
+      "cloningHeading": "Clonación de Voz",
+      "cloningDescription": "¿Quieres usar tu propia voz? Mejora a Pro y sube una muestra de voz para crear una voz personalizada.",
+      "generating": "Creando voz...",
+      "generate": "🎤 Crear Voz",
+      "resultPlaceholder": "Tu grabación aparecerá aquí"
+    }
+  },
+  "wallet": {
+    "pageHeadingPrefix": "Billetera de",
+    "pageHeadingSuffix": "Regalos",
+    "pageSubtitle": "Consulta los regalos que has recibido y tu historial de créditos",
+    "currentBalance": "Saldo Actual",
+    "credits": "Créditos",
+    "addCredits": "Añadir Créditos",
+    "stats": {
+      "purchased": "Comprados",
+      "used": "Usados",
+      "receivedFromGifts": "Recibidos por regalos",
+      "giftsSent": "Regalos enviados"
+    },
+    "recentGifts": "Regalos Recientes",
+    "forLabel": "Por",
+    "transactionHistory": "Historial de Transacciones",
+    "noTransactions": "Aún no hay transacciones",
+    "balanceLabel": "Saldo"
+  },
+  "pricing": {
+    "pageHeadingPrefix": "Compra",
+    "pageHeadingSuffix": "Créditos",
+    "pageSubtitle": "Usa créditos para crear video, música y voz con IA",
+    "paymentSuccess": "¡Pago completado con éxito! Los créditos se añadieron a tu cuenta.",
+    "paymentCanceled": "El pago fue cancelado. Puedes intentarlo de nuevo en cualquier momento.",
+    "genericError": "Error al crear la página de pago",
+    "currentBalance": "Tu Saldo Actual",
+    "credits": "Créditos",
+    "mostPopular": "Más Popular",
+    "bonusCredits": "¡+{count} créditos de bonificación!",
+    "estVideos": "~{count} videos de 30 segundos",
+    "estMusic": "~{count} creaciones musicales",
+    "estNarrations": "~{count} narraciones (1.000 caracteres)",
+    "processing": "Procesando...",
+    "buyNow": "Comprar Ahora",
+    "costHeading": "¿Cuánto cuesta cada creación?",
+    "costVideo": "Video",
+    "costVideoPrice": "12 créditos / 30 segundos",
+    "costMusic": "Música",
+    "costMusicPrice": "2 créditos / creación",
+    "costNarration": "Narración",
+    "costNarrationPrice": "1 crédito / 1.000 caracteres",
+    "securePayment": "Pago seguro a través de Stripe"
+  },
+  "language": {
+    "label": "Idioma"
+  }
+}
