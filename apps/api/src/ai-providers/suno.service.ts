@@ -77,15 +77,25 @@ export class SunoService {
         throw new Error(`Suno API error: ${response.status} - ${error}`);
       }
 
-      const data = await response.json();
+      interface SunoTrack {
+        audio_url?: string;
+        url?: string;
+        duration?: number;
+        title?: string;
+      }
+
+      const data = (await response.json()) as SunoTrack | SunoTrack[];
 
       // Suno typically returns an array of generated tracks
-      const track = Array.isArray(data) ? data[0] : data;
+      const track: SunoTrack = Array.isArray(data) ? data[0] ?? {} : data;
+
+      const outputUrl = track.audio_url ?? track.url ?? "";
+      const durationSeconds = track.duration ?? input.duration ?? 60;
 
       return {
-        outputUrl: track.audio_url || track.url,
-        durationSeconds: track.duration || input.duration || 60,
-        apiCostUsd: this.calculateCost(track.duration || 60),
+        outputUrl,
+        durationSeconds,
+        apiCostUsd: this.calculateCost(durationSeconds),
         title: track.title,
         metadata: {
           genre: input.genre,

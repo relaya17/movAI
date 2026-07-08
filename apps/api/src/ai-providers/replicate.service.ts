@@ -58,7 +58,8 @@ export class ReplicateService {
       });
 
       // The output is typically a URL or array of URLs
-      const outputUrl = Array.isArray(output) ? output[0] : output;
+      const rawOutput = output as string | string[] | undefined;
+      const outputUrl = Array.isArray(rawOutput) ? rawOutput[0] : rawOutput;
 
       if (typeof outputUrl !== "string") {
         throw new Error("Unexpected output format from Replicate");
@@ -103,7 +104,8 @@ export class ReplicateService {
         },
       });
 
-      const outputUrl = Array.isArray(output) ? output[0] : output;
+      const rawOutput = output as string | string[] | undefined;
+      const outputUrl = Array.isArray(rawOutput) ? rawOutput[0] : rawOutput;
 
       if (typeof outputUrl !== "string") {
         throw new Error("Unexpected output format from Replicate");
