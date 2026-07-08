@@ -3,6 +3,7 @@ import { InjectQueue } from "@nestjs/bullmq";
 import type { Queue } from "bullmq";
 import type { PostgresJsDatabase } from "drizzle-orm/postgres-js";
 import { eq, desc, and } from "drizzle-orm";
+import { IsString, IsOptional, IsNumber, IsUrl, MinLength, MaxLength, Min, Max } from "class-validator";
 import { aiCreations } from "@movai/db";
 import { DATABASE } from "../infra/tokens";
 import { CreditsService, AI_CREATION_COSTS } from "../credits/credits.service";
@@ -10,23 +11,73 @@ import { AI_CREATION_QUEUE } from "../queue/queue.module";
 import type { AICreationJobData } from "../queue/ai-creation.processor";
 import { randomUUID } from "crypto";
 
-export interface CreateVideoDto {
-  prompt: string;
+/**
+ * Classes (not `interface`) on purpose - the global ValidationPipe
+ * (main.ts) only has anything to validate against when Nest's reflection
+ * metadata points at a real class. These were plain interfaces before,
+ * which meant a request body was never actually checked against its
+ * declared shape - only the controllers' own `if (!dto.prompt?.trim())`
+ * spot-checks stood between a malformed/oversized body and the AI
+ * provider calls & credit charges downstream.
+ */
+export class CreateVideoDto {
+  @IsString()
+  @MinLength(1)
+  @MaxLength(2000)
+  prompt!: string;
+
+  @IsOptional()
+  @IsString()
+  @MaxLength(100)
   style?: string;
+
+  @IsOptional()
+  @IsNumber()
+  @Min(1)
+  @Max(120)
   duration?: number;
+
+  @IsOptional()
+  @IsUrl()
   imageUrl?: string;
 }
 
-export interface CreateMusicDto {
-  prompt: string;
+export class CreateMusicDto {
+  @IsString()
+  @MinLength(1)
+  @MaxLength(2000)
+  prompt!: string;
+
+  @IsOptional()
+  @IsString()
+  @MaxLength(100)
   genre?: string;
+
+  @IsOptional()
+  @IsString()
+  @MaxLength(100)
   mood?: string;
+
+  @IsOptional()
+  @IsString()
+  @MaxLength(5000)
   lyrics?: string;
 }
 
-export interface CreateVoiceDto {
-  text: string;
+export class CreateVoiceDto {
+  @IsString()
+  @MinLength(1)
+  @MaxLength(5000)
+  text!: string;
+
+  @IsOptional()
+  @IsString()
+  @MaxLength(100)
   voiceType?: string;
+
+  @IsOptional()
+  @IsString()
+  @MaxLength(50)
   language?: string;
 }
 
@@ -108,6 +159,7 @@ export class StudioService {
         userId,
         type: "video",
         prompt: dto.prompt,
+        creditsUsed: creditCost,
         params: {
           style: dto.style,
           duration: dto.duration || 5,
@@ -174,6 +226,7 @@ export class StudioService {
         userId,
         type: "music",
         prompt: dto.prompt,
+        creditsUsed: creditCost,
         params: {
           genre: dto.genre,
           mood: dto.mood,
@@ -239,6 +292,7 @@ export class StudioService {
         userId,
         type: "voice",
         prompt: dto.text,
+        creditsUsed: creditCost,
         params: {
           voiceType: dto.voiceType,
           language: dto.language,

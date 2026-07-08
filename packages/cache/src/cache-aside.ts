@@ -61,3 +61,26 @@ function safeJsonParse(raw: string): unknown {
 export function cacheKey(namespace: string, ...parts: string[]): string {
   return ["movai", namespace, ...parts].join(":");
 }
+
+/**
+ * Drops every cached entry under a namespace (e.g. all `movie-search:*`
+ * results) - used after content ingestion so newly-added movies show up in
+ * search immediately instead of waiting out the TTL. Uses SCAN (not KEYS),
+ * which is safe to run against a live Redis without blocking other clients
+ * even if the key space grows large.
+ */
+export async function invalidateNamespace(redis: Redis, namespace: string): Promise<number> {
+  const pattern = cacheKey(namespace, "*");
+  let cursor = "0";
+  let deleted = 0;
+
+  do {
+    const [nextCursor, keys] = await redis.scan(cursor, "MATCH", pattern, "COUNT", 100);
+    cursor = nextCursor;
+    if (keys.length > 0) {
+      deleted += await redis.unlink(...keys);
+    }
+  } while (cursor !== "0");
+
+  return deleted;
+}

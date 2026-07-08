@@ -4,19 +4,28 @@ import {
   Post,
   Body,
   Query,
-  Param,
+  UseGuards,
   BadRequestException,
 } from "@nestjs/common";
+import { IsInt, IsOptional, IsPositive, IsString, MaxLength } from "class-validator";
 import { CreditsService, CREATION_COSTS, CREDIT_VALUE_NIS } from "./credits.service";
+import { JwtAuthGuard } from "../auth/jwt-auth.guard";
+import { CurrentUserId } from "../auth/current-user-id.decorator";
 
-interface InitCreditsDto {
-  userId: string;
-}
+/** A class, not an interface - see studio.service.ts DTOs for why that matters to the global ValidationPipe. */
+class UseCreditsDto {
+  @IsInt()
+  @IsPositive()
+  amount!: number;
 
-interface UseCreditsDto {
-  userId: string;
-  amount: number;
+  @IsOptional()
+  @IsString()
+  @MaxLength(500)
   description?: string;
+
+  @IsOptional()
+  @IsString()
+  @MaxLength(200)
   referenceId?: string;
 }
 
@@ -25,7 +34,7 @@ export class CreditsController {
   constructor(private readonly creditsService: CreditsService) {}
 
   /**
-   * Get credit pricing information.
+   * Get credit pricing information. Public - no user data involved.
    */
   @Get("pricing")
   getPricing() {
@@ -37,7 +46,7 @@ export class CreditsController {
   }
 
   /**
-   * Get available credit packages for purchase.
+   * Get available credit packages for purchase. Public - no user data involved.
    */
   @Get("packages")
   async getPackages() {
@@ -45,38 +54,33 @@ export class CreditsController {
   }
 
   /**
-   * Get user's credit balance.
-   * In production, userId would come from JWT token.
+   * Get the caller's own credit balance. userId comes from the verified
+   * JWT, never from the request - there is no way to ask for anyone else's
+   * balance through this endpoint.
    */
-  @Get("balance/:userId")
-  async getBalance(@Param("userId") userId: string) {
-    if (!userId) {
-      throw new BadRequestException("userId is required");
-    }
+  @UseGuards(JwtAuthGuard)
+  @Get("balance")
+  async getBalance(@CurrentUserId() userId: string) {
     return this.creditsService.getBalance(userId);
   }
 
   /**
-   * Initialize credits for a new user (called on signup).
+   * Initialize credits for the caller (called on signup).
    */
+  @UseGuards(JwtAuthGuard)
   @Post("initialize")
-  async initializeCredits(@Body() dto: InitCreditsDto) {
-    if (!dto.userId) {
-      throw new BadRequestException("userId is required");
-    }
-    return this.creditsService.initializeUserCredits(dto.userId);
+  async initializeCredits(@CurrentUserId() userId: string) {
+    return this.creditsService.initializeUserCredits(userId);
   }
 
   /**
-   * Check if user has enough credits.
+   * Check if the caller has enough credits for an amount.
    */
-  @Get("check/:userId")
-  async checkCredits(
-    @Param("userId") userId: string,
-    @Query("amount") amount: string
-  ) {
-    if (!userId || !amount) {
-      throw new BadRequestException("userId and amount are required");
+  @UseGuards(JwtAuthGuard)
+  @Get("check")
+  async checkCredits(@CurrentUserId() userId: string, @Query("amount") amount: string) {
+    if (!amount) {
+      throw new BadRequestException("amount is required");
     }
     const numAmount = parseInt(amount, 10);
     if (isNaN(numAmount) || numAmount <= 0) {
@@ -93,18 +97,19 @@ export class CreditsController {
   }
 
   /**
-   * Use credits for a creation (internal API).
+   * Spend credits from the caller's own balance for a creation.
    */
+  @UseGuards(JwtAuthGuard)
   @Post("use")
-  async useCredits(@Body() dto: UseCreditsDto) {
-    if (!dto.userId || !dto.amount) {
-      throw new BadRequestException("userId and amount are required");
+  async useCredits(@CurrentUserId() userId: string, @Body() dto: UseCreditsDto) {
+    if (!dto.amount) {
+      throw new BadRequestException("amount is required");
     }
     if (dto.amount <= 0) {
       throw new BadRequestException("amount must be positive");
     }
     return this.creditsService.useCredits(
-      dto.userId,
+      userId,
       dto.amount,
       dto.description,
       dto.referenceId
@@ -112,17 +117,15 @@ export class CreditsController {
   }
 
   /**
-   * Get user's transaction history.
+   * Get the caller's own transaction history.
    */
-  @Get("history/:userId")
+  @UseGuards(JwtAuthGuard)
+  @Get("history")
   async getHistory(
-    @Param("userId") userId: string,
+    @CurrentUserId() userId: string,
     @Query("limit") limit?: string,
     @Query("offset") offset?: string
   ) {
-    if (!userId) {
-      throw new BadRequestException("userId is required");
-    }
     const numLimit = limit ? parseInt(limit, 10) : 50;
     const numOffset = offset ? parseInt(offset, 10) : 0;
     return this.creditsService.getTransactionHistory(userId, numLimit, numOffset);

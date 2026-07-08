@@ -10,7 +10,13 @@ const databaseProvider: Provider = {
   useFactory: (): Database =>
     createDb({
       connectionString: process.env.DATABASE_URL ?? "postgres://movai:movai@localhost:5433/movai",
-      ssl: process.env.NODE_ENV === "production"
+      ssl: process.env.NODE_ENV === "production",
+      // Was always createDb()'s hardcoded default (10) regardless of
+      // environment - fine for a laptop, a hard ceiling under real
+      // production concurrency. Env-configurable so it can be raised per
+      // deployment without a code change. This is a *per-process* pool (the
+      // HTTP api and the worker each open their own), not a global cap.
+      maxConnections: process.env.DATABASE_POOL_MAX ? Number.parseInt(process.env.DATABASE_POOL_MAX, 10) : 10
     })
 };
 

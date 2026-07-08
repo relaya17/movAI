@@ -5,6 +5,7 @@ import {
   Body,
   Param,
   Query,
+  UseGuards,
   BadRequestException,
 } from "@nestjs/common";
 import {
@@ -13,70 +14,55 @@ import {
   CreateMusicDto,
   CreateVoiceDto,
 } from "./studio.service";
+import { JwtAuthGuard } from "../auth/jwt-auth.guard";
+import { CurrentUserId } from "../auth/current-user-id.decorator";
 
+@UseGuards(JwtAuthGuard)
 @Controller("studio")
 export class StudioController {
   constructor(private readonly studioService: StudioService) {}
 
   /**
-   * Create a new video.
+   * Create a new video. userId comes from the verified JWT - a caller can
+   * only ever spend their own credits, never someone else's.
    */
   @Post("video")
-  async createVideo(
-    @Body() dto: CreateVideoDto & { userId: string }
-  ) {
-    if (!dto.userId) {
-      throw new BadRequestException("userId is required");
-    }
+  async createVideo(@CurrentUserId() userId: string, @Body() dto: CreateVideoDto) {
     if (!dto.prompt?.trim()) {
       throw new BadRequestException("prompt is required");
     }
-    return this.studioService.createVideo(dto.userId, dto);
+    return this.studioService.createVideo(userId, dto);
   }
 
   /**
    * Create a new music track.
    */
   @Post("music")
-  async createMusic(
-    @Body() dto: CreateMusicDto & { userId: string }
-  ) {
-    if (!dto.userId) {
-      throw new BadRequestException("userId is required");
-    }
+  async createMusic(@CurrentUserId() userId: string, @Body() dto: CreateMusicDto) {
     if (!dto.prompt?.trim()) {
       throw new BadRequestException("prompt is required");
     }
-    return this.studioService.createMusic(dto.userId, dto);
+    return this.studioService.createMusic(userId, dto);
   }
 
   /**
    * Create a new voice/speech.
    */
   @Post("voice")
-  async createVoice(
-    @Body() dto: CreateVoiceDto & { userId: string }
-  ) {
-    if (!dto.userId) {
-      throw new BadRequestException("userId is required");
-    }
+  async createVoice(@CurrentUserId() userId: string, @Body() dto: CreateVoiceDto) {
     if (!dto.text?.trim()) {
       throw new BadRequestException("text is required");
     }
-    return this.studioService.createVoice(dto.userId, dto);
+    return this.studioService.createVoice(userId, dto);
   }
 
   /**
-   * Get a specific creation status.
+   * Get a specific creation status - ownership (userId match) is enforced
+   * in the service query itself, so this can never leak another user's
+   * creation even if they guess a valid id.
    */
   @Get("creations/:id")
-  async getCreation(
-    @Param("id") creationId: string,
-    @Query("userId") userId: string
-  ) {
-    if (!userId) {
-      throw new BadRequestException("userId query param is required");
-    }
+  async getCreation(@CurrentUserId() userId: string, @Param("id") creationId: string) {
     const creation = await this.studioService.getCreation(userId, creationId);
     if (!creation) {
       throw new BadRequestException("Creation not found");
@@ -85,17 +71,14 @@ export class StudioController {
   }
 
   /**
-   * Get all creations for a user.
+   * Get all creations for the caller.
    */
   @Get("creations")
   async getUserCreations(
-    @Query("userId") userId: string,
+    @CurrentUserId() userId: string,
     @Query("limit") limit?: string,
     @Query("offset") offset?: string
   ) {
-    if (!userId) {
-      throw new BadRequestException("userId query param is required");
-    }
     return this.studioService.getUserCreations(
       userId,
       limit ? parseInt(limit, 10) : 20,

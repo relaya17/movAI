@@ -48,6 +48,12 @@ export function createYoutubeAdapter(options: YoutubeAdapterOptions): ContentAda
           url.searchParams.set("part", "snippet");
           url.searchParams.set("type", "video");
           url.searchParams.set("videoCategoryId", "1"); // Film & Animation
+          // Without this, "search" returns arbitrary videos regardless of
+          // license - including full copyrighted films re-uploaded without
+          // permission, which is exactly what this app cannot legally show.
+          // "creativeCommon" restricts results to videos the uploader has
+          // explicitly marked reusable (architecture plan §1.1).
+          url.searchParams.set("videoLicense", "creativeCommon");
           url.searchParams.set("q", query);
           url.searchParams.set("key", options.apiKey);
 

@@ -10,6 +10,7 @@ import { CreditsModule } from "./credits/credits.module";
 import { QueueModule } from "./queue/queue.module";
 import { StudioModule } from "./studio/studio.module";
 import { AIProvidersModule } from "./ai-providers/ai-providers.module";
+import { MonitoringModule } from "./monitoring/monitoring.module";
 
 @Module({
   imports: [
@@ -18,6 +19,7 @@ import { AIProvidersModule } from "./ai-providers/ai-providers.module";
     // tightened per-route (e.g. auth) inside the relevant controllers.
     ThrottlerModule.forRoot([{ ttl: 60_000, limit: 100 }]),
     InfraModule,
+    MonitoringModule,
     HealthModule,
     MoviesModule,
     AdminModule,

@@ -8,13 +8,24 @@ import { movies } from "../schema/catalog";
  * deliberately never overwritten - other tables (watchlist_items, ratings)
  * hold foreign keys to `movies.id`, so re-ingesting the same movie must
  * never change its identity, only refresh its metadata.
+ *
+ * Also de-duplicates by `tmdbId` when present: the same underlying film can
+ * be discovered twice under different slugs (e.g. an Archive.org identifier
+ * vs. a YouTube video id for the same public-domain title, or the same
+ * Archive.org item resurfacing under a different daily search query). When
+ * a row already exists for that tmdbId, this merges the new data into that
+ * *existing* row instead of creating a second catalog entry for one film.
  */
 export async function upsertMovie(db: Database, movie: PublicMovie): Promise<void> {
+  const existingByTmdbId = movie.tmdbId ? await getMovieByTmdbId(db, movie.tmdbId) : undefined;
+  const targetId = existingByTmdbId?.id ?? movie.id;
+  const targetSlug = existingByTmdbId?.slug ?? movie.slug;
+
   await db
     .insert(movies)
     .values({
-      id: movie.id,
-      slug: movie.slug,
+      id: targetId,
+      slug: targetSlug,
       title: movie.title,
       originalTitle: movie.originalTitle ?? null,
       year: movie.year,
@@ -41,6 +52,11 @@ export async function upsertMovie(db: Database, movie: PublicMovie): Promise<voi
         updatedAt: new Date()
       }
     });
+}
+
+export async function getMovieByTmdbId(db: Database, tmdbId: number): Promise<PublicMovie | undefined> {
+  const [row] = await db.select().from(movies).where(eq(movies.tmdbId, tmdbId)).limit(1);
+  return row ? rowToPublicMovie(row) : undefined;
 }
 
 /**

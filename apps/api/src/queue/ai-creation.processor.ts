@@ -9,6 +9,8 @@ import { AI_CREATION_QUEUE } from "./constants";
 import { ReplicateService } from "../ai-providers/replicate.service";
 import { SunoService } from "../ai-providers/suno.service";
 import { ElevenLabsService } from "../ai-providers/elevenlabs.service";
+import { CreditsService } from "../credits/credits.service";
+import { captureError } from "../monitoring/alerting";
 
 export interface AICreationJobData {
   creationId: string;
@@ -16,6 +18,8 @@ export interface AICreationJobData {
   type: "video" | "music" | "voice";
   prompt: string;
   params: Record<string, unknown>;
+  /** Needed here (not just re-read from the DB row) so a refund never depends on a second query racing the row's own update. */
+  creditsUsed: number;
 }
 
 export interface AICreationResult {
@@ -32,13 +36,14 @@ export class AICreationProcessor extends WorkerHost {
     @Inject(DATABASE) private readonly db: PostgresJsDatabase,
     private readonly replicateService: ReplicateService,
     private readonly sunoService: SunoService,
-    private readonly elevenLabsService: ElevenLabsService
+    private readonly elevenLabsService: ElevenLabsService,
+    private readonly creditsService: CreditsService
   ) {
     super();
   }
 
   async process(job: Job<AICreationJobData>): Promise<AICreationResult> {
-    const { creationId, type, prompt, params } = job.data;
+    const { creationId, userId, type, prompt, params, creditsUsed } = job.data;
 
     this.logger.log(`Processing AI creation job ${job.id}: ${type}`);
 
@@ -83,15 +88,46 @@ export class AICreationProcessor extends WorkerHost {
       const errorMessage =
         error instanceof Error ? error.message : "Unknown error";
 
-      // Update with failure
-      await this.db
-        .update(aiCreations)
-        .set({
-          status: "failed",
-          errorMessage,
-          completedAt: new Date(),
-        })
-        .where(eq(aiCreations.id, creationId));
+      // BullMQ retries this job (queue.module.ts: attempts: 3, exponential
+      // backoff) before giving up - refunding on every intermediate attempt
+      // would credit the user multiple times for one failed generation, or
+      // refund right before a later retry succeeds. Only the last allowed
+      // attempt is a *final* failure worth refunding for.
+      const maxAttempts = job.opts.attempts ?? 1;
+      const isFinalAttempt = job.attemptsMade + 1 >= maxAttempts;
+
+      if (isFinalAttempt) {
+        // Update with failure
+        await this.db
+          .update(aiCreations)
+          .set({
+            status: "failed",
+            errorMessage,
+            completedAt: new Date(),
+          })
+          .where(eq(aiCreations.id, creationId));
+
+        try {
+          await this.creditsService.addCredits(
+            userId,
+            creditsUsed,
+            "refund",
+            `החזר קרדיטים - יצירה נכשלה: ${errorMessage}`,
+            creationId
+          );
+          this.logger.log(`Refunded ${creditsUsed} credits to user ${userId} for failed creation ${creationId}`);
+        } catch (refundError) {
+          // Never let a refund failure hide the original generation error -
+          // this is reported loudly (log + Sentry, if configured) on
+          // purpose so it doesn't disappear silently - this is real money
+          // owed to a real user that a human now needs to look at.
+          captureError(refundError, { creationId, userId, creditsUsed, reason: "refund-failed" });
+        }
+      } else {
+        this.logger.warn(
+          `AI creation ${creationId} failed on attempt ${job.attemptsMade + 1}/${maxAttempts}, will retry: ${errorMessage}`
+        );
+      }
 
       this.logger.error(`AI creation ${creationId} failed: ${errorMessage}`);
       throw error;
