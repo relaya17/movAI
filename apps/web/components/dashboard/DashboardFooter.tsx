@@ -1,9 +1,23 @@
 import Link from "next/link";
 import { getTranslations } from "next-intl/server";
 
-export async function DashboardFooter(): Promise<React.ReactElement> {
+interface DashboardFooterProps {
+  compact?: boolean;
+}
+
+export async function DashboardFooter({ compact = false }: DashboardFooterProps): Promise<React.ReactElement> {
   const t = await getTranslations("footer");
   const currentYear = new Date().getFullYear();
+
+  if (compact) {
+    return (
+      <footer className="border-t border-white/10 bg-neutral-950/80 backdrop-blur-sm">
+        <p className="py-3 text-center text-xs text-neutral-500">
+          © {currentYear} Relaya. {t("rights")}
+        </p>
+      </footer>
+    );
+  }
 
   const LEGAL_LINKS = [
     { href: "/legal/terms", label: t("legal.terms") },

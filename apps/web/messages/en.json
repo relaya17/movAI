@@ -162,6 +162,9 @@
   "studio": {
     "pageHeading": "Studio",
     "pageSubtitle": "Create original content using artificial intelligence",
+    "heroTagline": "Your creative space — video, music, voice and song powered by AI",
+    "backToStudio": "Back to studio",
+    "navLabel": "Studio navigation",
     "usage": {
       "creditBalance": "Credit Balance",
       "buyMore": "Buy More Credits"

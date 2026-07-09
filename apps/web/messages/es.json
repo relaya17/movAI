@@ -162,6 +162,9 @@
   "studio": {
     "pageHeading": "Estudio",
     "pageSubtitle": "Crea contenido original con inteligencia artificial",
+    "heroTagline": "Tu espacio creativo — video, música, voz y canto con IA",
+    "backToStudio": "Volver al estudio",
+    "navLabel": "Navegación del estudio",
     "usage": {
       "creditBalance": "Saldo de Créditos",
       "buyMore": "Comprar Más Créditos"

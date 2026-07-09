@@ -1,4 +1,5 @@
 import { redirect } from "next/navigation";
+import { headers } from "next/headers";
 import { eq } from "drizzle-orm";
 import type { ReactNode } from "react";
 import { auth } from "@/auth";
@@ -34,6 +35,9 @@ export default async function DashboardLayout({ children }: { children: ReactNod
   const userRow = userRows[0];
   const showVerificationBanner = Boolean(userRow?.passwordHash) && !userRow?.emailVerified;
 
+  const pathname = (await headers()).get("x-pathname") ?? "";
+  const compactFooter = pathname === "/studio" || pathname.startsWith("/studio/");
+
   return (
     <div className="flex min-h-[100dvh] flex-col bg-neutral-950">
       {showVerificationBanner && <EmailVerificationBanner />}
@@ -42,7 +46,7 @@ export default async function DashboardLayout({ children }: { children: ReactNod
         {showSponsorBanner && <SponsorBanner />}
         {children}
       </main>
-      <DashboardFooter />
+      <DashboardFooter compact={compactFooter} />
     </div>
   );
 }
