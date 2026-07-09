@@ -9,7 +9,9 @@
   "packageManager": "pnpm@9.15.9",
   "scripts": {
     "build": "turbo run build",
+    "predev": "node scripts/kill-dev-ports.mjs",
     "dev": "turbo run dev",
+    "dev:clean": "node scripts/kill-dev-ports.mjs && node -e \"require('node:fs').rmSync('apps/web/.next',{recursive:true,force:true})\" && turbo run dev",
     "dev:worker": "pnpm --filter @movai/api dev:worker",
     "lint": "turbo run lint",
     "typecheck": "turbo run typecheck",

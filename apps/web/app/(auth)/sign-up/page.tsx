@@ -3,7 +3,7 @@ import { cookies } from "next/headers";
 import { getTranslations } from "next-intl/server";
 import { signUpAction } from "@/lib/auth-actions";
 import { SignUpForm } from "@/components/SignUpForm";
-import { REFERRAL_COOKIE } from "@/lib/referral-actions";
+import { REFERRAL_COOKIE } from "@/lib/referral-constants";
 
 export const metadata = { title: "הרשמה" };
 

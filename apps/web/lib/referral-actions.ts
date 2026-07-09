@@ -4,8 +4,7 @@ import { cookies } from "next/headers";
 import { auth } from "@/auth";
 import { db } from "./db";
 import { ensureReferralCode, getReferralCodeForUser, redeemReferralCode } from "@movai/db";
-
-const REFERRAL_COOKIE = "movai_ref";
+import { REFERRAL_COOKIE } from "./referral-constants";
 
 export async function getReferralLinkAction(): Promise<{ code: string; link: string } | { error: string }> {
   const session = await auth();
@@ -39,5 +38,3 @@ export async function applyReferralCodeAction(code: string, userId: string): Pro
   if (!code.trim()) return;
   await redeemReferralCode(db, userId, code.trim());
 }
-
-export { REFERRAL_COOKIE };

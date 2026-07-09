@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
+import { REFERRAL_COOKIE } from "@/lib/referral-constants";
 
 /**
  * CSP (architecture plan §13 security).
@@ -57,7 +58,7 @@ export function middleware(request: NextRequest): NextResponse {
 
   const ref = request.nextUrl.searchParams.get("ref");
   if (ref && /^[a-f0-9]{8}$/i.test(ref)) {
-    response.cookies.set("movai_ref", ref.toLowerCase(), {
+    response.cookies.set(REFERRAL_COOKIE, ref.toLowerCase(), {
       maxAge: 60 * 60 * 24 * 30,
       httpOnly: true,
       sameSite: "lax",
