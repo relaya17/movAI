@@ -141,6 +141,24 @@ export async function getMovieEmbedding(db: Database, movieId: string): Promise<
   return row?.embedding ?? undefined;
 }
 
+export async function updateMovieEmbedding(db: Database, movieId: string, embedding: number[]): Promise<void> {
+  await db.update(movies).set({ embedding, updatedAt: new Date() }).where(eq(movies.id, movieId));
+}
+
+/** Active catalog movies that still need an embedding vector. */
+export async function listMoviesMissingEmbeddings(db: Database, limit = 50): Promise<PublicMovie[]> {
+  const rows = await db
+    .select()
+    .from(movies)
+    .where(and(eq(movies.linkStatus, "active"), eq(movies.contentType, "movie")))
+    .limit(limit * 4);
+
+  return rows
+    .filter((row) => !Array.isArray(row.embedding) || row.embedding.length === 0)
+    .slice(0, limit)
+    .map(rowToPublicMovie);
+}
+
 export async function getMoviesByIds(db: Database, ids: readonly string[]): Promise<PublicMovie[]> {
   if (ids.length === 0) return [];
   const rows = await db

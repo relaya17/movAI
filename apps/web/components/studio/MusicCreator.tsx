@@ -24,7 +24,7 @@ export function MusicCreator(): React.ReactElement {
   const [mood, setMood] = useState("happy");
   const [withLyrics, setWithLyrics] = useState(false);
   const [lyrics, setLyrics] = useState("");
-  const [quality, setQuality] = useState<"standard" | "pro">("standard");
+  const [quality, setQuality] = useState<"standard" | "pro" | "studio">("standard");
   const { phase, resultUrl, error, start } = useAiGeneration();
   const isGenerating = phase === "starting" || phase === "processing";
 
@@ -96,7 +96,7 @@ export function MusicCreator(): React.ReactElement {
       {/* Quality tier */}
       <div className="rounded-xl border border-white/10 bg-black/20 p-4">
         <p className="mb-3 text-sm font-medium text-neutral-300">{t("qualityLabel")}</p>
-        <div className="grid grid-cols-2 gap-2">
+        <div className="grid grid-cols-1 gap-2 sm:grid-cols-3">
           <button
             type="button"
             onClick={() => setQuality("standard")}
@@ -120,6 +120,18 @@ export function MusicCreator(): React.ReactElement {
           >
             <div className="font-semibold">{t("qualityPro")}</div>
             <div className="text-xs opacity-80">{t("qualityProCost")}</div>
+          </button>
+          <button
+            type="button"
+            onClick={() => setQuality("studio")}
+            className={`rounded-lg px-3 py-3 text-sm transition-all ${
+              quality === "studio"
+                ? "bg-gradient-to-r from-purple-500/20 to-pink-500/20 text-purple-200 ring-1 ring-purple-500/50"
+                : "bg-white/5 text-neutral-400 hover:bg-white/10"
+            }`}
+          >
+            <div className="font-semibold">{t("qualityStudio")}</div>
+            <div className="text-xs opacity-80">{t("qualityStudioCost")}</div>
           </button>
         </div>
       </div>

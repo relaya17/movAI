@@ -18,6 +18,7 @@ export const QUEUE_NAMES = {
   subtitles: "subtitles",
   dubbing: "dubbing",
   onboarding: "onboarding",
+  embeddings: "embeddings",
   deadLetter: "dead-letter"
 } as const;
 
@@ -57,6 +58,16 @@ export const OnboardingDripJobSchema = z.object({
   dripDay: z.union([z.literal(3), z.literal(7)])
 });
 export type OnboardingDripJob = z.infer<typeof OnboardingDripJobSchema>;
+
+export const EmbeddingJobSchema = z.object({
+  movieId: z.string().uuid()
+});
+export type EmbeddingJob = z.infer<typeof EmbeddingJobSchema>;
+
+export const EmbeddingBackfillJobSchema = z.object({
+  batchSize: z.number().int().positive().max(200).default(50)
+});
+export type EmbeddingBackfillJob = z.infer<typeof EmbeddingBackfillJobSchema>;
 
 export const DeadLetterJobSchema = z.object({
   originalQueue: z.string(),
@@ -147,6 +158,35 @@ export function createOnboardingQueue(connection: ConnectionOptions): Queue<Onbo
   });
   attachQuietErrorHandler(queue);
   return queue;
+}
+
+export function createEmbeddingQueue(connection: ConnectionOptions): Queue<EmbeddingJob | EmbeddingBackfillJob> {
+  const queue = new Queue<EmbeddingJob | EmbeddingBackfillJob>(QUEUE_NAMES.embeddings, {
+    connection,
+    prefix: QUEUE_PREFIX,
+    defaultJobOptions: { ...DEFAULT_JOB_OPTIONS, attempts: 2 }
+  });
+  attachQuietErrorHandler(queue);
+  return queue;
+}
+
+export function createLazyEmbeddingQueue(connection: ConnectionOptions): Pick<Queue<EmbeddingJob | EmbeddingBackfillJob>, "add"> {
+  let queue: Queue<EmbeddingJob | EmbeddingBackfillJob> | undefined;
+  return {
+    add: (...args: Parameters<Queue<EmbeddingJob | EmbeddingBackfillJob>["add"]>) => {
+      queue ??= createEmbeddingQueue(connection);
+      return queue.add(...args);
+    }
+  };
+}
+
+/** Nightly backfill for catalog rows ingested before the embedding worker existed. */
+export async function scheduleDailyEmbeddingBackfill(queue: Queue<EmbeddingJob | EmbeddingBackfillJob>): Promise<void> {
+  await queue.add(
+    "backfill",
+    { batchSize: 50 },
+    { repeat: { pattern: "0 4 * * *" }, jobId: "daily-embedding-backfill" }
+  );
 }
 
 /** Daily onboarding drip scan (day 3 + day 7 emails). */

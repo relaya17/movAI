@@ -10,6 +10,8 @@ import {
 } from "@movai/db";
 import { db } from "./db";
 import { listMovies as listMoviesCatalog } from "./movies";
+import { getRecommendationLambda } from "./experiments";
+import { trackServerEvent } from "./analytics";
 
 /** A recommended movie plus a short, honest "why" - the transparency big streaming apps' black-box algorithms don't offer. */
 export type RecommendedMovie = PublicMovie & { reason: string };
@@ -42,13 +44,15 @@ export async function getRecommendationsForUser(userId: string | undefined, limi
 
     const withEmbeddings = await listMoviesWithEmbeddings(db, 200);
     const seedEmbedding = await averageSeedEmbedding(seedMovies.map((m) => m.id));
+    const lambda = await getRecommendationLambda();
 
     if (seedEmbedding && withEmbeddings.length > 0) {
       const candidates = new Map(withEmbeddings.filter((m) => !seedIds.includes(m.id)).map((m) => [m.id, m.embedding]));
-      const ranked = diversify(seedEmbedding, candidates, limit);
+      const ranked = diversify(seedEmbedding, candidates, limit, { lambda });
       const byId = new Map(withEmbeddings.map((m) => [m.id, m]));
       const picked = ranked.map((r) => byId.get(r.movieId)).filter((m): m is PublicMovie & { embedding: number[] } => !!m);
       if (picked.length > 0) {
+        await trackServerEvent("recommendation_shown", { count: picked.length, source: "embedding" });
         return picked.map(({ embedding: _e, ...movie }) => withReason(movie, buildGenreReason(movie.genres, seedMovies)));
       }
     }
@@ -70,10 +74,11 @@ export async function getSimilarMovies(movieId: string, genres: readonly string[
   try {
     const withEmbeddings = await listMoviesWithEmbeddings(db, 200);
     const seedEmbedding = await getMovieEmbedding(db, movieId);
+    const lambda = await getRecommendationLambda();
 
     if (seedEmbedding && withEmbeddings.length > 0) {
       const candidates = new Map(withEmbeddings.filter((m) => m.id !== movieId).map((m) => [m.id, m.embedding]));
-      const ranked = diversify(seedEmbedding, candidates, limit);
+      const ranked = diversify(seedEmbedding, candidates, limit, { lambda });
       const byId = new Map(withEmbeddings.map((m) => [m.id, m]));
       const picked = ranked.map((r) => byId.get(r.movieId)).filter((m): m is PublicMovie & { embedding: number[] } => !!m);
       if (picked.length > 0) {

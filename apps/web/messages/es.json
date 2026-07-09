@@ -248,6 +248,8 @@
       "qualityStandardCost": "2 créditos · MusicGen",
       "qualityPro": "Pro",
       "qualityProCost": "6 créditos · stereo-large",
+      "qualityStudio": "Estudio",
+      "qualityStudioCost": "10 créditos · MiniMax Music",
       "moods": {
         "happy": "Feliz",
         "sad": "Triste",
@@ -422,6 +424,13 @@
     "saving": "Guardando...",
     "authRequired": "Inicia sesión para guardar títulos.",
     "error": "No se pudo actualizar la lista. Inténtalo de nuevo."
+  },
+  "concierge": {
+    "label": "Movie Concierge — búsqueda en lenguaje natural",
+    "placeholder": "ej. películas de drama clásicas de los años 60",
+    "search": "Buscar",
+    "searching": "Buscando...",
+    "hint": "Describe lo que quieres ver — MoVAI encuentra contenido legal y gratuito"
   },
   "recommendations": {
     "title": "Recomendado para ti",

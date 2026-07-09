@@ -80,10 +80,10 @@
       "breakpoints": true
     },
     {
-      "idx": 11,
+      "idx": 12,
       "version": "7",
-      "when": 1783720803000,
-      "tag": "0011_growth_referrals",
+      "when": 1783720804000,
+      "tag": "0012_pgvector",
       "breakpoints": true
     }
   ]

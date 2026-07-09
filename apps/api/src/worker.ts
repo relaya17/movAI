@@ -13,6 +13,9 @@ import {
   createDubbingWorker,
   createOnboardingWorker,
   createOnboardingQueue,
+  createEmbeddingWorker,
+  createEmbeddingQueue,
+  scheduleDailyEmbeddingBackfill,
   createQueueConnection,
   scheduleDailyIngestion,
   scheduleDailyLinkCheck,
@@ -39,6 +42,7 @@ import { processSubtitleJob } from "./subtitles/process-subtitle";
 import { processDubbingJob } from "./dubbing/process-dubbing";
 import { processOnboardingDrip } from "./onboarding/process-onboarding-drip";
 import { sendOnboardingDripEmail } from "./email/onboarding-email";
+import { processEmbeddingJob, processEmbeddingBackfill } from "./embeddings/process-embedding";
 
 /**
  * Separate process from the HTTP API (apps/api/src/main.ts) - BullMQ
@@ -115,6 +119,14 @@ async function bootstrap(): Promise<void> {
 
       await indexMovies(search, processed);
 
+      const embeddingQueue = createEmbeddingQueue(connection);
+      for (const movie of processed) {
+        if (movie.contentType === "movie") {
+          await embeddingQueue.add(`embed-${movie.id}`, { movieId: movie.id }, { jobId: `embed-${movie.id}` });
+        }
+      }
+      await embeddingQueue.close();
+
       // The 5-minute cache-aside TTL on movie search (apps/api MoviesService)
       // would otherwise let a query that was searched moments before this
       // ingestion run keep serving the pre-ingestion (empty/stale) result set.
@@ -170,6 +182,17 @@ async function bootstrap(): Promise<void> {
     captureMessage(`Onboarding drip job exhausted all retries: ${entry.failedReason}`, entry)
   );
 
+  const embeddingWorker = createEmbeddingWorker({
+    connection,
+    processEmbedding: async (movieId) => {
+      await processEmbeddingJob(db, movieId);
+    },
+    processBackfill: async (batchSize) => processEmbeddingBackfill(db, batchSize)
+  });
+  attachDeadLetterRouting(embeddingWorker, deadLetterQueue, QUEUE_NAMES.embeddings, (entry) =>
+    captureMessage(`Embedding job exhausted all retries: ${entry.failedReason}`, entry)
+  );
+
   const linkCheckQueue = createLinkCheckQueue(connection);
   await scheduleDailyLinkCheck(linkCheckQueue);
 
@@ -185,7 +208,11 @@ async function bootstrap(): Promise<void> {
   const onboardingQueue = createOnboardingQueue(connection);
   await scheduleDailyOnboardingDrip(onboardingQueue);
 
-  logger.log("MoVAI workers running (ingestion, daily catalog sweep, link-check, subtitles, dubbing, onboarding drip, dead-letter routing active)");
+  const embeddingQueue = createEmbeddingQueue(connection);
+  await scheduleDailyEmbeddingBackfill(embeddingQueue);
+  await embeddingQueue.add("backfill", { batchSize: 100 }, { jobId: "startup-embedding-backfill" });
+
+  logger.log("MoVAI workers running (ingestion, daily catalog sweep, link-check, subtitles, dubbing, onboarding drip, embeddings, dead-letter routing active)");
 
   const shutdown = async (): Promise<void> => {
     logger.log("Shutting down workers...");
@@ -195,9 +222,11 @@ async function bootstrap(): Promise<void> {
       subtitleWorker.close(),
       dubbingWorker.close(),
       onboardingWorker.close(),
+      embeddingWorker.close(),
       linkCheckQueue.close(),
       ingestionQueue.close(),
       onboardingQueue.close(),
+      embeddingQueue.close(),
       deadLetterQueue.close()
     ]);
     await appContext.close();

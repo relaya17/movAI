@@ -248,6 +248,8 @@
       "qualityStandardCost": "2 credits · MusicGen",
       "qualityPro": "Pro",
       "qualityProCost": "6 credits · stereo-large",
+      "qualityStudio": "Studio",
+      "qualityStudioCost": "10 credits · MiniMax Music",
       "moods": {
         "happy": "Happy",
         "sad": "Sad",
@@ -469,6 +471,13 @@
     "saving": "Saving...",
     "authRequired": "Sign in to save titles.",
     "error": "Could not update watchlist. Try again."
+  },
+  "concierge": {
+    "label": "Movie Concierge — natural language search",
+    "placeholder": "e.g. classic drama films from the 1960s",
+    "search": "Search",
+    "searching": "Searching...",
+    "hint": "Describe what you want to watch — MoVAI finds legal free content"
   },
   "recommendations": {
     "title": "Recommended for you",

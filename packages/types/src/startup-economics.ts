@@ -22,6 +22,7 @@ export const ESTIMATED_PROVIDER_USD_PER_CREDIT = 0.03;
 export const CREDIT_COSTS = {
   music: 2,
   musicPro: 6,
+  musicStudio: 10,
   image: 1,
   imagePro: 5,
   voicePer1kChars: 1,

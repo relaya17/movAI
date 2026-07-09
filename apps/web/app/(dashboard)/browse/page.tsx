@@ -3,6 +3,7 @@ import { getTranslations } from "next-intl/server";
 import type { ContentType, PublicMovie } from "@movai/types";
 import { auth } from "@/auth";
 import { BrowseHero } from "@/components/dashboard/BrowseHero";
+import { ConciergeSearch } from "@/components/dashboard/ConciergeSearch";
 import { BrowsePageClient } from "@/components/dashboard/BrowsePageClient";
 import { ContentGrid } from "@/components/dashboard/ContentGrid";
 import { RealUploadsSection } from "@/components/dashboard/RealUploadsSection";
@@ -98,6 +99,7 @@ export default async function BrowsePage({ searchParams }: BrowsePageProps): Pro
   return (
     <BrowsePageClient>
       <BrowseHero activeCategory={activeCategory} />
+      {activeCategory === "all" ? <ConciergeSearch /> : null}
       <div className="mt-10 px-4 pb-16 sm:px-6 lg:px-8">
         <div className="mx-auto max-w-7xl space-y-10">
           {activeCategory === "all" ? <OnboardingPrompt /> : null}

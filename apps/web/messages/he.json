@@ -248,6 +248,8 @@
       "qualityStandardCost": "2 קרדיטים · MusicGen",
       "qualityPro": "פרו",
       "qualityProCost": "6 קרדיטים · stereo-large",
+      "qualityStudio": "סטודיו",
+      "qualityStudioCost": "10 קרדיטים · MiniMax Music",
       "moods": {
         "happy": "שמח",
         "sad": "עצוב",
@@ -469,6 +471,13 @@
     "saving": "שומר...",
     "authRequired": "יש להתחבר כדי לשמור כותרים.",
     "error": "לא הצלחנו לעדכן את הרשימה. נסו שוב."
+  },
+  "concierge": {
+    "label": "Movie Concierge — חיפוש בשפה טבעית",
+    "placeholder": "לדוגמה: סרטי דרמה קלאסיים משנות השישים",
+    "search": "חפש",
+    "searching": "מחפש...",
+    "hint": "תארו מה אתם רוצים לראות — MoVAI ימצא תוכן חוקי וחינמי מתאים"
   },
   "recommendations": {
     "title": "מומלץ עבורך",

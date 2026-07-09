@@ -30,8 +30,9 @@ function videoCreditCost(durationSeconds: number, quality: "standard" | "pro"): 
   return quality === "pro" ? base * 2 : base;
 }
 
-/** Standard MusicGen vs Pro (stereo-large, longer render). */
-function musicCreditCost(quality: "standard" | "pro"): number {
+/** Standard MusicGen vs Pro (stereo-large) vs Studio (MiniMax Music). */
+function musicCreditCost(quality: "standard" | "pro" | "studio"): number {
+  if (quality === "studio") return 10;
   return quality === "pro" ? 6 : 2;
 }
 
@@ -140,7 +141,7 @@ export interface GenerateMusicInput {
   genre: string;
   mood: string;
   withLyrics: boolean;
-  quality: "standard" | "pro";
+  quality: "standard" | "pro" | "studio";
   lyrics?: string | undefined;
 }
 
@@ -158,7 +159,12 @@ export async function generateMusicAction(input: GenerateMusicInput): Promise<St
       fullPrompt = `${fullPrompt}, with vocals and lyrics`;
     }
   }
-  const model = input.quality === "pro" ? REPLICATE_MODELS.musicPro : REPLICATE_MODELS.music;
+  const model =
+    input.quality === "studio"
+      ? REPLICATE_MODELS.musicStudio
+      : input.quality === "pro"
+        ? REPLICATE_MODELS.musicPro
+        : REPLICATE_MODELS.music;
 
   return chargeAndStart(
     userId,
@@ -173,11 +179,16 @@ export async function generateMusicAction(input: GenerateMusicInput): Promise<St
       ...(input.lyrics?.trim() ? { lyrics: input.lyrics.trim() } : {})
     },
     model,
-    {
-      prompt: fullPrompt,
-      duration: input.quality === "pro" ? 60 : 30,
-      model_version: input.quality === "pro" ? "stereo-large" : "stereo-melody-large"
-    }
+    input.quality === "studio"
+      ? {
+          prompt: fullPrompt,
+          duration: 90
+        }
+      : {
+          prompt: fullPrompt,
+          duration: input.quality === "pro" ? 60 : 30,
+          model_version: input.quality === "pro" ? "stereo-large" : "stereo-melody-large"
+        }
   );
 }
 

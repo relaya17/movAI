@@ -5,6 +5,7 @@ import { NextIntlClientProvider } from "next-intl";
 import { getLocale, getMessages } from "next-intl/server";
 import { isRtl, type Locale } from "@/i18n/config";
 import { ServiceWorkerRegister } from "@/components/ServiceWorkerRegister";
+import { AnalyticsProvider } from "@/components/AnalyticsProvider";
 import { CookieConsentBanner } from "@/components/CookieConsentBanner";
 import "./globals.css";
 
@@ -56,6 +57,7 @@ export default async function RootLayout({ children }: { children: ReactNode }):
           {skipToContentLabel}
         </a>
         <NextIntlClientProvider locale={locale} messages={messages}>
+          <AnalyticsProvider />
           <ServiceWorkerRegister />
           <div id="main-content">{children}</div>
           <CookieConsentBanner />

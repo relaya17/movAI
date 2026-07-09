@@ -248,6 +248,8 @@
       "qualityStandardCost": "رصيدان · MusicGen",
       "qualityPro": "احترافي",
       "qualityProCost": "6 أرصدة · stereo-large",
+      "qualityStudio": "استوديو",
+      "qualityStudioCost": "10 أرصدة · MiniMax Music",
       "moods": {
         "happy": "سعيد",
         "sad": "حزين",
@@ -416,6 +418,13 @@
     "saving": "جارٍ الحفظ...",
     "authRequired": "سجّل الدخول لحفظ العناوين.",
     "error": "تعذّر تحديث قائمة المشاهدة. حاول مرة أخرى."
+  },
+  "concierge": {
+    "label": "Movie Concierge — بحث بلغة طبيعية",
+    "placeholder": "مثال: أفلام دراما كلاسيكية من الستينيات",
+    "search": "بحث",
+    "searching": "جاري البحث...",
+    "hint": "صف ما تريد مشاهدته — MoVAI يجد محتوى قانونيًا ومجانيًا"
   },
   "recommendations": {
     "title": "موصى به لك",

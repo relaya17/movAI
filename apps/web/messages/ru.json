@@ -248,6 +248,8 @@
       "qualityStandardCost": "2 кредита · MusicGen",
       "qualityPro": "Pro",
       "qualityProCost": "6 кредитов · stereo-large",
+      "qualityStudio": "Студия",
+      "qualityStudioCost": "10 кредитов · MiniMax Music",
       "moods": {
         "happy": "Радостное",
         "sad": "Грустное",
@@ -416,6 +418,13 @@
     "saving": "Сохранение...",
     "authRequired": "Войдите, чтобы сохранять названия.",
     "error": "Не удалось обновить список. Попробуйте ещё раз."
+  },
+  "concierge": {
+    "label": "Movie Concierge — поиск на естественном языке",
+    "placeholder": "напр. классические драмы 1960-х",
+    "search": "Искать",
+    "searching": "Поиск...",
+    "hint": "Опишите, что хотите посмотреть — MoVAI найдёт легальный бесплатный контент"
   },
   "recommendations": {
     "title": "Рекомендуем вам",

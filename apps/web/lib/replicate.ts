@@ -28,6 +28,8 @@ export const REPLICATE_MODELS = {
   videoPro: process.env.REPLICATE_VIDEO_MODEL_PRO ?? "luma/ray-flash-2-720p",
   music: process.env.REPLICATE_MUSIC_MODEL ?? "meta/musicgen",
   musicPro: process.env.REPLICATE_MUSIC_MODEL_PRO ?? "meta/musicgen",
+  /** Studio tier — higher-fidelity vocal/instrument separation (MiniMax Music). */
+  musicStudio: process.env.REPLICATE_MUSIC_MODEL_STUDIO ?? "minimax/music-01",
   voice: process.env.REPLICATE_VOICE_MODEL ?? "lucataco/xtts-v2",
   whisper: process.env.REPLICATE_WHISPER_MODEL ?? "openai/whisper",
   // Schnell = standard tier (fast, cheap); Pro = paid tier, noticeably

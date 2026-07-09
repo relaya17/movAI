@@ -18,6 +18,7 @@
     "@movai/content-adapters": "workspace:*",
     "@movai/db": "workspace:*",
     "@movai/queue": "workspace:*",
+    "@movai/recommendation-engine": "workspace:*",
     "@movai/search": "workspace:*",
     "@movai/types": "workspace:*",
     "@nestjs/common": "10.4.15",
