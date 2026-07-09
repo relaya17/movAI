@@ -32,12 +32,19 @@ const NON_MOVIE_CONTENT_TYPES: readonly Exclude<ContentType, "movie">[] = ["stan
  * they're zeroed out rather than fabricated - ContentGrid already hides the
  * gift badge entirely when gifts is 0.
  */
-function toContentGridItems(items: readonly PublicMovie[]) {
+/**
+ * When the item came from getRecommendationsForUser, `reason` is a short
+ * "why this" line (e.g. "כי אהבת סרטי דרמה") - shown instead of the plain
+ * genre/year subtitle so the recommended row is transparent about why an
+ * item showed up, unlike the black-box algorithms big streamers get
+ * criticized for.
+ */
+function toContentGridItems(items: readonly (PublicMovie & { reason?: string })[]) {
   return items.map((item) => ({
     id: item.slug,
     title: item.title,
     thumbnail: item.posterUrl ?? FALLBACK_POSTER,
-    creator: item.genres[0] ?? String(item.year),
+    creator: item.reason ?? item.genres[0] ?? String(item.year),
     views: 0,
     gifts: 0
   }));

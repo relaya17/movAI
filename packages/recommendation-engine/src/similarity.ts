@@ -47,3 +47,59 @@ export function rankBySimilarity(
   }
   return scored.sort((x, y) => y.score - x.score).slice(0, limit);
 }
+
+export interface DiversifyOptions {
+  /**
+   * 1 = pure relevance (identical to rankBySimilarity), 0 = pure diversity.
+   * Default leans toward relevance while still refusing to fill the whole
+   * list from one tight cluster - this is the "genre silo" fix: big
+   * streaming apps rank by pure similarity and end up feeding users an
+   * increasingly narrow slice of what they already watch.
+   */
+  lambda?: number;
+}
+
+/**
+ * Maximal Marginal Relevance re-ranking: greedily picks the next candidate
+ * that balances relevance to the seed against similarity to items already
+ * picked, so the result isn't just the single nearest cluster. O(limit * n),
+ * fine for the ~200-candidate pools used here.
+ */
+export function diversify(
+  seedEmbedding: readonly number[],
+  candidates: ReadonlyMap<string, readonly number[]>,
+  limit = 20,
+  options: DiversifyOptions = {}
+): ScoredMovieId[] {
+  const lambda = options.lambda ?? 0.75;
+  const pool = new Map(candidates);
+  const picked: ScoredMovieId[] = [];
+  const pickedEmbeddings: (readonly number[])[] = [];
+
+  while (picked.length < limit && pool.size > 0) {
+    let bestId: string | undefined;
+    let bestEmbedding: readonly number[] | undefined;
+    let bestScore = -Infinity;
+
+    for (const [id, embedding] of pool) {
+      const relevance = cosineSimilarity(seedEmbedding, embedding);
+      const maxSimToPicked =
+        pickedEmbeddings.length === 0
+          ? 0
+          : Math.max(...pickedEmbeddings.map((pickedEmbedding) => cosineSimilarity(embedding, pickedEmbedding)));
+      const mmrScore = lambda * relevance - (1 - lambda) * maxSimToPicked;
+      if (mmrScore > bestScore) {
+        bestScore = mmrScore;
+        bestId = id;
+        bestEmbedding = embedding;
+      }
+    }
+
+    if (bestId === undefined || bestEmbedding === undefined) break;
+    picked.push({ movieId: bestId, score: cosineSimilarity(seedEmbedding, bestEmbedding) });
+    pickedEmbeddings.push(bestEmbedding);
+    pool.delete(bestId);
+  }
+
+  return picked;
+}

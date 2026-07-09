@@ -118,14 +118,9 @@ export async function DashboardFooter(): Promise<React.ReactElement> {
 
         {/* Bottom bar */}
         <div className="mt-10 border-t border-white/5 pt-6">
-          <div className="flex flex-col items-center justify-between gap-4 sm:flex-row">
-            <p className="text-xs text-neutral-500">
-              © {currentYear} Relaya. {t("rights")}
-            </p>
-            <p className="text-xs text-neutral-600" dir="ltr">
-              All rights reserved to Relaya Ltd.
-            </p>
-          </div>
+          <p className="text-center text-xs text-neutral-500">
+            © {currentYear} Relaya. {t("rights")}
+          </p>
         </div>
       </div>
     </footer>

@@ -31,7 +31,7 @@ import type { NextRequest } from "next/server";
  * escaping and the absence of dangerouslySetInnerHTML anywhere in this app
  * are the practical XSS defense underneath this.
  */
-export function middleware(request: NextRequest): NextResponse {
+export function middleware(_request: NextRequest): NextResponse {
   const isDev = process.env.NODE_ENV === "development";
 
   const scriptSrc = isDev ? "'self' 'unsafe-inline' 'unsafe-eval'" : "'self' 'unsafe-inline'";
@@ -49,10 +49,7 @@ export function middleware(request: NextRequest): NextResponse {
     "manifest-src 'self'"
   ].join("; ");
 
-  const requestHeaders = new Headers(request.headers);
-  requestHeaders.set("x-pathname", request.nextUrl.pathname);
-
-  const response = NextResponse.next({ request: { headers: requestHeaders } });
+  const response = NextResponse.next();
   response.headers.set("Content-Security-Policy", csp);
   return response;
 }

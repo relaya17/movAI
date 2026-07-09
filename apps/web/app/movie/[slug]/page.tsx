@@ -77,7 +77,7 @@ export default async function MoviePage({ params }: MoviePageProps): Promise<Rea
     id: item.slug,
     title: item.title,
     thumbnail: item.posterUrl ?? FALLBACK_POSTER,
-    creator: item.genres[0] ?? String(item.year),
+    creator: item.reason,
     views: 0,
     gifts: 0
   }));

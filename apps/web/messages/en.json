@@ -347,5 +347,18 @@
     "share": "Share",
     "copied": "Link copied",
     "copyFailed": "Could not copy link"
+  },
+  "contact": {
+    "title": "Contact Us",
+    "subtitle": "A question, a problem, or an accessibility request - we'd love to help. We actually reply, not just collect messages nobody reads.",
+    "name": "Name",
+    "email": "Email",
+    "message": "Message",
+    "submit": "Send",
+    "submitting": "Sending...",
+    "success": "Message sent successfully - we will get back to you soon.",
+    "errorInvalid": "Please fill in all fields correctly.",
+    "errorRateLimited": "Too many messages sent from this address. Try again later.",
+    "errorSendFailed": "Failed to send the message. Please try again."
   }
 }

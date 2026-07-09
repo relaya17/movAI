@@ -1,5 +1,4 @@
 import { redirect } from "next/navigation";
-import { headers } from "next/headers";
 import { eq } from "drizzle-orm";
 import type { ReactNode } from "react";
 import { auth } from "@/auth";
@@ -30,27 +29,20 @@ export default async function DashboardLayout({ children }: { children: ReactNod
       : Promise.resolve([])
   ]);
 
-  // Sponsor banner (the "ad") is the one thing an ad-free subscription
-  // actually removes - every other browse-page category stays identical
-  // for free and paying users (see the earlier catalog-paywall discussion:
-  // the free catalog itself is never gated).
   const showSponsorBanner = !activeSubscription?.plan.adFree;
 
   const userRow = userRows[0];
   const showVerificationBanner = Boolean(userRow?.passwordHash) && !userRow?.emailVerified;
 
-  const pathname = (await headers()).get("x-pathname") ?? "";
-  const hideFooter = pathname.startsWith("/studio");
-
   return (
     <div className="flex min-h-[100dvh] flex-col bg-neutral-950">
       {showVerificationBanner && <EmailVerificationBanner />}
       <DashboardNav user={session.user} creditBalance={creditBalance} founderBadge={activeSubscription?.plan.founderBadge ?? false} />
-      <main className="relative flex-1 overflow-x-hidden overflow-y-visible">
+      <main className="flex flex-1 flex-col overflow-x-hidden">
         {showSponsorBanner && <SponsorBanner />}
         {children}
       </main>
-      {!hideFooter && <DashboardFooter />}
+      <DashboardFooter />
     </div>
   );
 }

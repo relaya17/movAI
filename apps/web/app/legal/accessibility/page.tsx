@@ -19,7 +19,13 @@ export default function AccessibilityPage(): React.ReactElement {
       </ul>
 
       <h2>פנייה בנושא נגישות</h2>
-      <p>נתקלתם בבעיית נגישות? נשמח לתיקון - צרו קשר בכתובת [accessibility@ תתעדכן].</p>
+      <p>
+        נתקלתם בבעיית נגישות? נשמח לתקן - צרו קשר בכתובת{" "}
+        <a href="mailto:support@relaya.com" className="text-cyan-400 underline">
+          support@relaya.com
+        </a>{" "}
+        או דרך <a href="/contact" className="text-cyan-400 underline">טופס יצירת הקשר</a>. אנחנו עונים על כל פנייה.
+      </p>
     </>
   );
 }

@@ -347,5 +347,18 @@
     "share": "Compartir",
     "copied": "Enlace copiado",
     "copyFailed": "No se pudo copiar el enlace"
+  },
+  "contact": {
+    "title": "Contáctanos",
+    "subtitle": "Una pregunta, un problema o una solicitud de accesibilidad - nos encantaría ayudar. Realmente respondemos, no solo recopilamos mensajes que nadie lee.",
+    "name": "Nombre",
+    "email": "Correo electrónico",
+    "message": "Mensaje",
+    "submit": "Enviar",
+    "submitting": "Enviando...",
+    "success": "Mensaje enviado con éxito - te responderemos pronto.",
+    "errorInvalid": "Por favor completa todos los campos correctamente.",
+    "errorRateLimited": "Se enviaron demasiados mensajes desde esta dirección. Inténtalo más tarde.",
+    "errorSendFailed": "No se pudo enviar el mensaje. Inténtalo de nuevo."
   }
 }

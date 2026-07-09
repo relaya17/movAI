@@ -46,6 +46,52 @@ export async function sendPasswordResetEmail(to: string, resetUrl: string): Prom
   });
 }
 
+/**
+ * Support-inbox notification for the /contact form. Real, answered support
+ * is a deliberate differentiator here - see architecture discussion on big
+ * streaming platforms leaving the vast majority of complaints unanswered.
+ * Sent to SUPPORT_EMAIL, falling back to the first ADMIN_EMAILS entry so a
+ * single operator doesn't need to configure the same address twice.
+ */
+export async function sendContactMessage(input: { name: string; fromEmail: string; message: string }): Promise<void> {
+  const supportEmail = process.env.SUPPORT_EMAIL ?? (process.env.ADMIN_EMAILS ?? "").split(",")[0]?.trim();
+  if (!supportEmail) {
+    console.warn(`[email] No SUPPORT_EMAIL/ADMIN_EMAILS configured - contact message from ${input.fromEmail} logged only:\n${input.message}`);
+    return;
+  }
+
+  const client = getResendClient();
+  if (!client) {
+    console.warn(`[email] RESEND_API_KEY not set - contact message from ${input.fromEmail} to ${supportEmail}:\n${input.message}`);
+    return;
+  }
+
+  await client.emails.send({
+    from: EMAIL_FROM,
+    to: supportEmail,
+    replyTo: input.fromEmail,
+    subject: `פנייה חדשה מ-MoVAI: ${input.name}`,
+    html: `
+      <div dir="rtl" style="font-family: sans-serif; max-width: 480px; margin: 0 auto;">
+        <h2>פנייה חדשה מהאתר</h2>
+        <p><strong>שם:</strong> ${escapeHtml(input.name)}</p>
+        <p><strong>אימייל:</strong> ${escapeHtml(input.fromEmail)}</p>
+        <p><strong>הודעה:</strong></p>
+        <p style="white-space: pre-wrap;">${escapeHtml(input.message)}</p>
+      </div>
+    `
+  });
+}
+
+function escapeHtml(value: string): string {
+  return value
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#39;");
+}
+
 export async function sendVerificationEmail(to: string, verifyUrl: string): Promise<void> {
   const client = getResendClient();
   if (!client) {
