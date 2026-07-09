@@ -219,6 +219,10 @@
       "qualityProCost": "Luma Ray · 2× credits",
       "baseImageLabel": "Base Image (optional)",
       "baseImagePrompt": "Drag an image here or click to upload",
+      "baseImageUploading": "Uploading image...",
+      "baseImageReady": "Base image uploaded",
+      "baseImageRemove": "Remove image",
+      "baseImageUploadError": "Image upload failed",
       "generating": "Creating video... (this may take about a minute)",
       "generate": "✨ Create Video",
       "resultPlaceholder": "Your video will appear here",
@@ -391,6 +395,9 @@
     "costMusicPrice": "2 credits / creation",
     "costNarration": "Narration",
     "costNarrationPrice": "1 credit / 1,000 characters",
+    "costImage": "Image",
+    "costImagePrice": "1 credit (standard) · 5 credits (Pro)",
+    "estImages": "~{count} AI images",
     "securePayment": "Secure payment via Stripe"
   },
   "language": {
@@ -508,6 +515,27 @@
     },
     "thanks": "Thanks, we received your report and will review it soon.",
     "error": "Failed to send the report. Please try again."
+  },
+  "creators": {
+    "title": "For Creators",
+    "subtitle": "Discover legal free content, create with AI, and grow with the MoVAI community",
+    "features": {
+      "video": {
+        "title": "AI Video",
+        "desc": "Turn an idea into a cinematic short clip"
+      },
+      "music": {
+        "title": "AI Music",
+        "desc": "Create soundtracks and songs with lyrics"
+      },
+      "image": {
+        "title": "AI Images",
+        "desc": "Visuals for promos and thumbnails"
+      }
+    },
+    "ctaStudio": "Open Studio",
+    "ctaUpload": "Upload content",
+    "freemiumNote": "3 free AI creations per month + 10 signup credits"
   },
   "onboarding": {
     "title": "What do you like to watch?",

@@ -22,7 +22,8 @@ export const users = pgTable("users", {
   // Only set for email/password sign-ups (Credentials provider). Null for
   // users who only ever signed in via Google/GitHub - never required, never
   // read outside the Credentials authorize() callback.
-  passwordHash: text("passwordHash")
+  passwordHash: text("passwordHash"),
+  createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow()
 });
 
 export const accounts = pgTable(

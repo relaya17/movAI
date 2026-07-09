@@ -41,7 +41,7 @@ export function middleware(request: NextRequest): NextResponse {
     "base-uri 'self'",
     "frame-src https://www.youtube.com https://archive.org https://www.instagram.com",
     "img-src 'self' https://image.tmdb.org https://res.cloudinary.com data:",
-    "media-src 'self' https://res.cloudinary.com",
+    "media-src 'self' https://res.cloudinary.com https://archive.org",
     "style-src 'self' 'unsafe-inline'",
     `script-src ${scriptSrc}`,
     // Service worker registration (public/sw.js) + same-origin workers.
@@ -54,6 +54,17 @@ export function middleware(request: NextRequest): NextResponse {
 
   const response = NextResponse.next({ request: { headers: requestHeaders } });
   response.headers.set("Content-Security-Policy", csp);
+
+  const ref = request.nextUrl.searchParams.get("ref");
+  if (ref && /^[a-f0-9]{8}$/i.test(ref)) {
+    response.cookies.set("movai_ref", ref.toLowerCase(), {
+      maxAge: 60 * 60 * 24 * 30,
+      httpOnly: true,
+      sameSite: "lax",
+      path: "/"
+    });
+  }
+
   return response;
 }
 

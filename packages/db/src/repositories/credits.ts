@@ -108,6 +108,17 @@ async function applyCreditDelta(
   return newBalance;
 }
 
+/** Promo / referral / admin adjustments — idempotent when referenceId is unique per grant. */
+export async function grantPromoCredits(
+  db: Database,
+  userId: string,
+  amount: number,
+  description: string,
+  referenceId: string
+): Promise<number> {
+  return db.transaction((tx) => applyCreditDelta(tx, userId, amount, "promo", description, referenceId));
+}
+
 /** One-time welcome credits on first account creation. Idempotent via referenceId. */
 export async function grantSignupBonus(db: Database, userId: string): Promise<number | null> {
   const [existing] = await db

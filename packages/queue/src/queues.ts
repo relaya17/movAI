@@ -16,6 +16,8 @@ export const QUEUE_NAMES = {
   ingestion: "ingestion",
   linkCheck: "link-check",
   subtitles: "subtitles",
+  dubbing: "dubbing",
+  onboarding: "onboarding",
   deadLetter: "dead-letter"
 } as const;
 
@@ -45,6 +47,16 @@ export const SubtitleJobSchema = z.object({
   subtitleId: z.string().uuid()
 });
 export type SubtitleJob = z.infer<typeof SubtitleJobSchema>;
+
+export const DubbingJobSchema = z.object({
+  jobId: z.string().uuid()
+});
+export type DubbingJob = z.infer<typeof DubbingJobSchema>;
+
+export const OnboardingDripJobSchema = z.object({
+  dripDay: z.union([z.literal(3), z.literal(7)])
+});
+export type OnboardingDripJob = z.infer<typeof OnboardingDripJobSchema>;
 
 export const DeadLetterJobSchema = z.object({
   originalQueue: z.string(),
@@ -105,6 +117,42 @@ export function createLazySubtitleQueue(connection: ConnectionOptions): Pick<Que
       return queue.add(...args);
     }
   };
+}
+
+export function createDubbingQueue(connection: ConnectionOptions): Queue<DubbingJob> {
+  const queue = new Queue<DubbingJob>(QUEUE_NAMES.dubbing, {
+    connection,
+    prefix: QUEUE_PREFIX,
+    defaultJobOptions: { ...DEFAULT_JOB_OPTIONS, attempts: 2 }
+  });
+  attachQuietErrorHandler(queue);
+  return queue;
+}
+
+export function createLazyDubbingQueue(connection: ConnectionOptions): Pick<Queue<DubbingJob>, "add"> {
+  let queue: Queue<DubbingJob> | undefined;
+  return {
+    add: (...args: Parameters<Queue<DubbingJob>["add"]>) => {
+      queue ??= createDubbingQueue(connection);
+      return queue.add(...args);
+    }
+  };
+}
+
+export function createOnboardingQueue(connection: ConnectionOptions): Queue<OnboardingDripJob> {
+  const queue = new Queue<OnboardingDripJob>(QUEUE_NAMES.onboarding, {
+    connection,
+    prefix: QUEUE_PREFIX,
+    defaultJobOptions: DEFAULT_JOB_OPTIONS
+  });
+  attachQuietErrorHandler(queue);
+  return queue;
+}
+
+/** Daily onboarding drip scan (day 3 + day 7 emails). */
+export async function scheduleDailyOnboardingDrip(queue: Queue<OnboardingDripJob>): Promise<void> {
+  await queue.add("drip-day-3", { dripDay: 3 }, { repeat: { pattern: "0 9 * * *" }, jobId: "onboarding-drip-3" });
+  await queue.add("drip-day-7", { dripDay: 7 }, { repeat: { pattern: "0 9 * * *" }, jobId: "onboarding-drip-7" });
 }
 
 export function createDeadLetterQueue(connection: ConnectionOptions): Queue<DeadLetterJob> {

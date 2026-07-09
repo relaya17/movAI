@@ -39,7 +39,12 @@ export async function reportUploadAction(
   }
 
   try {
-    await sendContentReportEmail({ uploadId: parsed.data.uploadId, uploadTitle: parsed.data.uploadTitle, reason: parsed.data.reason, reporterEmail });
+    await sendContentReportEmail({
+      uploadId: parsed.data.uploadId,
+      uploadTitle: parsed.data.uploadTitle,
+      reason: parsed.data.reason,
+      ...(reporterEmail ? { reporterEmail } : {})
+    });
     return { ok: true };
   } catch (error) {
     console.error("[report] failed to send report", error);

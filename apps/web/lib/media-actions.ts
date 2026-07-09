@@ -15,6 +15,7 @@ import {
 import { canStartDubbing, getDubbingGate } from "@movai/types";
 import { getMovieBySlug } from "./movies";
 import { enqueueSubtitleJob } from "./subtitle-queue";
+import { enqueueDubbingJob } from "./dubbing-queue";
 
 const DUBBING_CREDITS_PER_JOB = 30;
 
@@ -193,6 +194,7 @@ export async function startDubbingAction(
       creditsUsed: DUBBING_CREDITS_PER_JOB,
       ...(permissionId ? { permissionRequestId: permissionId } : {})
     });
+    await enqueueDubbingJob(job.id);
     return { jobId: job.id };
   } catch {
     return { error: "לא הצלחנו להתחיל דיבוב" };

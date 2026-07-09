@@ -1,9 +1,12 @@
 "use client";
 
-import { useState } from "react";
+import Image from "next/image";
+import { useRef, useState } from "react";
 import { useTranslations } from "next-intl";
 import { Button } from "@movai/ui";
 import { generateVideoAction } from "@/lib/ai-studio-actions";
+import { getUploadAuthorizationAction } from "@/lib/upload-actions";
+import { uploadStudioImageToCloudinary } from "@/lib/studio-upload";
 import { useAiGeneration } from "@/lib/use-ai-generation";
 import { StudioResultShare } from "./StudioResultShare";
 
@@ -21,6 +24,7 @@ const DURATION_CONFIG = [
 
 export function VideoCreator(): React.ReactElement {
   const t = useTranslations("studio.video");
+  const fileInputRef = useRef<HTMLInputElement>(null);
   const STYLES = STYLE_IDS.map((id) => ({ id, label: t(`styles.${id}`), emoji: STYLE_EMOJIS[id] }));
   const DURATIONS = DURATION_CONFIG.map((d) => ({ ...d, label: t(`durations.${d.id}`) }));
 
@@ -28,13 +32,42 @@ export function VideoCreator(): React.ReactElement {
   const [style, setStyle] = useState("cinematic");
   const [duration, setDuration] = useState("15");
   const [quality, setQuality] = useState<"standard" | "pro">("standard");
+  const [baseImageUrl, setBaseImageUrl] = useState<string | null>(null);
+  const [baseImagePreview, setBaseImagePreview] = useState<string | null>(null);
+  const [uploadingImage, setUploadingImage] = useState(false);
+  const [uploadError, setUploadError] = useState<string | null>(null);
   const { phase, resultUrl, error, start } = useAiGeneration();
   const isGenerating = phase === "starting" || phase === "processing";
+
+  async function handleImageFile(file: File): Promise<void> {
+    setUploadError(null);
+    setUploadingImage(true);
+    try {
+      const authResult = await getUploadAuthorizationAction();
+      if ("error" in authResult) {
+        setUploadError(authResult.error);
+        return;
+      }
+      const url = await uploadStudioImageToCloudinary(file, authResult.authorization);
+      setBaseImageUrl(url);
+      setBaseImagePreview(URL.createObjectURL(file));
+    } catch {
+      setUploadError(t("baseImageUploadError"));
+    } finally {
+      setUploadingImage(false);
+    }
+  }
 
   const handleGenerate = async (): Promise<void> => {
     if (!prompt.trim()) return;
     await start(() =>
-      generateVideoAction({ prompt, style, durationSeconds: Number(duration), quality })
+      generateVideoAction({
+        prompt,
+        style,
+        durationSeconds: Number(duration),
+        quality,
+        ...(baseImageUrl ? { baseImageUrl } : {})
+      })
     );
   };
 
@@ -136,21 +169,57 @@ export function VideoCreator(): React.ReactElement {
       {/* Image upload (optional) */}
       <div>
         <label className="mb-2 block text-sm font-medium text-neutral-300">{t("baseImageLabel")}</label>
-        <div className="flex cursor-pointer items-center justify-center rounded-xl border border-dashed border-white/20 bg-black/20 p-6 transition-all hover:border-white/30">
-          <input type="file" accept="image/*" className="hidden" />
-          <div className="text-center">
-            <svg className="mx-auto mb-2 h-8 w-8 text-neutral-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
-            </svg>
-            <p className="text-sm text-neutral-400">{t("baseImagePrompt")}</p>
-          </div>
+        <div
+          role="button"
+          tabIndex={0}
+          onClick={() => fileInputRef.current?.click()}
+          onKeyDown={(e) => e.key === "Enter" && fileInputRef.current?.click()}
+          className="flex cursor-pointer items-center justify-center rounded-xl border border-dashed border-white/20 bg-black/20 p-6 transition-all hover:border-white/30"
+        >
+          <input
+            ref={fileInputRef}
+            type="file"
+            accept="image/*"
+            className="hidden"
+            onChange={(e) => {
+              const file = e.target.files?.[0];
+              if (file) void handleImageFile(file);
+            }}
+          />
+          {baseImagePreview ? (
+            <div className="text-center">
+              <Image src={baseImagePreview} alt="" width={256} height={128} unoptimized className="mx-auto mb-2 max-h-32 rounded-lg object-contain" />
+              <p className="text-sm text-cyan-400">{t("baseImageReady")}</p>
+              <button
+                type="button"
+                className="mt-2 text-xs text-neutral-400 hover:text-white"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  setBaseImageUrl(null);
+                  setBaseImagePreview(null);
+                }}
+              >
+                {t("baseImageRemove")}
+              </button>
+            </div>
+          ) : (
+            <div className="text-center">
+              <svg className="mx-auto mb-2 h-8 w-8 text-neutral-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+              </svg>
+              <p className="text-sm text-neutral-400">
+                {uploadingImage ? t("baseImageUploading") : t("baseImagePrompt")}
+              </p>
+            </div>
+          )}
         </div>
+        {uploadError ? <p className="mt-1 text-xs text-red-400">{uploadError}</p> : null}
       </div>
 
       {/* Generate button */}
       <Button
         onClick={() => void handleGenerate()}
-        disabled={!prompt.trim() || isGenerating}
+        disabled={!prompt.trim() || isGenerating || uploadingImage}
         className="w-full bg-gradient-to-r from-cyan-500 to-blue-500 py-3 font-semibold text-white hover:from-cyan-400 hover:to-blue-400 disabled:opacity-50"
       >
         {isGenerating ? (

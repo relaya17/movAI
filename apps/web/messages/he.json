@@ -219,6 +219,10 @@
       "qualityProCost": "Luma Ray · ×2 קרדיטים",
       "baseImageLabel": "תמונת בסיס (אופציונלי)",
       "baseImagePrompt": "גרור תמונה או לחץ להעלאה",
+      "baseImageUploading": "מעלה תמונה...",
+      "baseImageReady": "תמונת בסיס הועלתה",
+      "baseImageRemove": "הסר תמונה",
+      "baseImageUploadError": "העלאת התמונה נכשלה",
       "generating": "יוצר וידאו... (זה עשוי לקחת כדקה)",
       "generate": "✨ צור וידאו",
       "resultPlaceholder": "הסרטון שלך יופיע כאן",
@@ -391,6 +395,9 @@
     "costMusicPrice": "2 קרדיטים / יצירה",
     "costNarration": "קריינות",
     "costNarrationPrice": "1 קרדיט / 1000 תווים",
+    "costImage": "תמונה",
+    "costImagePrice": "1 קרדיט (רגיל) · 5 קרדיטים (פרו)",
+    "estImages": "~{count} תמונות AI",
     "securePayment": "תשלום מאובטח באמצעות Stripe"
   },
   "language": {
@@ -508,6 +515,27 @@
     },
     "thanks": "תודה, קיבלנו את הדיווח ונבדוק בהקדם.",
     "error": "שליחת הדיווח נכשלה. נסו שוב."
+  },
+  "creators": {
+    "title": "ליוצרים",
+    "subtitle": "גלה תוכן חוקי בחינם, צור עם AI, והרוויח מקהילת MoVAI",
+    "features": {
+      "video": {
+        "title": "וידאו AI",
+        "desc": "הפוך רעיון לסרטון קצר באיכות קולנועית"
+      },
+      "music": {
+        "title": "מוזיקה AI",
+        "desc": "צור פסקולות ושירים עם מילים"
+      },
+      "image": {
+        "title": "תמונות AI",
+        "desc": "עיצוב ויזואלי לפרומו ולתמונות מקדימות"
+      }
+    },
+    "ctaStudio": "פתח Studio",
+    "ctaUpload": "העלה תוכן",
+    "freemiumNote": "3 יצירות AI חינם בחודש + 10 קרדיטי הצטרפות"
   },
   "onboarding": {
     "title": "מה את/ה אוהב/ת לצפות?",

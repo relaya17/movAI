@@ -9,6 +9,9 @@ export const MONTHLY_FREE_CREATIONS = 3;
 /** One-time credits granted on signup (≈ 1 music + buffer). */
 export const SIGNUP_BONUS_CREDITS = 10;
 
+/** Credits granted to referrer and referred user on successful referral. */
+export const REFERRAL_BONUS_CREDITS = 5;
+
 /** Retail price per credit in agorot (₪0.50). */
 export const RETAIL_NIS_PER_CREDIT = 0.5;
 

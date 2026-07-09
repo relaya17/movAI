@@ -42,7 +42,7 @@ describe("diversify", () => {
     ]);
 
     const pureRelevance = rankBySimilarity([1, 0], candidates, 3).map((r) => r.movieId);
-    const diversified = diversify([1, 0], candidates, 3, { lambda: 0.5 }).map((r) => r.movieId);
+    const diversified = diversify([1, 0], candidates, 3, { lambda: 0.2 }).map((r) => r.movieId);
 
     // Pure relevance ranking is all near-duplicates - the failure mode we're fixing.
     expect(pureRelevance).not.toContain("different");

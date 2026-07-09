@@ -3,6 +3,7 @@
 import { useState, useEffect, useRef } from "react";
 import Image from "next/image";
 import Link from "next/link";
+import { getProfileStatsAction } from "@/lib/profile-actions";
 
 const PROFILE_VIDEO =
   "https://res.cloudinary.com/dora8sxcb/video/upload/v1783521760/seedance-2.0_Create_a_futuristic_cinematic_promo_video_for_MoVAI_an_AI-powered_movie_discover-0_2_kdnjwi.mp4";
@@ -21,7 +22,7 @@ interface ProfileClientProps {
 export function ProfileClient({ user }: ProfileClientProps) {
   const videoRef = useRef<HTMLVideoElement>(null);
   const [credits, setCredits] = useState<number | null>(null);
-  const [creationsCount] = useState(0);
+  const [creationsCount, setCreationsCount] = useState(0);
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
@@ -33,14 +34,17 @@ export function ProfileClient({ user }: ProfileClientProps) {
   useEffect(() => {
     async function fetchUserData() {
       try {
-        const res = await fetch(`/api/credits/balance?userId=${user.id}`);
-        if (res.ok) {
-          const data = (await res.json()) as { balance?: number };
-          setCredits(data.balance ?? 10);
+        const result = await getProfileStatsAction();
+        if ("error" in result) {
+          setCredits(10);
+          setCreationsCount(0);
+        } else {
+          setCredits(result.creditBalance);
+          setCreationsCount(result.creationsCount);
         }
       } catch {
-        // Fallback to 10 bonus credits
         setCredits(10);
+        setCreationsCount(0);
       }
       setIsLoading(false);
     }
@@ -175,10 +179,10 @@ export function ProfileClient({ user }: ProfileClientProps) {
             </div>
             <div className="text-4xl font-bold text-white">{creationsCount}</div>
             <Link
-              href="/studio"
+              href="/studio/gallery"
               className="mt-3 inline-block text-sm text-purple-400 transition-colors hover:text-purple-300"
             >
-              צור חדש ←
+              הגלריה שלי ←
             </Link>
           </div>
 

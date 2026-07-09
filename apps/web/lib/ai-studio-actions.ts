@@ -14,6 +14,15 @@ import {
   type CreationType
 } from "@movai/db";
 import { REPLICATE_MODELS, startPrediction, getPredictionStatus, AiGenerationNotConfiguredError } from "./replicate";
+import { ESTIMATED_PROVIDER_USD_PER_CREDIT } from "@movai/types";
+
+/** Maps Studio voice-type picks to XTTS style hints (lucataco/xtts-v2 has no preset IDs). */
+const VOICE_STYLE_HINTS: Record<string, string> = {
+  narrator: "Speak clearly as a professional narrator:",
+  singer_male: "Sing with a male vocal tone:",
+  singer_female: "Sing with a female vocal tone:",
+  character: "Perform with an expressive character voice:"
+};
 
 /** 12 credits / 30s standard; Pro tier doubles the rate (higher-fidelity model). */
 function videoCreditCost(durationSeconds: number, quality: "standard" | "pro"): number {
@@ -141,7 +150,14 @@ export async function generateMusicAction(input: GenerateMusicInput): Promise<St
   if (!input.prompt.trim()) return { error: "כתבו תיאור למוזיקה" };
 
   const cost = musicCreditCost(input.quality);
-  const fullPrompt = `${input.prompt.trim()}, ${input.genre} genre, ${input.mood} mood`;
+  let fullPrompt = `${input.prompt.trim()}, ${input.genre} genre, ${input.mood} mood`;
+  if (input.withLyrics) {
+    if (input.lyrics?.trim()) {
+      fullPrompt = `${fullPrompt}. Lyrics: ${input.lyrics.trim()}`;
+    } else {
+      fullPrompt = `${fullPrompt}, with vocals and lyrics`;
+    }
+  }
   const model = input.quality === "pro" ? REPLICATE_MODELS.musicPro : REPLICATE_MODELS.music;
 
   return chargeAndStart(
@@ -149,7 +165,13 @@ export async function generateMusicAction(input: GenerateMusicInput): Promise<St
     "music",
     cost,
     input.prompt.trim(),
-    { genre: input.genre, mood: input.mood, withLyrics: input.withLyrics, quality: input.quality },
+    {
+      genre: input.genre,
+      mood: input.mood,
+      withLyrics: input.withLyrics,
+      quality: input.quality,
+      ...(input.lyrics?.trim() ? { lyrics: input.lyrics.trim() } : {})
+    },
     model,
     {
       prompt: fullPrompt,
@@ -171,11 +193,21 @@ export async function generateVoiceAction(input: GenerateVoiceInput): Promise<St
   if (!input.text.trim()) return { error: "כתבו טקסט ליצירה" };
 
   const cost = voiceCreditCost(input.text.length);
+  const styleHint = VOICE_STYLE_HINTS[input.voiceType] ?? "";
+  const styledText = styleHint ? `${styleHint} ${input.text.trim()}` : input.text.trim();
 
-  return chargeAndStart(userId, "voice", cost, input.text.trim(), { voiceType: input.voiceType, language: input.language }, REPLICATE_MODELS.voice, {
-    text: input.text.trim(),
-    language: input.language
-  });
+  return chargeAndStart(
+    userId,
+    "voice",
+    cost,
+    input.text.trim(),
+    { voiceType: input.voiceType, language: input.language },
+    REPLICATE_MODELS.voice,
+    {
+      text: styledText,
+      language: input.language
+    }
+  );
 }
 
 export interface GenerateImageInput {
@@ -228,7 +260,15 @@ export async function getGenerationStatusAction(creationId: string): Promise<Gen
     const prediction = await getPredictionStatus(predictionId);
 
     if (prediction.status === "succeeded") {
-      await updateAiCreation(db, creationId, { status: "completed", resultUrl: prediction.resultUrl ?? undefined });
+      const apiCostUsd =
+        creation.creditsUsed > 0
+          ? (creation.creditsUsed * ESTIMATED_PROVIDER_USD_PER_CREDIT).toFixed(4)
+          : "0";
+      await updateAiCreation(db, creationId, {
+        status: "completed",
+        resultUrl: prediction.resultUrl ?? undefined,
+        apiCostUsd
+      });
       return { status: "completed", resultUrl: prediction.resultUrl };
     }
 

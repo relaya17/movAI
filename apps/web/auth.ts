@@ -6,8 +6,9 @@ import { compare } from "bcryptjs";
 import { eq } from "drizzle-orm";
 import { z } from "zod";
 import { DrizzleAdapter } from "@auth/drizzle-adapter";
-import { accounts, sessions, users, verificationTokens, grantSignupBonus } from "@movai/db";
+import { accounts, sessions, users, verificationTokens, grantSignupBonus, ensureReferralCode, logOnboardingDripSent } from "@movai/db";
 import { db } from "./lib/db";
+import { sendWelcomeEmail } from "./lib/email";
 
 const authSecret =
   process.env.AUTH_SECRET ??
@@ -72,6 +73,15 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
     async createUser({ user }) {
       if (user.id) {
         await grantSignupBonus(db, user.id);
+        await ensureReferralCode(db, user.id);
+        if (user.email) {
+          try {
+            await sendWelcomeEmail(user.email, user.name ?? null);
+            await logOnboardingDripSent(db, user.id, 0);
+          } catch (error) {
+            console.error("[auth] welcome email failed", error);
+          }
+        }
       }
     }
   }

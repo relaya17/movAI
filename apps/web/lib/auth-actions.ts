@@ -4,11 +4,13 @@ import { hash } from "bcryptjs";
 import { eq } from "drizzle-orm";
 import { z } from "zod";
 import { AuthError } from "next-auth";
-import { userProfiles, users, isUniqueViolation, grantSignupBonus } from "@movai/db";
+import { userProfiles, users, isUniqueViolation, grantSignupBonus, ensureReferralCode, logOnboardingDripSent } from "@movai/db";
 import { signIn } from "@/auth";
 import { db } from "./db";
 import { checkRateLimit, loginRateLimitKey } from "./rate-limit";
 import { issueAndSendVerificationEmail } from "./email-verification-actions";
+import { applyReferralCodeAction } from "./referral-actions";
+import { sendWelcomeEmail } from "./email";
 
 /**
  * Brute-force guard on login (review finding: no rate limiting on
@@ -143,6 +145,19 @@ export async function signUpAction(_prevState: AuthActionState, formData: FormDa
     });
 
     await grantSignupBonus(db, createdUser.id);
+    await ensureReferralCode(db, createdUser.id);
+
+    const referralCode = formData.get("referralCode");
+    if (typeof referralCode === "string" && referralCode.trim()) {
+      await applyReferralCodeAction(referralCode, createdUser.id);
+    }
+
+    try {
+      await sendWelcomeEmail(parsed.email, fullName);
+      await logOnboardingDripSent(db, createdUser.id, 0);
+    } catch (error) {
+      console.error("[signUpAction] failed to send welcome email", error);
+    }
 
     // Best-effort - a signup must never fail just because the email provider
     // hiccuped. The user still gets a working account either way; they can

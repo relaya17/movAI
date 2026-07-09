@@ -108,6 +108,9 @@ importers:
       replicate:
         specifier: 1.0.1
         version: 1.0.1
+      resend:
+        specifier: 4.0.1
+        version: 4.0.1(react-dom@19.0.0(react@19.0.0))(react@19.0.0)
       rxjs:
         specifier: 7.8.1
         version: 7.8.1
@@ -243,6 +246,9 @@ importers:
       '@movai/config':
         specifier: workspace:*
         version: link:../config
+      '@types/node':
+        specifier: 22.10.2
+        version: 22.10.2
       typescript:
         specifier: 5.7.2
         version: 5.7.2
@@ -342,6 +348,9 @@ importers:
       '@movai/config':
         specifier: workspace:*
         version: link:../config
+      '@types/node':
+        specifier: 22.10.2
+        version: 22.10.2
       typescript:
         specifier: 5.7.2
         version: 5.7.2
@@ -358,6 +367,9 @@ importers:
       '@movai/config':
         specifier: workspace:*
         version: link:../config
+      '@types/node':
+        specifier: 22.10.2
+        version: 22.10.2
       typescript:
         specifier: 5.7.2
         version: 5.7.2
@@ -380,6 +392,9 @@ importers:
       '@movai/config':
         specifier: workspace:*
         version: link:../config
+      '@types/node':
+        specifier: 22.10.2
+        version: 22.10.2
       typescript:
         specifier: 5.7.2
         version: 5.7.2
@@ -396,6 +411,9 @@ importers:
       '@movai/config':
         specifier: workspace:*
         version: link:../config
+      '@types/node':
+        specifier: 22.10.2
+        version: 22.10.2
       typescript:
         specifier: 5.7.2
         version: 5.7.2

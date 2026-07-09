@@ -219,6 +219,10 @@
       "qualityProCost": "Luma Ray · ×2 أرصدة",
       "baseImageLabel": "صورة أساسية (اختياري)",
       "baseImagePrompt": "اسحب صورة هنا أو انقر للرفع",
+      "baseImageUploading": "جارٍ رفع الصورة...",
+      "baseImageReady": "تم رفع الصورة الأساسية",
+      "baseImageRemove": "إزالة الصورة",
+      "baseImageUploadError": "فشل رفع الصورة",
       "generating": "جارٍ إنشاء الفيديو... (قد يستغرق ذلك حوالي دقيقة)",
       "generate": "✨ إنشاء فيديو",
       "resultPlaceholder": "سيظهر الفيديو الخاص بك هنا",
@@ -376,6 +380,9 @@
     "costMusicPrice": "2 رصيد / إبداع",
     "costNarration": "تعليق صوتي",
     "costNarrationPrice": "1 رصيد / 1000 حرف",
+    "costImage": "صورة",
+    "costImagePrice": "1 رصيد (عادي) · 5 رصيد (برو)",
+    "estImages": "~{count} صور AI",
     "securePayment": "دفع آمن عبر Stripe"
   },
   "language": {
@@ -455,6 +462,18 @@
     },
     "thanks": "شكرًا، تلقينا بلاغك وسنراجعه قريبًا.",
     "error": "فشل إرسال البلاغ. حاول مرة أخرى."
+  },
+  "creators": {
+    "title": "للمبدعين",
+    "subtitle": "اكتشف محتوى قانوني مجاني، أنشئ بالذكاء الاصطناعي، وانمُ مع مجتمع MoVAI",
+    "features": {
+      "video": { "title": "فيديو AI", "desc": "حوّل فكرة إلى مقطع قصير بجودة سينمائية" },
+      "music": { "title": "موسيقى AI", "desc": "أنشئ موسيقى وأغاني بكلمات" },
+      "image": { "title": "صور AI", "desc": "مرئيات للعروض الترويجية والصور المصغرة" }
+    },
+    "ctaStudio": "افتح الاستوديو",
+    "ctaUpload": "ارفع محتوى",
+    "freemiumNote": "3 إنشاءات AI مجانية شهرياً + 10 رصيد ترحيب"
   },
   "onboarding": {
     "title": "ماذا تحب أن تشاهد؟",

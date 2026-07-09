@@ -111,7 +111,7 @@ export async function sendContentReportEmail(input: {
   await client.emails.send({
     from: EMAIL_FROM,
     to: supportEmail,
-    replyTo: input.reporterEmail,
+    ...(input.reporterEmail ? { replyTo: input.reporterEmail } : {}),
     subject: `דיווח על תוכן: ${input.uploadTitle}`,
     html: `
       <div dir="rtl" style="font-family: sans-serif; max-width: 480px; margin: 0 auto;">
@@ -131,6 +131,31 @@ function escapeHtml(value: string): string {
     .replace(/>/g, "&gt;")
     .replace(/"/g, "&quot;")
     .replace(/'/g, "&#39;");
+}
+
+export async function sendWelcomeEmail(to: string, name: string | null): Promise<void> {
+  const client = getResendClient();
+  const greeting = name ? `שלום ${name}` : "שלום";
+
+  if (!client) {
+    console.warn(`[email] RESEND_API_KEY not set - welcome email for ${to}`);
+    return;
+  }
+
+  const appUrl = process.env.NEXT_PUBLIC_APP_URL ?? "http://localhost:3100";
+  await client.emails.send({
+    from: EMAIL_FROM,
+    to,
+    subject: "ברוכים הבאים ל-MoVAI!",
+    html: `
+      <div dir="rtl" style="font-family: sans-serif; max-width: 480px; margin: 0 auto;">
+        <h2>${escapeHtml(greeting)} 👋</h2>
+        <p>שמחים שהצטרפתם! גלו תוכן חוקי בחינם, ונסו ליצור וידאו, מוזיקה וקול ב-AI Studio.</p>
+        <p><a href="${appUrl}/studio" style="display: inline-block; padding: 10px 20px; background: #06b6d4; color: white; border-radius: 8px; text-decoration: none;">לסטודיו AI</a></p>
+        <p style="color: #666; font-size: 13px;">קיבלתם 10 קרדיטי הצטרפות + 3 יצירות חינם בחודש.</p>
+      </div>
+    `
+  });
 }
 
 export async function sendVerificationEmail(to: string, verifyUrl: string): Promise<void> {

@@ -147,6 +147,12 @@ export function PricingClient({ packages, currentBalance }: PricingClientProps) 
                   </svg>
                   <span>{t("estNarrations", { count: totalCredits })}</span>
                 </div>
+                <div className="flex items-center gap-2">
+                  <svg className="h-4 w-4 text-green-400" fill="currentColor" viewBox="0 0 20 20">
+                    <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                  </svg>
+                  <span>{t("estImages", { count: totalCredits })}</span>
+                </div>
               </div>
 
               <button
@@ -178,7 +184,7 @@ export function PricingClient({ packages, currentBalance }: PricingClientProps) 
       {/* Credit Usage Info */}
       <div className="mt-12 rounded-2xl border border-white/10 bg-white/5 p-6">
         <h3 className="mb-4 text-lg font-semibold text-white">{t("costHeading")}</h3>
-        <div className="grid gap-4 sm:grid-cols-3">
+        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
           <div className="rounded-xl bg-white/5 p-4 text-center">
             <div className="mb-2 text-2xl">🎬</div>
             <p className="font-semibold text-white">{t("costVideo")}</p>
@@ -188,6 +194,11 @@ export function PricingClient({ packages, currentBalance }: PricingClientProps) 
             <div className="mb-2 text-2xl">🎵</div>
             <p className="font-semibold text-white">{t("costMusic")}</p>
             <p className="text-sm text-neutral-400">{t("costMusicPrice")}</p>
+          </div>
+          <div className="rounded-xl bg-white/5 p-4 text-center">
+            <div className="mb-2 text-2xl">🖼️</div>
+            <p className="font-semibold text-white">{t("costImage")}</p>
+            <p className="text-sm text-neutral-400">{t("costImagePrice")}</p>
           </div>
           <div className="rounded-xl bg-white/5 p-4 text-center">
             <div className="mb-2 text-2xl">🎙️</div>

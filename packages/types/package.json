@@ -14,8 +14,9 @@
     "zod": "3.24.1"
   },
   "devDependencies": {
+    "@movai/config": "workspace:*",
+    "@types/node": "22.10.2",
     "typescript": "5.7.2",
-    "vitest": "2.1.8",
-    "@movai/config": "workspace:*"
+    "vitest": "2.1.8"
   }
 }

@@ -5,3 +5,5 @@ export * from "./catalog-queries";
 export * from "./workers/ingestion.worker";
 export * from "./workers/link-check.worker";
 export * from "./workers/subtitle.worker";
+export * from "./workers/dubbing.worker";
+export * from "./workers/onboarding.worker";

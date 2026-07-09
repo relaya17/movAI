@@ -8,6 +8,7 @@ import { getCreditBalance, getActiveSubscription, users } from "@movai/db";
 import { DashboardNav } from "@/components/dashboard/DashboardNav";
 import { DashboardFooter } from "@/components/dashboard/DashboardFooter";
 import { EmailVerificationBanner } from "@/components/EmailVerificationBanner";
+import { ReferralCapture } from "@/components/ReferralCapture";
 import { SponsorBanner } from "@/components/dashboard/SponsorBanner";
 
 export default async function DashboardLayout({ children }: { children: ReactNode }): Promise<React.ReactElement> {
@@ -40,6 +41,7 @@ export default async function DashboardLayout({ children }: { children: ReactNod
 
   return (
     <div className="flex min-h-[100dvh] flex-col bg-neutral-950">
+      <ReferralCapture />
       {showVerificationBanner && <EmailVerificationBanner />}
       <DashboardNav user={session.user} creditBalance={creditBalance} founderBadge={activeSubscription?.plan.founderBadge ?? false} />
       <main className="flex flex-1 flex-col overflow-x-hidden">

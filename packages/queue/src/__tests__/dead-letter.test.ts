@@ -55,7 +55,7 @@ describe("attachDeadLetterRouting", () => {
     const onDeadLettered = vi.fn();
 
     attachDeadLetterRouting(worker, deadLetterQueue, "movai-link-check", onDeadLettered);
-    worker.emit("failed", createFakeJob({ attemptsMade: 2, attempts: 3, id: "job-9" }), new Error("upstream down"), "");
+    worker.emit("failed", createFakeJob({ attemptsMade: 3, attempts: 3, id: "job-9" }), new Error("upstream down"), "");
 
     expect(onDeadLettered).toHaveBeenCalledWith(
       expect.objectContaining({ originalQueue: "movai-link-check", originalJobId: "job-9", failedReason: "upstream down" })

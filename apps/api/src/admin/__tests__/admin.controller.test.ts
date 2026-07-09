@@ -18,7 +18,11 @@ describe("AdminController", () => {
 
     const result = await controller.ingest({ source: "archive", query: "public domain classics" });
 
-    expect(add).toHaveBeenCalledWith("manual-ingest", { source: "archive", query: "public domain classics" });
+    expect(add).toHaveBeenCalledWith("manual-ingest", {
+      source: "archive",
+      query: "public domain classics",
+      contentType: "movie"
+    });
     expect(result).toEqual({ jobId: "job-123" });
   });
 });

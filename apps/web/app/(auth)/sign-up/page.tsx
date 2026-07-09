@@ -1,12 +1,21 @@
 import Link from "next/link";
+import { cookies } from "next/headers";
 import { getTranslations } from "next-intl/server";
 import { signUpAction } from "@/lib/auth-actions";
 import { SignUpForm } from "@/components/SignUpForm";
+import { REFERRAL_COOKIE } from "@/lib/referral-actions";
 
 export const metadata = { title: "הרשמה" };
 
-export default async function SignUpPage(): Promise<React.ReactElement> {
+interface SignUpPageProps {
+  searchParams: Promise<{ ref?: string }>;
+}
+
+export default async function SignUpPage({ searchParams }: SignUpPageProps): Promise<React.ReactElement> {
   const t = await getTranslations("auth.signUp");
+  const params = await searchParams;
+  const jar = await cookies();
+  const referralCode = params.ref ?? jar.get(REFERRAL_COOKIE)?.value;
 
   return (
     <>
@@ -29,7 +38,7 @@ export default async function SignUpPage(): Promise<React.ReactElement> {
         {t("subtitle")}
       </p>
 
-      <SignUpForm action={signUpAction} />
+      <SignUpForm action={signUpAction} referralCode={referralCode} />
 
       <p className="mt-4 text-center text-sm text-neutral-300">
         {t("haveAccount")}{" "}

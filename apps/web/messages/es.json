@@ -219,6 +219,10 @@
       "qualityProCost": "Luma Ray · ×2 créditos",
       "baseImageLabel": "Imagen Base (opcional)",
       "baseImagePrompt": "Arrastra una imagen aquí o haz clic para subir",
+      "baseImageUploading": "Subiendo imagen...",
+      "baseImageReady": "Imagen base subida",
+      "baseImageRemove": "Quitar imagen",
+      "baseImageUploadError": "Error al subir la imagen",
       "generating": "Creando video... (puede tardar aprox. un minuto)",
       "generate": "✨ Crear Video",
       "resultPlaceholder": "Tu video aparecerá aquí",
@@ -380,6 +384,9 @@
     "costMusicPrice": "2 créditos / creación",
     "costNarration": "Narración",
     "costNarrationPrice": "1 crédito / 1.000 caracteres",
+    "costImage": "Imagen",
+    "costImagePrice": "1 crédito (estándar) · 5 créditos (Pro)",
+    "estImages": "~{count} imágenes AI",
     "securePayment": "Pago seguro a través de Stripe"
   },
   "language": {
@@ -461,6 +468,18 @@
     },
     "thanks": "Gracias, recibimos tu reporte y lo revisaremos pronto.",
     "error": "No se pudo enviar el reporte. Inténtalo de nuevo."
+  },
+  "creators": {
+    "title": "Para Creadores",
+    "subtitle": "Descubre contenido legal gratis, crea con IA y crece con la comunidad MoVAI",
+    "features": {
+      "video": { "title": "Video AI", "desc": "Convierte una idea en un clip corto cinematográfico" },
+      "music": { "title": "Música AI", "desc": "Crea bandas sonoras y canciones con letra" },
+      "image": { "title": "Imágenes AI", "desc": "Visuales para promos y miniaturas" }
+    },
+    "ctaStudio": "Abrir Studio",
+    "ctaUpload": "Subir contenido",
+    "freemiumNote": "3 creaciones AI gratis al mes + 10 créditos de bienvenida"
   },
   "onboarding": {
     "title": "¿Qué te gusta ver?",

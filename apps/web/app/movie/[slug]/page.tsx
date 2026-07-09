@@ -10,6 +10,7 @@ import { ShareButton } from "@/components/ShareButton";
 import { WatchlistButton } from "@/components/WatchlistButton";
 import { MovieDubbingPanel } from "@/components/movie/MovieDubbingPanel";
 import { MovieSubtitlesPanel } from "@/components/movie/MovieSubtitlesPanel";
+import { ArchiveMoviePlayer } from "@/components/movie/ArchiveMoviePlayer";
 import { resolveInstagramEmbed } from "@/lib/instagram";
 import { getMovieBySlug, listMovies, listContentByType } from "@/lib/movies";
 import { getIsInWatchlist } from "@/lib/watchlist-actions";
@@ -124,14 +125,11 @@ export default async function MoviePage({ params }: MoviePageProps): Promise<Rea
         )}
 
         {embeddable && movie.watchSource.kind === "archive" && (
-          <div className="aspect-video w-full overflow-hidden rounded-lg">
-            <iframe
-              src={`https://archive.org/embed/${movie.watchSource.identifier}`}
-              title={`נגן Internet Archive — ${movie.title}`}
-              className="h-full w-full"
-              allowFullScreen
-            />
-          </div>
+          <ArchiveMoviePlayer
+            movieId={movie.id}
+            identifier={movie.watchSource.identifier}
+            title={movie.title}
+          />
         )}
 
         {!embeddable && !instagramEmbed && movie.watchSource.kind === "external-link" && (

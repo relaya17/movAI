@@ -10,9 +10,13 @@ import {
   createLinkCheckQueue,
   createLinkCheckWorker,
   createSubtitleWorker,
+  createDubbingWorker,
+  createOnboardingWorker,
+  createOnboardingQueue,
   createQueueConnection,
   scheduleDailyIngestion,
   scheduleDailyLinkCheck,
+  scheduleDailyOnboardingDrip,
   QUEUE_NAMES
 } from "@movai/queue";
 import {
@@ -32,6 +36,9 @@ import { WorkerModule } from "./worker.module";
 import { DATABASE, SEARCH_CLIENT, REDIS_CLIENT } from "./infra/tokens";
 import { initSentry, captureMessage } from "./monitoring/alerting";
 import { processSubtitleJob } from "./subtitles/process-subtitle";
+import { processDubbingJob } from "./dubbing/process-dubbing";
+import { processOnboardingDrip } from "./onboarding/process-onboarding-drip";
+import { sendOnboardingDripEmail } from "./email/onboarding-email";
 
 /**
  * Separate process from the HTTP API (apps/api/src/main.ts) - BullMQ
@@ -140,6 +147,29 @@ async function bootstrap(): Promise<void> {
     captureMessage(`Subtitle job exhausted all retries: ${entry.failedReason}`, entry)
   );
 
+  const dubbingWorker = createDubbingWorker({
+    connection,
+    processDubbing: async (jobId) => {
+      await processDubbingJob(db, jobId);
+    }
+  });
+  attachDeadLetterRouting(dubbingWorker, deadLetterQueue, QUEUE_NAMES.dubbing, (entry) =>
+    captureMessage(`Dubbing job exhausted all retries: ${entry.failedReason}`, entry)
+  );
+
+  const onboardingWorker = createOnboardingWorker({
+    connection,
+    processDrip: async (dripDay) => {
+      const sent = await processOnboardingDrip(db, dripDay, {
+        sendDripEmail: sendOnboardingDripEmail
+      });
+      logger.log(`Onboarding drip day ${dripDay}: sent ${sent} email(s)`);
+    }
+  });
+  attachDeadLetterRouting(onboardingWorker, deadLetterQueue, QUEUE_NAMES.onboarding, (entry) =>
+    captureMessage(`Onboarding drip job exhausted all retries: ${entry.failedReason}`, entry)
+  );
+
   const linkCheckQueue = createLinkCheckQueue(connection);
   await scheduleDailyLinkCheck(linkCheckQueue);
 
@@ -152,7 +182,10 @@ async function bootstrap(): Promise<void> {
     adapters.map((adapter) => adapter.name) as ("youtube" | "archive")[]
   );
 
-  logger.log("MoVAI workers running (ingestion, daily catalog sweep, link-check, subtitles, dead-letter routing active)");
+  const onboardingQueue = createOnboardingQueue(connection);
+  await scheduleDailyOnboardingDrip(onboardingQueue);
+
+  logger.log("MoVAI workers running (ingestion, daily catalog sweep, link-check, subtitles, dubbing, onboarding drip, dead-letter routing active)");
 
   const shutdown = async (): Promise<void> => {
     logger.log("Shutting down workers...");
@@ -160,8 +193,11 @@ async function bootstrap(): Promise<void> {
       ingestionWorker.close(),
       linkCheckWorker.close(),
       subtitleWorker.close(),
+      dubbingWorker.close(),
+      onboardingWorker.close(),
       linkCheckQueue.close(),
       ingestionQueue.close(),
+      onboardingQueue.close(),
       deadLetterQueue.close()
     ]);
     await appContext.close();
