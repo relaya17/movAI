@@ -5,6 +5,7 @@ import { NextIntlClientProvider } from "next-intl";
 import { getLocale, getMessages } from "next-intl/server";
 import { isRtl, type Locale } from "@/i18n/config";
 import { ServiceWorkerRegister } from "@/components/ServiceWorkerRegister";
+import { CookieConsentBanner } from "@/components/CookieConsentBanner";
 import "./globals.css";
 
 const orbitron = Orbitron({
@@ -57,6 +58,7 @@ export default async function RootLayout({ children }: { children: ReactNode }):
         <NextIntlClientProvider locale={locale} messages={messages}>
           <ServiceWorkerRegister />
           <div id="main-content">{children}</div>
+          <CookieConsentBanner />
         </NextIntlClientProvider>
       </body>
     </html>

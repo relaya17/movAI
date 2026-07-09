@@ -10,3 +10,4 @@ export * from "./repositories/payments";
 export * from "./repositories/subscriptions";
 export * from "./repositories/sponsors";
 export * from "./repositories/watchlist";
+export * from "./repositories/free-tier";

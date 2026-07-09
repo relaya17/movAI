@@ -6,7 +6,7 @@ import { compare } from "bcryptjs";
 import { eq } from "drizzle-orm";
 import { z } from "zod";
 import { DrizzleAdapter } from "@auth/drizzle-adapter";
-import { accounts, sessions, users, verificationTokens } from "@movai/db";
+import { accounts, sessions, users, verificationTokens, grantSignupBonus } from "@movai/db";
 import { db } from "./lib/db";
 
 const authSecret =
@@ -67,5 +67,12 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
   ],
   pages: {
     signIn: "/sign-in"
+  },
+  events: {
+    async createUser({ user }) {
+      if (user.id) {
+        await grantSignupBonus(db, user.id);
+      }
+    }
   }
 });

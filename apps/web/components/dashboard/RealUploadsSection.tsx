@@ -3,6 +3,7 @@ import { getTranslations } from "next-intl/server";
 import { getPublishedUploads } from "@movai/db";
 import { db } from "@/lib/db";
 import { GiftButton } from "@/components/gifts/GiftButton";
+import { ReportButton } from "@/components/ReportButton";
 
 /** Real, DB-backed creator uploads (distinct from the curated demo catalog above it) - the actual output of /upload. */
 export async function RealUploadsSection(): Promise<React.ReactElement | null> {
@@ -31,6 +32,9 @@ export async function RealUploadsSection(): Promise<React.ReactElement | null> {
               )}
               <div className="absolute bottom-2 right-2">
                 <GiftButton uploadId={upload.id} />
+              </div>
+              <div className="absolute left-2 top-2">
+                <ReportButton uploadId={upload.id} uploadTitle={upload.title} />
               </div>
             </div>
             <div className="mt-2 px-1">

@@ -1,6 +1,7 @@
-import { eq, sql } from "drizzle-orm";
+import { and, eq, sql } from "drizzle-orm";
 import type { Database, Transaction } from "../client";
 import { creditBalances, creditTransactions, giftCatalog, giftTransactions, uploads } from "../schema/index";
+import { SIGNUP_BONUS_CREDITS } from "@movai/types";
 
 /**
  * Share of a gift's credit value that reaches the creator, matching the
@@ -105,6 +106,21 @@ async function applyCreditDelta(
   });
 
   return newBalance;
+}
+
+/** One-time welcome credits on first account creation. Idempotent via referenceId. */
+export async function grantSignupBonus(db: Database, userId: string): Promise<number | null> {
+  const [existing] = await db
+    .select({ id: creditTransactions.id })
+    .from(creditTransactions)
+    .where(and(eq(creditTransactions.userId, userId), eq(creditTransactions.type, "signup_bonus")))
+    .limit(1);
+
+  if (existing) return null;
+
+  return db.transaction((tx) =>
+    applyCreditDelta(tx, userId, SIGNUP_BONUS_CREDITS, "signup_bonus", "מתנת הצטרפות לסטודיו", `signup:${userId}`)
+  );
 }
 
 /** Credits a purchase (from a completed payment) - see repositories/payments.ts for the payment-provider side. */

@@ -8,6 +8,7 @@ import {
   updateAiCreation,
   spendCredits,
   refundCredits,
+  getFreeCreationsRemaining,
   InsufficientCreditsError,
   type CreationType
 } from "@movai/db";
@@ -47,18 +48,28 @@ async function chargeAndStart(
   model: string,
   input: Record<string, unknown>
 ): Promise<StartGenerationResult> {
-  let balanceAfterCharge: number;
-  try {
-    balanceAfterCharge = await spendCredits(db, userId, cost, `יצירת ${type === "video" ? "וידאו" : type === "music" ? "מוזיקה" : "קול"} ב-AI Studio`);
-  } catch (err) {
-    if (err instanceof InsufficientCreditsError) {
-      return { error: `אין מספיק קרדיטים (נדרשים ${err.required}, יש לך ${err.available})` };
-    }
-    throw err;
-  }
-  void balanceAfterCharge;
+  const freeRemaining = await getFreeCreationsRemaining(db, userId);
+  const effectiveCost = freeRemaining > 0 ? 0 : cost;
 
-  const creation = await createAiCreation(db, { userId, type, creditsUsed: cost, prompt, settings, apiProvider: "replicate" });
+  if (effectiveCost > 0) {
+    try {
+      await spendCredits(db, userId, effectiveCost, `יצירת ${type === "video" ? "וידאו" : type === "music" ? "מוזיקה" : "קול"} ב-AI Studio`);
+    } catch (err) {
+      if (err instanceof InsufficientCreditsError) {
+        return { error: `אין מספיק קרדיטים (נדרשים ${err.required}, יש לך ${err.available})` };
+      }
+      throw err;
+    }
+  }
+
+  const creation = await createAiCreation(db, {
+    userId,
+    type,
+    creditsUsed: effectiveCost,
+    prompt,
+    settings: { ...settings, usedFreeTier: effectiveCost === 0 },
+    apiProvider: "replicate"
+  });
 
   try {
     const { predictionId } = await startPrediction(model, input);
@@ -67,7 +78,9 @@ async function chargeAndStart(
   } catch (err) {
     const message = err instanceof AiGenerationNotConfiguredError ? "יצירת AI לא מוגדרת - חסר REPLICATE_API_TOKEN" : "שגיאה בהתחלת היצירה";
     await updateAiCreation(db, creation.id, { status: "failed", errorMessage: message });
-    await refundCredits(db, userId, cost, `החזר - ${message}`, creation.id);
+    if (effectiveCost > 0) {
+      await refundCredits(db, userId, effectiveCost, `החזר - ${message}`, creation.id);
+    }
     return { error: message };
   }
 }

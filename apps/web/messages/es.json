@@ -165,6 +165,10 @@
     "heroTagline": "Tu espacio creativo — video, música, voz y canto con IA",
     "backToStudio": "Volver al estudio",
     "navLabel": "Navegación del estudio",
+    "quota": {
+      "freeRemaining": "Te quedan {count} de {total} creaciones gratis este mes",
+      "creditsOnly": "Saldo de créditos: {balance}"
+    },
     "usage": {
       "creditBalance": "Saldo de Créditos",
       "buyMore": "Comprar Más Créditos"
@@ -363,5 +367,22 @@
     "errorInvalid": "Por favor completa todos los campos correctamente.",
     "errorRateLimited": "Se enviaron demasiados mensajes desde esta dirección. Inténtalo más tarde.",
     "errorSendFailed": "No se pudo enviar el mensaje. Inténtalo de nuevo."
+  },
+  "cookieConsent": {
+    "message": "Este sitio usa cookies esenciales (inicio de sesión, preferencia de idioma) y cookies básicas de análisis. Consulta nuestra política de cookies.",
+    "accept": "Aceptar",
+    "policyLink": "Política de cookies"
+  },
+  "report": {
+    "buttonLabel": "Reportar contenido",
+    "dialogTitle": "¿Por qué reportas esto?",
+    "reasons": {
+      "copyright": "Infracción de derechos de autor",
+      "spam": "Spam o contenido engañoso",
+      "inappropriate": "Contenido ofensivo o inapropiado",
+      "other": "Otro"
+    },
+    "thanks": "Gracias, recibimos tu reporte y lo revisaremos pronto.",
+    "error": "No se pudo enviar el reporte. Inténtalo de nuevo."
   }
 }

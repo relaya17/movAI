@@ -3,6 +3,7 @@ import { getTranslations } from "next-intl/server";
 import { MusicCreator } from "@/components/studio/MusicCreator";
 import { StudioPanel } from "@/components/studio/StudioPanel";
 import { StudioSubNav } from "@/components/studio/StudioSubNav";
+import { StudioFreeQuota } from "@/components/studio/StudioFreeQuota";
 
 export async function generateMetadata(): Promise<Metadata> {
   const t = await getTranslations("studio.tabs.music");
@@ -16,6 +17,7 @@ export default function StudioMusicPage(): React.ReactElement {
   return (
     <div className="w-full py-2">
       <StudioSubNav />
+      <StudioFreeQuota />
       <StudioPanel>
         <MusicCreator />
       </StudioPanel>

@@ -165,6 +165,10 @@
     "heroTagline": "Your creative space — video, music, voice and song powered by AI",
     "backToStudio": "Back to studio",
     "navLabel": "Studio navigation",
+    "quota": {
+      "freeRemaining": "{count} of {total} free creations left this month",
+      "creditsOnly": "Credit balance: {balance}"
+    },
     "usage": {
       "creditBalance": "Credit Balance",
       "buyMore": "Buy More Credits"
@@ -363,5 +367,22 @@
     "errorInvalid": "Please fill in all fields correctly.",
     "errorRateLimited": "Too many messages sent from this address. Try again later.",
     "errorSendFailed": "Failed to send the message. Please try again."
+  },
+  "cookieConsent": {
+    "message": "This site uses essential cookies (login, language preference) and basic analytics cookies. See our cookie policy for details.",
+    "accept": "Accept",
+    "policyLink": "Cookie Policy"
+  },
+  "report": {
+    "buttonLabel": "Report content",
+    "dialogTitle": "Why are you reporting this?",
+    "reasons": {
+      "copyright": "Copyright infringement",
+      "spam": "Spam or misleading content",
+      "inappropriate": "Offensive or inappropriate content",
+      "other": "Other"
+    },
+    "thanks": "Thanks, we received your report and will review it soon.",
+    "error": "Failed to send the report. Please try again."
   }
 }

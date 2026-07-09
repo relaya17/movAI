@@ -83,6 +83,47 @@ export async function sendContactMessage(input: { name: string; fromEmail: strin
   });
 }
 
+/**
+ * Content-report notification (lib/report-actions.ts) - separate from
+ * sendContactMessage so the subject line/routing is unambiguous for a
+ * single-operator inbox triaging trust & safety vs general questions.
+ */
+export async function sendContentReportEmail(input: {
+  uploadId: string;
+  uploadTitle: string;
+  reason: string;
+  reporterEmail?: string;
+}): Promise<void> {
+  const supportEmail = process.env.SUPPORT_EMAIL ?? (process.env.ADMIN_EMAILS ?? "").split(",")[0]?.trim();
+  const body = `Upload: ${input.uploadTitle} (${input.uploadId})\nReason: ${input.reason}\nReporter: ${input.reporterEmail ?? "anonymous"}`;
+
+  if (!supportEmail) {
+    console.warn(`[email] No SUPPORT_EMAIL/ADMIN_EMAILS configured - content report logged only:\n${body}`);
+    return;
+  }
+
+  const client = getResendClient();
+  if (!client) {
+    console.warn(`[email] RESEND_API_KEY not set - content report to ${supportEmail}:\n${body}`);
+    return;
+  }
+
+  await client.emails.send({
+    from: EMAIL_FROM,
+    to: supportEmail,
+    replyTo: input.reporterEmail,
+    subject: `דיווח על תוכן: ${input.uploadTitle}`,
+    html: `
+      <div dir="rtl" style="font-family: sans-serif; max-width: 480px; margin: 0 auto;">
+        <h2>דיווח על תוכן</h2>
+        <p><strong>תוכן:</strong> ${escapeHtml(input.uploadTitle)} (${escapeHtml(input.uploadId)})</p>
+        <p><strong>סיבה:</strong> ${escapeHtml(input.reason)}</p>
+        <p><strong>מדווח:</strong> ${escapeHtml(input.reporterEmail ?? "אנונימי")}</p>
+      </div>
+    `
+  });
+}
+
 function escapeHtml(value: string): string {
   return value
     .replace(/&/g, "&amp;")

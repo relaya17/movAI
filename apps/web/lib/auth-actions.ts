@@ -4,7 +4,7 @@ import { hash } from "bcryptjs";
 import { eq } from "drizzle-orm";
 import { z } from "zod";
 import { AuthError } from "next-auth";
-import { userProfiles, users, isUniqueViolation } from "@movai/db";
+import { userProfiles, users, isUniqueViolation, grantSignupBonus } from "@movai/db";
 import { signIn } from "@/auth";
 import { db } from "./db";
 import { checkRateLimit, loginRateLimitKey } from "./rate-limit";
@@ -141,6 +141,8 @@ export async function signUpAction(_prevState: AuthActionState, formData: FormDa
       username: parsed.username,
       dateOfBirth: parsed.dateOfBirth
     });
+
+    await grantSignupBonus(db, createdUser.id);
 
     // Best-effort - a signup must never fail just because the email provider
     // hiccuped. The user still gets a working account either way; they can
