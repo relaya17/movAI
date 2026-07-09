@@ -18,30 +18,40 @@ export function StudioTabs(): React.ReactElement {
   const TABS = TAB_IDS.map((id) => ({ id, label: t(`${id}.label`), icon: TAB_ICONS[id], description: t(`${id}.description`) }));
 
   return (
-    <div>
-      {/* Tab buttons */}
-      <div className="mb-6 flex gap-2 overflow-x-auto pb-2">
+    <div className="w-full min-w-0">
+      <div
+        className="mb-3 grid grid-cols-3 gap-1.5 rounded-lg border border-white/15 bg-black/60 p-1.5 backdrop-blur-xl sm:mb-4 sm:gap-2 sm:rounded-xl sm:p-2"
+        role="tablist"
+      >
         {TABS.map((tab) => (
           <button
             key={tab.id}
+            type="button"
+            role="tab"
+            aria-selected={activeTab === tab.id}
             onClick={() => setActiveTab(tab.id)}
-            className={`flex shrink-0 items-center gap-2 rounded-xl px-5 py-3 text-sm font-medium transition-all ${
+            className={`flex min-w-0 flex-col items-center gap-1 rounded-md px-1.5 py-2 text-center transition-all sm:flex-row sm:gap-2 sm:px-3 sm:py-2.5 sm:text-right ${
               activeTab === tab.id
-                ? "bg-gradient-to-r from-cyan-500/20 to-blue-500/20 text-white ring-1 ring-cyan-500/50"
-                : "bg-white/5 text-neutral-400 hover:bg-white/10 hover:text-white"
+                ? "bg-gradient-to-r from-cyan-600/90 to-blue-600/90 text-white shadow-md ring-1 ring-cyan-400/60"
+                : "bg-black/45 text-neutral-100 hover:bg-black/60"
             }`}
           >
-            <span className="text-xl">{tab.icon}</span>
-            <div className="text-right">
-              <div>{tab.label}</div>
-              <div className="text-xs text-neutral-500">{tab.description}</div>
+            <span className="shrink-0 text-lg sm:text-xl">{tab.icon}</span>
+            <div className="min-w-0 w-full sm:w-auto">
+              <div className="truncate text-[11px] font-semibold leading-tight sm:text-sm">{tab.label}</div>
+              <div
+                className={`hidden truncate text-[10px] leading-tight sm:block sm:text-xs ${
+                  activeTab === tab.id ? "text-cyan-100/90" : "text-neutral-300"
+                }`}
+              >
+                {tab.description}
+              </div>
             </div>
           </button>
         ))}
       </div>
 
-      {/* Tab content */}
-      <div className="rounded-2xl border border-white/10 bg-white/5 p-6 backdrop-blur-sm">
+      <div className="w-full min-w-0 rounded-lg border border-white/15 bg-black/60 p-3 backdrop-blur-xl sm:rounded-xl sm:p-5 md:p-6">
         {activeTab === "video" && <VideoCreator />}
         {activeTab === "music" && <MusicCreator />}
         {activeTab === "voice" && <VoiceCreator />}

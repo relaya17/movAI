@@ -1,6 +1,5 @@
 import Image from "next/image";
 import type { ReactNode } from "react";
-import { optimizeCloudinaryUrl } from "@/lib/cloudinary";
 import { LanguageSwitcher } from "@/components/LanguageSwitcher";
 
 export const AUTH_BACKGROUND_IMAGE =
@@ -12,7 +11,7 @@ export function AuthPageShell({ children }: { children: ReactNode }): React.Reac
     <div className="relative isolate min-h-[100dvh] w-full">
       <div className="pointer-events-none absolute inset-0 z-0">
         <Image
-          src={optimizeCloudinaryUrl(AUTH_BACKGROUND_IMAGE, 1920)}
+          src={AUTH_BACKGROUND_IMAGE}
           alt=""
           fill
           priority

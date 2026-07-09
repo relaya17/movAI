@@ -1,8 +1,13 @@
 import type { MetadataRoute } from "next";
 
+function siteOrigin(): string {
+  return (process.env.NEXT_PUBLIC_APP_URL ?? "http://localhost:3100").replace(/\/$/, "");
+}
+
 export default function robots(): MetadataRoute.Robots {
+  const origin = siteOrigin();
   return {
     rules: { userAgent: "*", allow: "/" },
-    sitemap: "https://example.com/sitemap.xml" // TODO: replace once domain is chosen (plan §9.1)
+    sitemap: `${origin}/sitemap.xml`
   };
 }

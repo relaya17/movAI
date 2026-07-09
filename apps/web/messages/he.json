@@ -5,9 +5,11 @@
     "upload": "העלאה",
     "profile": "הפרופיל שלי",
     "buyCredits": "קנה קרדיטים",
+    "subscription": "מנוי פרימיום",
     "giftWallet": "ארנק מתנות",
     "signOut": "התנתקות",
-    "menuLabel": "תפריט ניווט"
+    "menuLabel": "תפריט ניווט",
+    "watchlist": "רשימת צפייה"
   },
   "footer": {
     "tagline": "פלטפורמת גילוי תוכן מבוססת בינה מלאכותית. גלה סרטים, סטנדאפ, מוזיקה ושירה.",
@@ -45,7 +47,8 @@
       "and": "ואת",
       "privacyLink": "מדיניות הפרטיות",
       "submit": "התחברות",
-      "submitting": "רגע..."
+      "submitting": "רגע...",
+      "forgotPasswordLink": "שכחתם סיסמה?"
     },
     "signUp": {
       "titlePrefix": "הרשמה ל-",
@@ -69,6 +72,39 @@
     "credentialsForm": {
       "email": "אימייל",
       "password": "סיסמה"
+    },
+    "forgotPassword": {
+      "title": "שכחתם סיסמה?",
+      "subtitle": "הזינו את כתובת האימייל שלכם ונשלח לכם קישור לאיפוס הסיסמה.",
+      "email": "אימייל",
+      "submit": "שליחת קישור לאיפוס",
+      "submitting": "שולח...",
+      "submitted": "אם קיים חשבון עם האימייל הזה, נשלח אליו קישור לאיפוס הסיסמה.",
+      "backToSignIn": "חזרה להתחברות"
+    },
+    "resetPassword": {
+      "title": "איפוס סיסמה",
+      "subtitle": "בחרו סיסמה חדשה לחשבון שלכם.",
+      "newPassword": "סיסמה חדשה",
+      "confirmPassword": "אימות סיסמה",
+      "submit": "עדכון סיסמה",
+      "submitting": "מעדכן...",
+      "mismatch": "הסיסמאות אינן תואמות",
+      "missingToken": "קישור האיפוס לא תקין.",
+      "requestNewLink": "בקשת קישור חדש",
+      "success": "הסיסמה עודכנה בהצלחה - אפשר להתחבר עכשיו."
+    },
+    "verifyEmail": {
+      "title": "אימות אימייל",
+      "success": "כתובת האימייל אומתה בהצלחה!",
+      "failure": "קישור האימות לא תקין או שפג תוקפו.",
+      "continueToApp": "המשך לאפליקציה",
+      "banner": {
+        "message": "כדאי לאמת את כתובת האימייל שלכם.",
+        "resend": "שליחת קישור אימות מחדש",
+        "sending": "שולח...",
+        "resent": "קישור אימות נשלח - בדקו את תיבת הדואר שלכם."
+      }
     }
   },
   "gifts": {
@@ -77,7 +113,8 @@
     "creatorShare": "💰 50% מהמתנה מגיע ליוצר",
     "genericError": "שגיאה בשליחת המתנה",
     "epicSentMessage": "🎉 מתנה מרשימה נשלחה! 🎉",
-    "sentMessage": "נשלחה בהצלחה!"
+    "sentMessage": "נשלחה בהצלחה!",
+    "credits": "קרדיטים"
   },
   "contentTypes": {
     "standup": "סטנדאפ",
@@ -130,18 +167,39 @@
       "buyMore": "קנה עוד קרדיטים"
     },
     "tabs": {
-      "video": { "label": "וידאו", "description": "צור סרטון מטקסט או תמונה" },
-      "music": { "label": "מוזיקה", "description": "צור מוזיקה מקורית" },
-      "voice": { "label": "קול ושירה", "description": "צור קריינות או שירה" }
+      "video": {
+        "label": "וידאו",
+        "description": "צור סרטון מטקסט או תמונה"
+      },
+      "music": {
+        "label": "מוזיקה",
+        "description": "צור מוזיקה מקורית"
+      },
+      "voice": {
+        "label": "קול ושירה",
+        "description": "צור קריינות או שירה"
+      }
     },
     "video": {
       "promptLabel": "תאר את הסרטון שתרצה ליצור",
       "promptPlaceholder": "לדוגמה: רחוב עירוני בלילה עם גשם, אורות ניאון מהבהבים, מכונית ספורט שחורה חולפת באיטיות...",
       "promptHint": "טיפ: ככל שהתיאור מפורט יותר, התוצאה תהיה טובה יותר",
       "styleLabel": "סגנון",
-      "styles": { "cinematic": "קולנועי", "anime": "אנימה", "realistic": "ריאליסטי", "3d": "תלת מימד", "cartoon": "קריקטורה", "noir": "נואר" },
+      "styles": {
+        "cinematic": "קולנועי",
+        "anime": "אנימה",
+        "realistic": "ריאליסטי",
+        "3d": "תלת מימד",
+        "cartoon": "קריקטורה",
+        "noir": "נואר"
+      },
       "durationLabel": "אורך",
-      "durations": { "5": "5 שניות", "15": "15 שניות", "30": "30 שניות", "60": "60 שניות" },
+      "durations": {
+        "5": "5 שניות",
+        "15": "15 שניות",
+        "30": "30 שניות",
+        "60": "60 שניות"
+      },
       "proLabel": "PRO",
       "baseImageLabel": "תמונת בסיס (אופציונלי)",
       "baseImagePrompt": "גרור תמונה או לחץ להעלאה",
@@ -154,9 +212,25 @@
       "promptLabel": "תאר את המוזיקה שתרצה ליצור",
       "promptPlaceholder": "לדוגמה: שיר פופ קליל עם גיטרה אקוסטית, קצב מרים, מתאים לנסיעה בכביש פתוח...",
       "genreLabel": "ז׳אנר",
-      "genres": { "pop": "פופ", "rock": "רוק", "electronic": "אלקטרוני", "jazz": "ג׳אז", "classical": "קלאסי", "hiphop": "היפ הופ", "ambient": "אמביינט", "cinematic": "קולנועי" },
+      "genres": {
+        "pop": "פופ",
+        "rock": "רוק",
+        "electronic": "אלקטרוני",
+        "jazz": "ג׳אז",
+        "classical": "קלאסי",
+        "hiphop": "היפ הופ",
+        "ambient": "אמביינט",
+        "cinematic": "קולנועי"
+      },
       "moodLabel": "מצב רוח",
-      "moods": { "happy": "שמח", "sad": "עצוב", "energetic": "אנרגטי", "calm": "רגוע", "dramatic": "דרמטי", "romantic": "רומנטי" },
+      "moods": {
+        "happy": "שמח",
+        "sad": "עצוב",
+        "energetic": "אנרגטי",
+        "calm": "רגוע",
+        "dramatic": "דרמטי",
+        "romantic": "רומנטי"
+      },
       "addLyricsHeading": "הוסף שירה",
       "addLyricsDescription": "צור שיר עם מילים וקול",
       "lyricsLabel": "מילים (אופציונלי - אם ריק, הבינה תכתוב)",
@@ -168,13 +242,32 @@
     "voice": {
       "typeLabel": "סוג קול",
       "types": {
-        "narrator": { "label": "קריין", "description": "קול מקצועי לקריינות" },
-        "singer_male": { "label": "זמר", "description": "קול גברי לשירה" },
-        "singer_female": { "label": "זמרת", "description": "קול נשי לשירה" },
-        "character": { "label": "דמות", "description": "קולות ייחודיים לדמויות" }
+        "narrator": {
+          "label": "קריין",
+          "description": "קול מקצועי לקריינות"
+        },
+        "singer_male": {
+          "label": "זמר",
+          "description": "קול גברי לשירה"
+        },
+        "singer_female": {
+          "label": "זמרת",
+          "description": "קול נשי לשירה"
+        },
+        "character": {
+          "label": "דמות",
+          "description": "קולות ייחודיים לדמויות"
+        }
       },
       "languageLabel": "שפה",
-      "languages": { "he": "עברית", "en": "אנגלית", "ar": "ערבית", "ru": "רוסית", "fr": "צרפתית", "es": "ספרדית" },
+      "languages": {
+        "he": "עברית",
+        "en": "אנגלית",
+        "ar": "ערבית",
+        "ru": "רוסית",
+        "fr": "צרפתית",
+        "es": "ספרדית"
+      },
       "lyricsTextLabel": "מילות השיר",
       "narrationTextLabel": "טקסט לקריינות",
       "lyricsPlaceholder": "כתוב את מילות השיר כאן...",
@@ -233,5 +326,26 @@
   },
   "language": {
     "label": "שפה"
+  },
+  "watchlist": {
+    "title": "רשימת הצפייה שלי",
+    "subtitle": "כותרים ששמרת לצפייה מאוחר יותר.",
+    "gridTitle": "שמורים",
+    "empty": "הרשימה ריקה. פתחו כותר ולחצו על הוספה לרשימה.",
+    "add": "הוסף לרשימה",
+    "remove": "ברשימה",
+    "saving": "שומר...",
+    "authRequired": "יש להתחבר כדי לשמור כותרים.",
+    "error": "לא הצלחנו לעדכן את הרשימה. נסו שוב."
+  },
+  "recommendations": {
+    "title": "מומלץ עבורך",
+    "similar": "עוד כמו זה",
+    "empty": ""
+  },
+  "share": {
+    "share": "שתף",
+    "copied": "הקישור הועתק",
+    "copyFailed": "לא הצלחנו להעתיק"
   }
 }

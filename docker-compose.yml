@@ -45,7 +45,9 @@ services:
     volumes:
       - movai_meili_data:/meili_data
     healthcheck:
-      test: ["CMD", "wget", "--spider", "-q", "http://localhost:7700/health"]
+      # Use 127.0.0.1 - `localhost` resolves to ::1 inside alpine and wget
+      # gets "Connection refused" even though Meili is healthy on IPv4.
+      test: ["CMD", "wget", "--spider", "-q", "http://127.0.0.1:7700/health"]
       interval: 5s
       timeout: 5s
       retries: 10

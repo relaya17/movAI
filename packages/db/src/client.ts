@@ -29,7 +29,10 @@ export type Transaction = Parameters<Parameters<Database["transaction"]>[0]>[0];
 export function createDb(options: CreateDbOptions) {
   const client = postgres(options.connectionString, {
     ssl: options.ssl ?? true,
-    max: options.maxConnections ?? 10
+    max: options.maxConnections ?? 10,
+    // Fail fast when Postgres isn't running (local dev without Docker) so
+    // auth/browse don't hang for tens of seconds on every request.
+    connect_timeout: 5
   });
 
   return drizzle(client, { schema });

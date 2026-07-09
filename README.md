@@ -10,6 +10,8 @@ pnpm install
 
 # תשתית מקומית (Postgres+Redis+Meilisearch):
 docker compose up -d
+# אם מופיע name conflict (container names already in use):
+# docker rm -f movai-meilisearch-1 movai-redis-1 movai-postgres-1 && docker compose up -d
 cp .env.example .env.local   # ומלאו את הערכים הרלוונטיים (ראו הערות בקובץ)
 
 # מיגרציות DB:

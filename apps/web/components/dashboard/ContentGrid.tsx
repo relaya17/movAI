@@ -3,7 +3,6 @@
 import Image from "next/image";
 import Link from "next/link";
 import { useLocale, useTranslations } from "next-intl";
-import { optimizeCloudinaryUrl } from "@/lib/cloudinary";
 import { isRtl, type Locale } from "@/i18n/config";
 
 interface ContentItem {
@@ -19,6 +18,14 @@ interface ContentGridProps {
   id: string;
   title: string;
   items: ContentItem[];
+  /**
+   * Every browse category (movies, standup, music, singing) links to
+   * /movie/[slug] (apps/web/app/movie/[slug]/page.tsx, a real DB-backed,
+   * contentType-agnostic page) using item.id = the catalog item's slug.
+   * "/watch" default kept only for any other future caller that isn't
+   * catalog-backed.
+   */
+  hrefBase?: string;
 }
 
 function formatNumber(num: number): string {
@@ -28,7 +35,7 @@ function formatNumber(num: number): string {
   return num.toString();
 }
 
-export function ContentGrid({ id, title, items }: ContentGridProps): React.ReactElement {
+export function ContentGrid({ id, title, items, hrefBase = "/watch" }: ContentGridProps): React.ReactElement {
   const t = useTranslations("browse.categoryPills");
   const locale = useLocale() as Locale;
   const arrow = isRtl(locale) ? "←" : "→";
@@ -48,19 +55,19 @@ export function ContentGrid({ id, title, items }: ContentGridProps): React.React
 
       <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5">
         {items.map((item) => (
-          <ContentCard key={item.id} item={item} />
+          <ContentCard key={item.id} item={item} hrefBase={hrefBase} />
         ))}
       </div>
     </section>
   );
 }
 
-function ContentCard({ item }: { item: ContentItem }): React.ReactElement {
+function ContentCard({ item, hrefBase }: { item: ContentItem; hrefBase: string }): React.ReactElement {
   return (
-    <Link href={`/watch/${item.id}`} className="group relative">
+    <Link href={`${hrefBase}/${item.id}`} className="group relative">
       <div className="relative aspect-video overflow-hidden rounded-xl border border-white/10 bg-neutral-800 transition-all duration-300 group-hover:border-cyan-400/50 group-hover:shadow-lg group-hover:shadow-cyan-500/10">
         <Image
-          src={optimizeCloudinaryUrl(item.thumbnail, 400)}
+          src={item.thumbnail}
           alt={item.title}
           fill
           sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 20vw"

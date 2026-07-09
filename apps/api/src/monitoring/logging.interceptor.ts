@@ -35,13 +35,19 @@ export class LoggingInterceptor implements NestInterceptor {
     // URL - grouping by template keeps metrics/log volume bounded instead
     // of creating a new series per unique id.
     const route = (request.route as { path?: string } | undefined)?.path ?? request.path;
+    // Capture for RxJS callbacks - under tsx/watch the interceptor `this`
+    // can be undefined inside catchError, which turned every real handler
+    // failure into a secondary "Cannot read properties of undefined
+    // (reading 'recordRequest')" 500 and hid the original error.
+    const metrics = this.metrics;
+    const logger = this.logger;
 
     return next.handle().pipe(
       tap(() => {
         const durationMs = Date.now() - start;
         const statusCode = response.statusCode;
-        this.metrics.recordRequest(method, route, statusCode, durationMs);
-        this.logger.log(`[${correlationId}] ${method} ${route} ${statusCode} ${durationMs}ms`);
+        metrics.recordRequest(method, route, statusCode, durationMs);
+        logger.log(`[${correlationId}] ${method} ${route} ${statusCode} ${durationMs}ms`);
       }),
       catchError((error: unknown) => {
         const durationMs = Date.now() - start;
@@ -50,8 +56,8 @@ export class LoggingInterceptor implements NestInterceptor {
         // this fires for most Nest exception types) - 500 is the safe
         // fallback for metrics purposes when it isn't.
         const statusCode = response.statusCode >= 400 ? response.statusCode : 500;
-        this.metrics.recordRequest(method, route, statusCode, durationMs);
-        this.logger.error(`[${correlationId}] ${method} ${route} ${statusCode} ${durationMs}ms - ${String(error)}`);
+        metrics.recordRequest(method, route, statusCode, durationMs);
+        logger.error(`[${correlationId}] ${method} ${route} ${statusCode} ${durationMs}ms - ${String(error)}`);
         captureError(error, { correlationId, method, route });
         return throwError(() => error);
       })

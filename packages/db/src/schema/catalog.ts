@@ -1,7 +1,8 @@
 import { integer, jsonb, pgEnum, pgTable, text, timestamp, uuid } from "drizzle-orm/pg-core";
-import type { ContentClassification, WatchSource } from "@movai/types";
+import type { ContentClassification, ContentType, WatchSource } from "@movai/types";
 
 export const linkStatusEnum = pgEnum("link_status", ["active", "dead", "unchecked"]);
+export const contentTypeEnum = pgEnum("content_type", ["movie", "standup", "music", "singing"]);
 
 export const movies = pgTable("movies", {
   id: uuid("id").primaryKey().defaultRandom(),
@@ -14,6 +15,8 @@ export const movies = pgTable("movies", {
   posterUrl: text("poster_url"),
   /** TMDB attribution is mandatory in the UI wherever this id is surfaced - see legal/README.md */
   tmdbId: integer("tmdb_id"),
+  /** "movie" default keeps every pre-existing row (and every caller that doesn't filter by it) unchanged. */
+  contentType: contentTypeEnum("content_type").$type<ContentType>().notNull().default("movie"),
   /** Discriminated union from @movai/types, stored as-is and re-validated with zod on read. */
   watchSource: jsonb("watch_source").$type<WatchSource>().notNull(),
   linkStatus: linkStatusEnum("link_status").notNull().default("unchecked"),

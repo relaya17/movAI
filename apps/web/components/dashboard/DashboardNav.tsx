@@ -10,13 +10,16 @@ import { LanguageSwitcher } from "@/components/LanguageSwitcher";
 interface DashboardNavProps {
   user: User;
   creditBalance?: number;
+  /** Yearly-tier subscription perk (see @movai/db subscriptionPlans.founderBadge) - a small marker next to the username, nothing more. */
+  founderBadge?: boolean;
 }
 
-export function DashboardNav({ user, creditBalance }: DashboardNavProps): React.ReactElement {
+export function DashboardNav({ user, creditBalance, founderBadge }: DashboardNavProps): React.ReactElement {
   const t = useTranslations("nav");
 
   const NAV_LINKS: Array<{ href: string; label: string; highlight?: boolean }> = [
     { href: "/browse", label: t("discover") },
+    { href: "/watchlist", label: t("watchlist") },
     { href: "/studio", label: t("studio"), highlight: true },
     { href: "/upload", label: t("upload") },
   ];
@@ -32,7 +35,7 @@ export function DashboardNav({ user, creditBalance }: DashboardNavProps): React.
     <nav className="fixed inset-x-0 top-0 z-50 border-b border-white/10 bg-black/60 backdrop-blur-xl">
       <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
         {/* Logo */}
-        <Link href="/browse" className="flex items-baseline font-orbitron font-bold tracking-widest" dir="ltr">
+        <Link href="/browse" prefetch className="flex items-baseline font-orbitron font-bold tracking-widest" dir="ltr">
           <span className="text-xl text-white sm:text-2xl">MoV</span>
           <span
             className="text-2xl sm:text-3xl"
@@ -53,6 +56,7 @@ export function DashboardNav({ user, creditBalance }: DashboardNavProps): React.
             <Link
               key={link.href}
               href={link.href}
+              prefetch={true}
               className={`text-sm font-medium transition-colors ${
                 link.highlight
                   ? "rounded-full bg-gradient-to-r from-cyan-500/20 to-blue-500/20 px-4 py-1.5 text-cyan-300 ring-1 ring-cyan-500/30 hover:from-cyan-500/30 hover:to-blue-500/30"
@@ -81,6 +85,11 @@ export function DashboardNav({ user, creditBalance }: DashboardNavProps): React.
               onClick={() => setProfileMenuOpen((open) => !open)}
               className="flex items-center gap-2 rounded-full border border-white/20 bg-white/5 px-3 py-1.5 text-sm font-medium text-white backdrop-blur transition-colors hover:bg-white/10"
             >
+              {founderBadge && (
+                <span title="תומך מייסד" className="text-amber-400">
+                  👑
+                </span>
+              )}
               <span className="hidden sm:inline">{user.name ?? user.email}</span>
               <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
@@ -102,6 +111,13 @@ export function DashboardNav({ user, creditBalance }: DashboardNavProps): React.
                   onClick={() => setProfileMenuOpen(false)}
                 >
                   {t("buyCredits")}
+                </Link>
+                <Link
+                  href="/pricing/subscription"
+                  className="block px-4 py-2 text-sm text-neutral-300 hover:bg-white/5 hover:text-white"
+                  onClick={() => setProfileMenuOpen(false)}
+                >
+                  {t("subscription")}
                 </Link>
                 <Link
                   href="/wallet"
@@ -149,6 +165,7 @@ export function DashboardNav({ user, creditBalance }: DashboardNavProps): React.
               <Link
                 key={link.href}
                 href={link.href}
+                prefetch
                 onClick={() => setMobileMenuOpen(false)}
                 className="rounded-lg px-3 py-2.5 text-sm font-medium text-neutral-300 transition-colors hover:bg-white/5 hover:text-white"
               >

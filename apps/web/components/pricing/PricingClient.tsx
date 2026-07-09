@@ -204,6 +204,13 @@ export function PricingClient({ packages, currentBalance }: PricingClientProps) 
         </svg>
         <span>{t("securePayment")}</span>
       </div>
+
+      {/* Subscription cross-link - a recurring plan (day/week/month/year) bundles credits at a discount plus ad-free/priority perks, see /pricing/subscription */}
+      <div className="mt-4 text-center">
+        <a href="/pricing/subscription" className="text-sm text-cyan-400 underline-offset-4 hover:underline">
+          מעדיפים מנוי חודשי? לרמות המחיר של המנוי
+        </a>
+      </div>
     </div>
   );
 }

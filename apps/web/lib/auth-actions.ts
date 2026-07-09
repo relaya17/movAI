@@ -4,9 +4,24 @@ import { hash } from "bcryptjs";
 import { eq } from "drizzle-orm";
 import { z } from "zod";
 import { AuthError } from "next-auth";
-import { userProfiles, users } from "@movai/db";
+import { userProfiles, users, isUniqueViolation } from "@movai/db";
 import { signIn } from "@/auth";
 import { db } from "./db";
+import { checkRateLimit, loginRateLimitKey } from "./rate-limit";
+import { issueAndSendVerificationEmail } from "./email-verification-actions";
+
+/**
+ * Brute-force guard on login (review finding: no rate limiting on
+ * credentials sign-in at all). Deliberately counts every attempt through
+ * this action, not just failed ones - simpler than tracking success/failure
+ * separately, and also blunts credential-stuffing/enumeration attempts that
+ * a "failures only" counter wouldn't catch. Keyed by the submitted email
+ * (not IP - Next.js server actions don't have a clean, spoof-resistant way
+ * to read the caller's IP without trusting a proxy header), so this
+ * protects a given account regardless of how many source IPs are used
+ * against it.
+ */
+const LOGIN_RATE_LIMIT = { max: 5, windowSeconds: 15 * 60 };
 
 const credentialsSchema = z.object({
   email: z.string().email("כתובת אימייל לא תקינה"),
@@ -80,50 +95,108 @@ export async function signUpAction(_prevState: AuthActionState, formData: FormDa
   const parsed = parseSignUp(formData);
   if ("error" in parsed) return parsed;
 
-  const existingEmail = await db.select({ id: users.id }).from(users).where(eq(users.email, parsed.email)).limit(1);
-  if (existingEmail.length > 0) {
-    return { error: "כבר קיים חשבון עם האימייל הזה - נסו להתחבר במקום" };
+  try {
+    const existingEmail = await db.select({ id: users.id }).from(users).where(eq(users.email, parsed.email)).limit(1);
+    if (existingEmail.length > 0) {
+      return { error: "כבר קיים חשבון עם האימייל הזה - נסו להתחבר במקום" };
+    }
+
+    const existingUsername = await db
+      .select({ userId: userProfiles.userId })
+      .from(userProfiles)
+      .where(eq(userProfiles.username, parsed.username))
+      .limit(1);
+    if (existingUsername.length > 0) {
+      return { error: "שם המשתמש כבר תפוס - נסו שם אחר" };
+    }
+
+    const passwordHash = await hash(parsed.password, BCRYPT_COST);
+    const fullName = `${parsed.firstName} ${parsed.lastName}`;
+
+    // The checks above are a courtesy (fast, friendly error before touching
+    // anything) - they are NOT what actually prevents a duplicate account.
+    // Two signups for the same email/username submitted at nearly the same
+    // moment can both pass those checks before either insert commits; the
+    // real backstop is the unique constraint on users.email / user_profiles
+    // .username (schema/auth.ts, schema/social.ts). Without this try/catch,
+    // that constraint violation would have surfaced as an unhandled 500
+    // instead of the same friendly message the pre-check gives everyone else.
+    const [createdUser] = await db
+      .insert(users)
+      .values({
+        email: parsed.email,
+        name: fullName,
+        passwordHash
+      })
+      .returning({ id: users.id });
+
+    if (!createdUser) {
+      return { error: "לא הצלחנו ליצור את החשבון - נסו שוב" };
+    }
+
+    await db.insert(userProfiles).values({
+      userId: createdUser.id,
+      firstName: parsed.firstName,
+      lastName: parsed.lastName,
+      username: parsed.username,
+      dateOfBirth: parsed.dateOfBirth
+    });
+
+    // Best-effort - a signup must never fail just because the email provider
+    // hiccuped. The user still gets a working account either way; they can
+    // always request the link again later via resendVerificationEmailAction.
+    try {
+      await issueAndSendVerificationEmail(createdUser.id, parsed.email);
+    } catch (error) {
+      console.error("[signUpAction] failed to send verification email", error);
+    }
+
+    return signInWithCredentials(parsed.email, parsed.password);
+  } catch (error) {
+    if (isUniqueViolation(error)) {
+      const constraint = getConstraintName(error);
+      if (constraint?.includes("username")) {
+        return { error: "שם המשתמש כבר תפוס - נסו שם אחר" };
+      }
+      return { error: "כבר קיים חשבון עם האימייל הזה - נסו להתחבר במקום" };
+    }
+    if (isInfraUnavailable(error)) {
+      return { error: "השרת המקומי לא מחובר למסד הנתונים כרגע. הפעילו את Docker (postgres) ונסו שוב." };
+    }
+    throw error;
   }
+}
 
-  const existingUsername = await db
-    .select({ userId: userProfiles.userId })
-    .from(userProfiles)
-    .where(eq(userProfiles.username, parsed.username))
-    .limit(1);
-  if (existingUsername.length > 0) {
-    return { error: "שם המשתמש כבר תפוס - נסו שם אחר" };
+function getConstraintName(error: unknown): string | undefined {
+  if (typeof error === "object" && error !== null && "constraint_name" in error) {
+    const value = (error as { constraint_name: unknown }).constraint_name;
+    return typeof value === "string" ? value : undefined;
   }
+  return undefined;
+}
 
-  const passwordHash = await hash(parsed.password, BCRYPT_COST);
-  const fullName = `${parsed.firstName} ${parsed.lastName}`;
-
-  const [createdUser] = await db
-    .insert(users)
-    .values({
-      email: parsed.email,
-      name: fullName,
-      passwordHash
-    })
-    .returning({ id: users.id });
-
-  if (!createdUser) {
-    return { error: "לא הצלחנו ליצור את החשבון - נסו שוב" };
-  }
-
-  await db.insert(userProfiles).values({
-    userId: createdUser.id,
-    firstName: parsed.firstName,
-    lastName: parsed.lastName,
-    username: parsed.username,
-    dateOfBirth: parsed.dateOfBirth
-  });
-
-  return signInWithCredentials(parsed.email, parsed.password);
+/** Postgres/Redis down locally (no Docker) - surface a clear message instead of hanging or 500ing. */
+function isInfraUnavailable(error: unknown): boolean {
+  if (!(error instanceof Error)) return false;
+  const code = "code" in error && typeof error.code === "string" ? error.code : "";
+  return (
+    code === "ECONNREFUSED" ||
+    code === "ETIMEDOUT" ||
+    code === "ENOTFOUND" ||
+    code === "CONNECT_TIMEOUT" ||
+    /connect|ECONNREFUSED|timeout/i.test(error.message)
+  );
 }
 
 export async function signInAction(_prevState: AuthActionState, formData: FormData): Promise<AuthActionState> {
   const parsed = parseCredentials(formData);
   if ("error" in parsed) return parsed;
+
+  const rateLimit = await checkRateLimit(loginRateLimitKey(parsed.email), LOGIN_RATE_LIMIT);
+  if (!rateLimit.allowed) {
+    const minutes = Math.max(1, Math.ceil((rateLimit.retryAfterSeconds ?? LOGIN_RATE_LIMIT.windowSeconds) / 60));
+    return { error: `יותר מדי ניסיונות התחברות כושלים. נסו שוב בעוד כ-${minutes} דקות.` };
+  }
 
   return signInWithCredentials(parsed.email, parsed.password);
 }
@@ -139,6 +212,9 @@ async function signInWithCredentials(email: string, password: string): Promise<A
   } catch (error) {
     if (error instanceof AuthError) {
       return { error: "אימייל או סיסמה שגויים" };
+    }
+    if (isInfraUnavailable(error)) {
+      return { error: "השרת המקומי לא מחובר למסד הנתונים כרגע. הפעילו את Docker (postgres) ונסו שוב." };
     }
     throw error;
   }

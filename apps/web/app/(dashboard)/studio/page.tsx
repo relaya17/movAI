@@ -1,10 +1,10 @@
 import type { Metadata } from "next";
-import Link from "next/link";
 import { getTranslations } from "next-intl/server";
-import { auth } from "@/auth";
-import { db } from "@/lib/db";
-import { getCreditBalance } from "@movai/db";
 import { StudioTabs } from "@/components/studio/StudioTabs";
+import { optimizeCloudinaryUrl } from "@/lib/cloudinary";
+
+const STUDIO_BACKGROUND =
+  "https://res.cloudinary.com/dora8sxcb/image/upload/v1783618062/gpt-image-2_Create_a_futuristic_cinematic_promo_video_for_MoVAI_an_AI-powered_movie_discover-0_ob1xlt.jpg";
 
 export const metadata: Metadata = {
   title: "סטודיו AI",
@@ -13,46 +13,34 @@ export const metadata: Metadata = {
 
 export default async function StudioPage(): Promise<React.ReactElement> {
   const t = await getTranslations("studio");
-  const session = await auth();
-  const creditBalance = session?.user?.id ? await getCreditBalance(db, session.user.id) : 0;
+  const bgUrl = optimizeCloudinaryUrl(STUDIO_BACKGROUND, 1920);
 
   return (
-    <div className="min-h-screen pt-20 pb-16">
-      <div className="mx-auto max-w-5xl px-4 sm:px-6 lg:px-8">
-        {/* Header */}
-        <div className="mb-8 text-center">
-          <h1 className="font-orbitron text-3xl font-bold tracking-wide text-white sm:text-4xl">
-            {t("pageHeading")}{" "}
-            <span
-              style={{
-                background: "linear-gradient(180deg, #ffffff 0%, #67e8f9 50%, #06b6d4 100%)",
-                WebkitBackgroundClip: "text",
-                WebkitTextFillColor: "transparent",
-              }}
-            >
-              AI
-            </span>
-          </h1>
-          <p className="mt-2 text-neutral-400">{t("pageSubtitle")}</p>
-        </div>
-
-        {/* Credit balance - every generation is charged against this, no separate monthly quota */}
-        <div className="mb-8 rounded-xl border border-white/10 bg-white/5 p-4 backdrop-blur">
-          <div className="flex flex-wrap items-center justify-between gap-4">
-            <div>
-              <p className="text-xs text-neutral-500">{t("usage.creditBalance")}</p>
-              <p className="text-lg font-semibold text-white">💰 {creditBalance.toLocaleString()}</p>
-            </div>
-            <Link
-              href="/pricing"
-              className="rounded-full bg-gradient-to-r from-cyan-500 to-blue-500 px-4 py-2 text-sm font-semibold text-white transition-all hover:from-cyan-400 hover:to-blue-400"
-            >
-              {t("usage.buyMore")}
-            </Link>
+    <div
+      className="w-full bg-neutral-950 bg-cover bg-center bg-no-repeat"
+      style={{
+        backgroundImage: `linear-gradient(rgba(0,0,0,0.55), rgba(0,0,0,0.7)), url('${bgUrl}')`,
+      }}
+    >
+      <div className="mx-auto w-full max-w-5xl px-3 pb-10 pt-16 sm:px-6 sm:pb-12 sm:pt-20 lg:px-8">
+        <header className="mx-auto mb-4 max-w-xl sm:mb-5">
+          <div className="rounded-lg border border-white/20 bg-black/55 px-4 py-3 text-center backdrop-blur-xl sm:rounded-xl sm:px-5 sm:py-4">
+            <h1 className="font-orbitron text-xl font-bold tracking-wide text-white sm:text-2xl md:text-3xl">
+              {t("pageHeading")}{" "}
+              <span
+                style={{
+                  background: "linear-gradient(180deg, #ffffff 0%, #67e8f9 50%, #06b6d4 100%)",
+                  WebkitBackgroundClip: "text",
+                  WebkitTextFillColor: "transparent",
+                }}
+              >
+                AI
+              </span>
+            </h1>
+            <p className="mt-1 text-xs text-neutral-200 sm:text-sm">{t("pageSubtitle")}</p>
           </div>
-        </div>
+        </header>
 
-        {/* Studio Tabs */}
         <StudioTabs />
       </div>
     </div>

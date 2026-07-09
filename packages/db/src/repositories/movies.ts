@@ -1,5 +1,5 @@
-import { and, eq, isNull, lt, or } from "drizzle-orm";
-import type { PublicMovie, MovieLinkStatus } from "@movai/types";
+import { and, eq, inArray, isNull, lt, or } from "drizzle-orm";
+import type { PublicMovie, MovieLinkStatus, ContentType } from "@movai/types";
 import type { Database } from "../client";
 import { movies } from "../schema/catalog";
 
@@ -33,6 +33,7 @@ export async function upsertMovie(db: Database, movie: PublicMovie): Promise<voi
       synopsis: movie.synopsis,
       posterUrl: movie.posterUrl ?? null,
       tmdbId: movie.tmdbId ?? null,
+      contentType: movie.contentType,
       watchSource: movie.watchSource,
       linkStatus: movie.linkStatus,
       linkLastCheckedAt: movie.linkLastCheckedAt ? new Date(movie.linkLastCheckedAt) : null,
@@ -48,6 +49,7 @@ export async function upsertMovie(db: Database, movie: PublicMovie): Promise<voi
         synopsis: movie.synopsis,
         posterUrl: movie.posterUrl ?? null,
         tmdbId: movie.tmdbId ?? null,
+        contentType: movie.contentType,
         watchSource: movie.watchSource,
         updatedAt: new Date()
       }
@@ -97,16 +99,48 @@ export async function getMovieBySlug(db: Database, slug: string): Promise<Public
 export interface ListMoviesOptions {
   limit?: number;
   offset?: number;
+  /** Defaults to "movie" - pass "standup"/"music"/"singing" to list those browse categories instead. */
+  contentType?: ContentType;
 }
 
 export async function listMovies(db: Database, options: ListMoviesOptions = {}): Promise<PublicMovie[]> {
   const rows = await db
     .select()
     .from(movies)
-    .where(and(eq(movies.linkStatus, "active")))
+    .where(and(eq(movies.linkStatus, "active"), eq(movies.contentType, options.contentType ?? "movie")))
     .limit(options.limit ?? 50)
     .offset(options.offset ?? 0);
 
+  return rows.map(rowToPublicMovie);
+}
+
+/** Catalog rows that have a stored embedding - for content-based recommendations. */
+export async function listMoviesWithEmbeddings(
+  db: Database,
+  limit = 200
+): Promise<Array<PublicMovie & { embedding: number[] }>> {
+  const rows = await db
+    .select()
+    .from(movies)
+    .where(and(eq(movies.linkStatus, "active"), eq(movies.contentType, "movie")))
+    .limit(limit);
+
+  return rows
+    .filter((row): row is MovieRow & { embedding: number[] } => Array.isArray(row.embedding) && row.embedding.length > 0)
+    .map((row) => ({ ...rowToPublicMovie(row), embedding: row.embedding }));
+}
+
+export async function getMovieEmbedding(db: Database, movieId: string): Promise<number[] | undefined> {
+  const [row] = await db.select({ embedding: movies.embedding }).from(movies).where(eq(movies.id, movieId)).limit(1);
+  return row?.embedding ?? undefined;
+}
+
+export async function getMoviesByIds(db: Database, ids: readonly string[]): Promise<PublicMovie[]> {
+  if (ids.length === 0) return [];
+  const rows = await db
+    .select()
+    .from(movies)
+    .where(and(eq(movies.linkStatus, "active"), inArray(movies.id, [...ids])));
   return rows.map(rowToPublicMovie);
 }
 
@@ -123,6 +157,7 @@ function rowToPublicMovie(row: MovieRow): PublicMovie {
     synopsis: row.synopsis,
     posterUrl: row.posterUrl ?? undefined,
     tmdbId: row.tmdbId ?? undefined,
+    contentType: row.contentType,
     watchSource: row.watchSource,
     linkStatus: row.linkStatus,
     linkLastCheckedAt: row.linkLastCheckedAt ? row.linkLastCheckedAt.toISOString() : undefined,

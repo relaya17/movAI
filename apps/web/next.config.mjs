@@ -6,6 +6,13 @@ const withNextIntl = createNextIntlPlugin("./i18n/request.ts");
 const nextConfig = {
   reactStrictMode: true,
   images: {
+    // Cloudinary URLs are already transformed (f_auto/q_auto/w_*); a custom
+    // loader serves them directly to the browser and skips /_next/image.
+    // That avoids Node TLS failures (UNABLE_TO_VERIFY_LEAF_SIGNATURE) when a
+    // local proxy/antivirus intercepts HTTPS - which otherwise 500s the
+    // optimizer and stalls auth/browse pages for several seconds.
+    loader: "custom",
+    loaderFile: "./lib/cloudinary-loader.ts",
     // TMDB poster CDN + Cloudinary (hero promo assets) - only sources allowed for remote images (architecture plan §13.1 CSP)
     remotePatterns: [
       { protocol: "https", hostname: "image.tmdb.org" },

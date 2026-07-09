@@ -2,7 +2,6 @@
 
 import Image from "next/image";
 import { useCallback, useEffect, useRef, useState } from "react";
-import { optimizeCloudinaryUrl } from "@/lib/cloudinary";
 
 const PROMO_VIDEO =
   "https://res.cloudinary.com/dora8sxcb/video/upload/v1783467883/seedance-2.0_Create_a_futuristic_cinematic_promo_video_for_MoVAI_an_AI-powered_movie_discover-0_kmxvdw.mp4";
@@ -81,7 +80,7 @@ export function HeroPromo({ authButtons }: HeroPromoProps): React.ReactElement {
       {/* Landing backdrop loads under the video so the crossfade has no flash. */}
       <div className="pointer-events-none absolute inset-0 z-0">
         <Image
-          src={optimizeCloudinaryUrl(BACKGROUND_IMAGE, 1920)}
+          src={BACKGROUND_IMAGE}
           alt=""
           fill
           priority

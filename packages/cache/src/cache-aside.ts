@@ -35,17 +35,25 @@ export interface CacheAsideOptions<T> {
  * per movie-id, this is critical for cost"), and recommendation lookups.
  */
 export async function cacheAside<T>(options: CacheAsideOptions<T>): Promise<T> {
-  const cached = await options.redis.get(options.key);
-  if (cached !== null) {
-    const parsed = options.schema.safeParse(safeJsonParse(cached));
-    if (parsed.success) {
-      return parsed.data;
+  try {
+    const cached = await options.redis.get(options.key);
+    if (cached !== null) {
+      const parsed = options.schema.safeParse(safeJsonParse(cached));
+      if (parsed.success) {
+        return parsed.data;
+      }
+      // Fall through to recompute - treat an unparseable/invalid entry as a miss.
     }
-    // Fall through to recompute - treat an unparseable/invalid entry as a miss.
+  } catch {
+    // Redis down / connect timeout - skip cache read and compute fresh.
   }
 
   const fresh = await options.compute();
-  await options.redis.set(options.key, JSON.stringify(fresh), "EX", options.ttlSeconds);
+  try {
+    await options.redis.set(options.key, JSON.stringify(fresh), "EX", options.ttlSeconds);
+  } catch {
+    // Best-effort write - a dead Redis must never fail the request.
+  }
   return fresh;
 }
 

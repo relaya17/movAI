@@ -13,7 +13,7 @@ export async function ensureMoviesIndex(client: MeiliSearch): Promise<void> {
 
   await index.updateSettings({
     searchableAttributes: ["title", "originalTitle", "synopsis", "genres"],
-    filterableAttributes: ["genres", "year", "linkStatus", "watchSource.kind"],
+    filterableAttributes: ["genres", "year", "linkStatus", "watchSource.kind", "contentType"],
     sortableAttributes: ["year"]
   });
 }

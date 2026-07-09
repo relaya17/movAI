@@ -1,5 +1,6 @@
 import { Queue, type ConnectionOptions } from "bullmq";
 import { z } from "zod";
+import { ContentTypeSchema } from "@movai/types";
 
 /**
  * BullMQ builds Redis keys as `{prefix}:{queueName}:...` internally, so a
@@ -19,7 +20,16 @@ export const QUEUE_NAMES = {
 
 export const IngestionJobSchema = z.object({
   source: z.enum(["youtube", "archive"]),
-  query: z.string().min(1)
+  query: z.string().min(1),
+  /**
+   * What kind of content this search is meant to surface (browse-page
+   * category, see @movai/types ContentType). Defaults to "movie" so every
+   * pre-existing job payload (manual /admin/ingest calls, already-scheduled
+   * repeatable jobs) keeps behaving exactly as before without needing this
+   * field. "archive" only ever produces "movie" content regardless of what's
+   * requested here - see archive-org.ts.
+   */
+  contentType: ContentTypeSchema.default("movie")
 });
 export type IngestionJob = z.infer<typeof IngestionJobSchema>;
 
@@ -43,25 +53,54 @@ const DEFAULT_JOB_OPTIONS = {
   backoff: { type: "exponential" as const, delay: 2_000 }
 };
 
-export function createIngestionQueue(connection: ConnectionOptions): Queue<IngestionJob> {
-  return new Queue<IngestionJob>(QUEUE_NAMES.ingestion, {
-    connection,
-    prefix: QUEUE_PREFIX,
-    defaultJobOptions: DEFAULT_JOB_OPTIONS
+function attachQuietErrorHandler(queue: Queue): void {
+  // BullMQ's internal ioredis clients emit 'error' on ECONNREFUSED; without a
+  // listener Node prints "Unhandled error event" and it looks like a crash loop.
+  queue.on("error", () => {
+    /* callers surface failures via rejected promises on .add() / workers */
   });
 }
 
-export function createLinkCheckQueue(connection: ConnectionOptions): Queue<LinkCheckJob> {
-  return new Queue<LinkCheckJob>(QUEUE_NAMES.linkCheck, {
+export function createIngestionQueue(connection: ConnectionOptions): Queue<IngestionJob> {
+  const queue = new Queue<IngestionJob>(QUEUE_NAMES.ingestion, {
     connection,
     prefix: QUEUE_PREFIX,
     defaultJobOptions: DEFAULT_JOB_OPTIONS
   });
+  attachQuietErrorHandler(queue);
+  return queue;
+}
+
+export function createLinkCheckQueue(connection: ConnectionOptions): Queue<LinkCheckJob> {
+  const queue = new Queue<LinkCheckJob>(QUEUE_NAMES.linkCheck, {
+    connection,
+    prefix: QUEUE_PREFIX,
+    defaultJobOptions: DEFAULT_JOB_OPTIONS
+  });
+  attachQuietErrorHandler(queue);
+  return queue;
 }
 
 export function createDeadLetterQueue(connection: ConnectionOptions): Queue<DeadLetterJob> {
   // No retries here on purpose - a dead-letter entry is already the "final attempt failed" record.
-  return new Queue<DeadLetterJob>(QUEUE_NAMES.deadLetter, { connection, prefix: QUEUE_PREFIX });
+  const queue = new Queue<DeadLetterJob>(QUEUE_NAMES.deadLetter, { connection, prefix: QUEUE_PREFIX });
+  attachQuietErrorHandler(queue);
+  return queue;
+}
+
+/**
+ * Defers opening a Redis socket until the first `.add()` - used by the HTTP
+ * API process so local `pnpm dev` without Docker doesn't dial Redis at boot.
+ * The worker process still uses createIngestionQueue() eagerly (it needs Redis).
+ */
+export function createLazyIngestionQueue(connection: ConnectionOptions): Pick<Queue<IngestionJob>, "add"> {
+  let queue: Queue<IngestionJob> | undefined;
+  return {
+    add: (...args: Parameters<Queue<IngestionJob>["add"]>) => {
+      queue ??= createIngestionQueue(connection);
+      return queue.add(...args);
+    }
+  };
 }
 
 /** Schedules the daily link-rot check (architecture plan §12.6) as a repeatable job. */

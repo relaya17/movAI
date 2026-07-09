@@ -1,4 +1,4 @@
-import type { PublicMovie } from "@movai/types";
+import type { ContentType, PublicMovie } from "@movai/types";
 
 /**
  * Contract every content source adapter implements. Kept intentionally
@@ -8,7 +8,14 @@ import type { PublicMovie } from "@movai/types";
  */
 export interface ContentAdapter {
   readonly name: string;
-  search(query: string): Promise<PublicMovie[]>;
+  /**
+   * `contentType` steers adapters that can search more than one kind of
+   * content (currently only youtube.ts - archive-org.ts always produces
+   * "movie" regardless of what's passed) toward the right underlying
+   * category/results and tags the returned PublicMovie[] accordingly.
+   * Defaults to "movie" so every pre-existing caller keeps working unchanged.
+   */
+  search(query: string, contentType?: ContentType): Promise<PublicMovie[]>;
   /** Used by the daily "link rot" job - architecture plan §12.6. */
   checkLinkAlive(movie: PublicMovie): Promise<boolean>;
 }

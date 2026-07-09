@@ -67,7 +67,7 @@ async function applyCreditDelta(
   tx: Transaction,
   userId: string,
   amount: number,
-  type: "signup_bonus" | "purchase" | "usage" | "refund" | "gift" | "promo",
+  type: "signup_bonus" | "purchase" | "usage" | "refund" | "gift" | "promo" | "subscription",
   description: string,
   referenceId?: string
 ): Promise<number> {
@@ -115,6 +115,26 @@ export async function grantPurchasedCredits(
   paymentId: string
 ): Promise<number> {
   return db.transaction((tx) => applyCreditDelta(tx, userId, amount, "purchase", `רכישת ${amount} קרדיטים`, paymentId));
+}
+
+/**
+ * Credits a subscription's per-period allotment (see repositories/subscriptions.ts).
+ * `referenceId` must be unique per billing period for the SAME subscription
+ * (e.g. `${stripeSubscriptionId}:${currentPeriodStart.toISOString()}`) - the
+ * (userId, referenceId, type) unique index is what makes this idempotent
+ * against Stripe redelivering the same "invoice paid" webhook event: a
+ * second attempt to grant the *same* period's credits throws a unique
+ * violation instead of double-crediting the user.
+ */
+export async function grantSubscriptionCredits(
+  db: Database,
+  userId: string,
+  amount: number,
+  periodReferenceId: string
+): Promise<number> {
+  return db.transaction((tx) =>
+    applyCreditDelta(tx, userId, amount, "subscription", `קרדיטים ממנוי - ${amount}`, periodReferenceId)
+  );
 }
 
 /**

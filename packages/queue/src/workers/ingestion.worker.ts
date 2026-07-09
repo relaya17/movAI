@@ -20,7 +20,7 @@ export function createIngestionWorker(options: CreateIngestionWorkerOptions): Wo
         throw new Error(`No content adapter registered for source "${payload.source}"`);
       }
 
-      const movies = await adapter.search(payload.query);
+      const movies = await adapter.search(payload.query, payload.contentType);
       await options.onMoviesFetched(movies);
       return { indexed: movies.length };
     },

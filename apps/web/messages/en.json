@@ -5,9 +5,11 @@
     "upload": "Upload",
     "profile": "My Profile",
     "buyCredits": "Buy Credits",
+    "subscription": "Premium subscription",
     "giftWallet": "Gift Wallet",
     "signOut": "Sign Out",
-    "menuLabel": "Navigation menu"
+    "menuLabel": "Navigation menu",
+    "watchlist": "Watchlist"
   },
   "footer": {
     "tagline": "AI-powered content discovery. Find movies, stand-up, music and singing.",
@@ -45,7 +47,8 @@
       "and": "and",
       "privacyLink": "Privacy Policy",
       "submit": "Sign In",
-      "submitting": "One moment..."
+      "submitting": "One moment...",
+      "forgotPasswordLink": "Forgot password?"
     },
     "signUp": {
       "titlePrefix": "Sign up for ",
@@ -69,6 +72,39 @@
     "credentialsForm": {
       "email": "Email",
       "password": "Password"
+    },
+    "forgotPassword": {
+      "title": "Forgot password?",
+      "subtitle": "Enter your email and we'll send you a link to reset your password.",
+      "email": "Email",
+      "submit": "Send reset link",
+      "submitting": "Sending...",
+      "submitted": "If an account exists for that email, we've sent a password reset link.",
+      "backToSignIn": "Back to sign in"
+    },
+    "resetPassword": {
+      "title": "Reset password",
+      "subtitle": "Choose a new password for your account.",
+      "newPassword": "New password",
+      "confirmPassword": "Confirm password",
+      "submit": "Update password",
+      "submitting": "Updating...",
+      "mismatch": "Passwords don't match",
+      "missingToken": "This reset link is invalid.",
+      "requestNewLink": "Request a new link",
+      "success": "Password updated successfully - you can sign in now."
+    },
+    "verifyEmail": {
+      "title": "Email Verification",
+      "success": "Your email has been verified successfully!",
+      "failure": "This verification link is invalid or has expired.",
+      "continueToApp": "Continue to app",
+      "banner": {
+        "message": "Please verify your email address.",
+        "resend": "Resend verification link",
+        "sending": "Sending...",
+        "resent": "Verification link sent - check your inbox."
+      }
     }
   },
   "gifts": {
@@ -77,7 +113,8 @@
     "creatorShare": "💰 50% of the gift goes to the creator",
     "genericError": "Error sending gift",
     "epicSentMessage": "🎉 An amazing gift was sent! 🎉",
-    "sentMessage": "Sent successfully!"
+    "sentMessage": "Sent successfully!",
+    "credits": "Credits"
   },
   "contentTypes": {
     "standup": "Stand-Up",
@@ -130,18 +167,39 @@
       "buyMore": "Buy More Credits"
     },
     "tabs": {
-      "video": { "label": "Video", "description": "Create a video from text or an image" },
-      "music": { "label": "Music", "description": "Create original music" },
-      "voice": { "label": "Voice & Singing", "description": "Create narration or singing" }
+      "video": {
+        "label": "Video",
+        "description": "Create a video from text or an image"
+      },
+      "music": {
+        "label": "Music",
+        "description": "Create original music"
+      },
+      "voice": {
+        "label": "Voice & Singing",
+        "description": "Create narration or singing"
+      }
     },
     "video": {
       "promptLabel": "Describe the video you want to create",
       "promptPlaceholder": "e.g.: An urban street at night in the rain, flickering neon lights, a black sports car passing slowly...",
       "promptHint": "Tip: the more detailed the description, the better the result",
       "styleLabel": "Style",
-      "styles": { "cinematic": "Cinematic", "anime": "Anime", "realistic": "Realistic", "3d": "3D", "cartoon": "Cartoon", "noir": "Noir" },
+      "styles": {
+        "cinematic": "Cinematic",
+        "anime": "Anime",
+        "realistic": "Realistic",
+        "3d": "3D",
+        "cartoon": "Cartoon",
+        "noir": "Noir"
+      },
       "durationLabel": "Duration",
-      "durations": { "5": "5 seconds", "15": "15 seconds", "30": "30 seconds", "60": "60 seconds" },
+      "durations": {
+        "5": "5 seconds",
+        "15": "15 seconds",
+        "30": "30 seconds",
+        "60": "60 seconds"
+      },
       "proLabel": "PRO",
       "baseImageLabel": "Base Image (optional)",
       "baseImagePrompt": "Drag an image here or click to upload",
@@ -154,9 +212,25 @@
       "promptLabel": "Describe the music you want to create",
       "promptPlaceholder": "e.g.: A light pop song with acoustic guitar, upbeat tempo, perfect for a road trip...",
       "genreLabel": "Genre",
-      "genres": { "pop": "Pop", "rock": "Rock", "electronic": "Electronic", "jazz": "Jazz", "classical": "Classical", "hiphop": "Hip Hop", "ambient": "Ambient", "cinematic": "Cinematic" },
+      "genres": {
+        "pop": "Pop",
+        "rock": "Rock",
+        "electronic": "Electronic",
+        "jazz": "Jazz",
+        "classical": "Classical",
+        "hiphop": "Hip Hop",
+        "ambient": "Ambient",
+        "cinematic": "Cinematic"
+      },
       "moodLabel": "Mood",
-      "moods": { "happy": "Happy", "sad": "Sad", "energetic": "Energetic", "calm": "Calm", "dramatic": "Dramatic", "romantic": "Romantic" },
+      "moods": {
+        "happy": "Happy",
+        "sad": "Sad",
+        "energetic": "Energetic",
+        "calm": "Calm",
+        "dramatic": "Dramatic",
+        "romantic": "Romantic"
+      },
       "addLyricsHeading": "Add Singing",
       "addLyricsDescription": "Create a song with lyrics and vocals",
       "lyricsLabel": "Lyrics (optional - if empty, the AI will write them)",
@@ -168,13 +242,32 @@
     "voice": {
       "typeLabel": "Voice Type",
       "types": {
-        "narrator": { "label": "Narrator", "description": "Professional narration voice" },
-        "singer_male": { "label": "Male Singer", "description": "Male singing voice" },
-        "singer_female": { "label": "Female Singer", "description": "Female singing voice" },
-        "character": { "label": "Character", "description": "Unique character voices" }
+        "narrator": {
+          "label": "Narrator",
+          "description": "Professional narration voice"
+        },
+        "singer_male": {
+          "label": "Male Singer",
+          "description": "Male singing voice"
+        },
+        "singer_female": {
+          "label": "Female Singer",
+          "description": "Female singing voice"
+        },
+        "character": {
+          "label": "Character",
+          "description": "Unique character voices"
+        }
       },
       "languageLabel": "Language",
-      "languages": { "he": "Hebrew", "en": "English", "ar": "Arabic", "ru": "Russian", "fr": "French", "es": "Spanish" },
+      "languages": {
+        "he": "Hebrew",
+        "en": "English",
+        "ar": "Arabic",
+        "ru": "Russian",
+        "fr": "French",
+        "es": "Spanish"
+      },
       "lyricsTextLabel": "Song Lyrics",
       "narrationTextLabel": "Narration Text",
       "lyricsPlaceholder": "Write the song lyrics here...",
@@ -233,5 +326,26 @@
   },
   "language": {
     "label": "Language"
+  },
+  "watchlist": {
+    "title": "My Watchlist",
+    "subtitle": "Titles you saved to watch later.",
+    "gridTitle": "Saved",
+    "empty": "Your watchlist is empty. Open a title and tap Add to watchlist.",
+    "add": "Add to watchlist",
+    "remove": "In watchlist",
+    "saving": "Saving...",
+    "authRequired": "Sign in to save titles.",
+    "error": "Could not update watchlist. Try again."
+  },
+  "recommendations": {
+    "title": "Recommended for you",
+    "similar": "More like this",
+    "empty": ""
+  },
+  "share": {
+    "share": "Share",
+    "copied": "Link copied",
+    "copyFailed": "Could not copy link"
   }
 }

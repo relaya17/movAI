@@ -17,6 +17,20 @@ export function createQueueConnection(options: CreateQueueConnectionOptions): Co
     host: url.hostname,
     port: url.port ? Number.parseInt(url.port, 10) : 6379,
     maxRetriesPerRequest: null,
+    // Windows: prefer IPv4 - Docker publishes Redis on 127.0.0.1, not ::1.
+    family: 4,
+    // Don't open a TCP socket until the first queue command - the HTTP API
+    // constructs Queue handles at boot but rarely needs Redis until an admin
+    // ingest runs. Without this, a missing local Redis floods the terminal.
+    lazyConnect: true,
+    connectTimeout: 2_000,
+    // Cap reconnect storms when Redis is down locally (no Docker). Returning
+    // null stops ioredis retries so the API/dev terminal isn't flooded with
+    // ECONNREFUSED and request handlers aren't stuck behind an offline queue.
+    retryStrategy(times) {
+      if (times > 3) return null;
+      return Math.min(times * 200, 1_000);
+    },
     // Built conditionally rather than `password: url.password || undefined` -
     // exactOptionalPropertyTypes (architecture plan §4.1) rejects an explicit
     // `undefined` assigned to an optional property.

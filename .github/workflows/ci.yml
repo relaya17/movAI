@@ -32,3 +32,16 @@ jobs:
 
       - name: Build
         run: pnpm build
+
+      - name: Install Playwright Chromium
+        run: pnpm --filter @movai/web exec playwright install --with-deps chromium
+
+      - name: Playwright smoke
+        working-directory: apps/web
+        env:
+          CI: "true"
+          PLAYWRIGHT_PORT: "3110"
+          AUTH_SECRET: "playwright-ci-auth-secret-32chars!!"
+          AUTH_URL: "http://127.0.0.1:3110"
+          NEXT_PUBLIC_APP_URL: "http://127.0.0.1:3110"
+        run: pnpm test:e2e

@@ -4,6 +4,7 @@ import { Orbitron, Bebas_Neue } from "next/font/google";
 import { NextIntlClientProvider } from "next-intl";
 import { getLocale, getMessages } from "next-intl/server";
 import { isRtl, type Locale } from "@/i18n/config";
+import { ServiceWorkerRegister } from "@/components/ServiceWorkerRegister";
 import "./globals.css";
 
 const orbitron = Orbitron({
@@ -54,6 +55,7 @@ export default async function RootLayout({ children }: { children: ReactNode }):
           {skipToContentLabel}
         </a>
         <NextIntlClientProvider locale={locale} messages={messages}>
+          <ServiceWorkerRegister />
           <div id="main-content">{children}</div>
         </NextIntlClientProvider>
       </body>

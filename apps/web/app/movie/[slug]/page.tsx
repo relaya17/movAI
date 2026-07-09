@@ -1,8 +1,15 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
+import { getTranslations } from "next-intl/server";
 import { isEmbeddable } from "@movai/types";
 import { Button } from "@movai/ui";
-import { getMovieBySlug, listMovies } from "@/lib/movies";
+import { auth } from "@/auth";
+import { ContentGrid } from "@/components/dashboard/ContentGrid";
+import { ShareButton } from "@/components/ShareButton";
+import { WatchlistButton } from "@/components/WatchlistButton";
+import { getMovieBySlug, listMovies, listContentByType } from "@/lib/movies";
+import { getIsInWatchlist } from "@/lib/watchlist-actions";
+import { getSimilarMovies } from "@/lib/recommendations";
 
 export const revalidate = 3600; // ISR - architecture plan §11.1
 
@@ -10,9 +17,17 @@ interface MoviePageProps {
   params: Promise<{ slug: string }>;
 }
 
+const FALLBACK_POSTER =
+  "https://res.cloudinary.com/dora8sxcb/image/upload/v1783468280/gpt-image-2_Create_a_futuristic_cinematic_promo_video_for_MoVAI_an_AI-powered_movie_discover-0_c0cywb.jpg";
+
 export async function generateStaticParams(): Promise<{ slug: string }[]> {
-  const movies = await listMovies();
-  return movies.map((movie) => ({ slug: movie.slug }));
+  const [movies, standup, music, singing] = await Promise.all([
+    listMovies(),
+    listContentByType("standup"),
+    listContentByType("music"),
+    listContentByType("singing")
+  ]);
+  return [...movies, ...standup, ...music, ...singing].map((item) => ({ slug: item.slug }));
 }
 
 export async function generateMetadata({ params }: MoviePageProps): Promise<Metadata> {
@@ -36,17 +51,36 @@ export default async function MoviePage({ params }: MoviePageProps): Promise<Rea
   const movie = await getMovieBySlug(slug);
   if (!movie) notFound();
 
-  const embeddable = isEmbeddable(movie.watchSource);
+  const session = await auth();
+  const [inWatchlist, similar, tRecs] = await Promise.all([
+    session?.user?.id ? getIsInWatchlist(movie.id) : Promise.resolve(false),
+    getSimilarMovies(movie.id, movie.genres, 8),
+    getTranslations("recommendations")
+  ]);
 
-  // schema.org structured data for SEO rich results (architecture plan §8)
+  const embeddable = isEmbeddable(movie.watchSource);
+  const appUrl = process.env.NEXT_PUBLIC_APP_URL ?? "http://localhost:3100";
+  const shareUrl = `${appUrl}/movie/${movie.slug}`;
+
   const jsonLd = {
     "@context": "https://schema.org",
-    "@type": "Movie",
+    "@type": movie.contentType === "movie" ? "Movie" : "VideoObject",
     name: movie.title,
     dateCreated: String(movie.year),
     genre: movie.genres,
-    description: movie.synopsis
+    description: movie.synopsis,
+    image: movie.posterUrl,
+    url: shareUrl
   };
+
+  const similarItems = similar.map((item) => ({
+    id: item.slug,
+    title: item.title,
+    thumbnail: item.posterUrl ?? FALLBACK_POSTER,
+    creator: item.genres[0] ?? String(item.year),
+    views: 0,
+    gifts: 0
+  }));
 
   return (
     <div className="mx-auto max-w-3xl px-4 py-6">
@@ -56,6 +90,11 @@ export default async function MoviePage({ params }: MoviePageProps): Promise<Rea
         {movie.title} <span className="font-normal text-neutral-500">({movie.year})</span>
       </h1>
       <p className="mt-4 text-neutral-700 dark:text-neutral-300">{movie.synopsis}</p>
+
+      <div className="mt-4 flex flex-wrap gap-3">
+        {session?.user?.id ? <WatchlistButton slug={movie.slug} initialInWatchlist={inWatchlist} /> : null}
+        <ShareButton title={movie.title} url={shareUrl} />
+      </div>
 
       <div className="mt-6">
         {embeddable && movie.watchSource.kind === "youtube" && (
@@ -97,6 +136,12 @@ export default async function MoviePage({ params }: MoviePageProps): Promise<Rea
         {movie.watchSource.kind === "external-link" && "קישור חיצוני למקור מורשה"}
         . MoVAI אינו מארח את הקובץ ואינו קשור למקור.
       </p>
+
+      {similarItems.length > 0 ? (
+        <div className="mt-10">
+          <ContentGrid id="similar" title={tRecs("similar")} items={similarItems} hrefBase="/movie" />
+        </div>
+      ) : null}
     </div>
   );
 }

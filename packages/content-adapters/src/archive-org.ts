@@ -87,6 +87,11 @@ function mapToPublicMovie(
     year: Number.isFinite(year) ? year : new Date().getFullYear(),
     genres: [],
     synopsis: description || doc.title,
+    // Archive.org's `mediatype:(movies)` filter in the search query above
+    // means everything this adapter ever returns is a film - contentType is
+    // always "movie" here regardless of what the caller passed in, unlike
+    // youtube.ts which actually varies its results by contentType.
+    contentType: "movie",
     watchSource: { kind: "archive", identifier: doc.identifier, license },
     linkStatus: "unchecked"
   };

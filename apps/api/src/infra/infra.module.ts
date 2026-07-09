@@ -2,7 +2,7 @@ import { Global, Module, type Provider } from "@nestjs/common";
 import { createDb, type Database } from "@movai/db";
 import { createRedisClient } from "@movai/cache";
 import { createSearchClient } from "@movai/search";
-import { createIngestionQueue, createQueueConnection } from "@movai/queue";
+import { createLazyIngestionQueue, createQueueConnection } from "@movai/queue";
 import { DATABASE, REDIS_CLIENT, SEARCH_CLIENT, INGESTION_QUEUE } from "./tokens.js";
 
 const databaseProvider: Provider = {
@@ -22,7 +22,7 @@ const databaseProvider: Provider = {
 
 const redisProvider: Provider = {
   provide: REDIS_CLIENT,
-  useFactory: () => createRedisClient({ url: process.env.REDIS_URL ?? "redis://localhost:6380" })
+  useFactory: () => createRedisClient({ url: process.env.REDIS_URL ?? "redis://127.0.0.1:6380" })
 };
 
 const searchProvider: Provider = {
@@ -41,7 +41,11 @@ const searchProvider: Provider = {
  */
 const ingestionQueueProvider: Provider = {
   provide: INGESTION_QUEUE,
-  useFactory: () => createIngestionQueue(createQueueConnection({ url: process.env.REDIS_URL ?? "redis://localhost:6380" }))
+  // Lazy: don't open Redis until an admin actually enqueues an ingest job.
+  // Eager Queue construction was the remaining ECONNREFUSED spam at API boot
+  // when Docker/Redis isn't running locally.
+  useFactory: () =>
+    createLazyIngestionQueue(createQueueConnection({ url: process.env.REDIS_URL ?? "redis://127.0.0.1:6380" }))
 };
 
 /**

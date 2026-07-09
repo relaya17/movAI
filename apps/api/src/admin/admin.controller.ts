@@ -8,6 +8,8 @@ interface IngestResponse {
   jobId: string;
 }
 
+type IngestionQueueHandle = Pick<Queue<IngestionJob>, "add">;
+
 /**
  * Operator-only endpoints, guarded by AdminApiKeyGuard (see that file for
  * why this is a stopgap, not real auth). `/v1/admin/ingest` enqueues a job
@@ -18,7 +20,7 @@ interface IngestResponse {
 @UseGuards(AdminApiKeyGuard)
 @Controller("admin")
 export class AdminController {
-  constructor(@Inject(INGESTION_QUEUE) private readonly ingestionQueue: Queue<IngestionJob>) {}
+  constructor(@Inject(INGESTION_QUEUE) private readonly ingestionQueue: IngestionQueueHandle) {}
 
   @Post("ingest")
   async ingest(@Body() rawBody: unknown): Promise<IngestResponse> {

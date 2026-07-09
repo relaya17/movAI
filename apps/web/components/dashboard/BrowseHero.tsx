@@ -4,8 +4,6 @@ import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { useTranslations } from "next-intl";
-import { optimizeCloudinaryUrl } from "@/lib/cloudinary";
-
 const HERO_IMAGE =
   "https://res.cloudinary.com/dora8sxcb/image/upload/v1783468294/kino-xl_a_cinematic_photo_of_Create_a_futuristic_cinematic_promo_video_for_MoVAI_an_AI-p-0_kykzup.jpg";
 
@@ -41,7 +39,7 @@ export function BrowseHero({ activeCategory }: BrowseHeroProps): React.ReactElem
           }`}
         >
           <Image
-            src={optimizeCloudinaryUrl(HERO_IMAGE, 1920)}
+            src={HERO_IMAGE}
             alt="MoVAI קולנוע"
             fill
             priority

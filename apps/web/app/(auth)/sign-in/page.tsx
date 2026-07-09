@@ -7,8 +7,14 @@ import { Button } from "@movai/ui";
 
 export const metadata = { title: "התחברות" };
 
-export default async function SignInPage(): Promise<React.ReactElement> {
+interface SignInPageProps {
+  searchParams: Promise<{ passwordReset?: string }>;
+}
+
+export default async function SignInPage({ searchParams }: SignInPageProps): Promise<React.ReactElement> {
+  const { passwordReset } = await searchParams;
   const t = await getTranslations("auth.signIn");
+  const tReset = await getTranslations("auth.resetPassword");
 
   return (
     <>
@@ -29,7 +35,19 @@ export default async function SignInPage(): Promise<React.ReactElement> {
       </h1>
       <p className="mb-8 text-center text-sm text-neutral-300">{t("subtitle")}</p>
 
+      {passwordReset === "1" && (
+        <p role="status" className="mb-4 rounded-lg border border-emerald-400/30 bg-emerald-400/10 px-3 py-2 text-center text-sm text-emerald-300">
+          {tReset("success")}
+        </p>
+      )}
+
       <CredentialsForm action={signInAction} submitLabel={t("submit")} submittingLabel={t("submitting")} />
+
+      <p className="mt-3 text-center text-sm">
+        <Link href="/forgot-password" className="text-cyan-300 underline hover:text-cyan-200">
+          {t("forgotPasswordLink")}
+        </Link>
+      </p>
 
       <p className="mt-4 text-center text-sm text-neutral-300">
         {t("noAccount")}{" "}

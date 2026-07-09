@@ -36,6 +36,34 @@
       "when": 1783522306744,
       "tag": "0004_fair_bloodstorm",
       "breakpoints": true
+    },
+    {
+      "idx": 5,
+      "version": "7",
+      "when": 1783538909920,
+      "tag": "0005_quick_mister_fear",
+      "breakpoints": true
+    },
+    {
+      "idx": 6,
+      "version": "7",
+      "when": 1783542958365,
+      "tag": "0006_melodic_liz_osborn",
+      "breakpoints": true
+    },
+    {
+      "idx": 7,
+      "version": "7",
+      "when": 1783634400000,
+      "tag": "0007_content_type",
+      "breakpoints": true
+    },
+    {
+      "idx": 8,
+      "version": "7",
+      "when": 1783720800000,
+      "tag": "0008_subscriptions_sponsors",
+      "breakpoints": true
     }
   ]
 }

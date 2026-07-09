@@ -15,9 +15,11 @@ interface BrowsePageClientProps {
   children: React.ReactNode;
 }
 
+const PROMO_SEEN_KEY = "movai-browse-promo-seen";
+
 export function BrowsePageClient({ children }: BrowsePageClientProps): React.ReactElement {
   const videoRef = useRef<HTMLVideoElement | null>(null);
-  const [phase, setPhase] = useState<Phase>("video");
+  const [phase, setPhase] = useState<Phase>("content");
 
   const beginTransition = useCallback((): void => {
     setPhase((current) => (current === "video" ? "transition" : current));
@@ -25,10 +27,18 @@ export function BrowsePageClient({ children }: BrowsePageClientProps): React.Rea
 
   useEffect(() => {
     const mediaQuery = window.matchMedia("(prefers-reduced-motion: reduce)");
-    if (mediaQuery.matches) {
+    if (mediaQuery.matches || sessionStorage.getItem(PROMO_SEEN_KEY)) {
       setPhase("content");
+      return;
     }
+    setPhase("video");
   }, []);
+
+  useEffect(() => {
+    if (phase === "content") {
+      sessionStorage.setItem(PROMO_SEEN_KEY, "1");
+    }
+  }, [phase]);
 
   useEffect(() => {
     if (phase !== "video") return;

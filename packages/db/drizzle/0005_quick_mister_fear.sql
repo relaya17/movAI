@@ -1,0 +1,1 @@
+CREATE UNIQUE INDEX "credit_transactions_user_reference_type_unique" ON "credit_transactions" USING btree ("user_id","reference_id","type") WHERE "credit_transactions"."reference_id" IS NOT NULL;

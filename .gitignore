@@ -10,3 +10,7 @@ coverage
 .vercel
 .pnpm-store
 _tmp_*
+test-results
+playwright-report
+blob-report
+playwright/.cache

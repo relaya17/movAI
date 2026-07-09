@@ -71,10 +71,19 @@ export function GiftButton({ uploadId, disabled }: GiftButtonProps) {
             <div
               className="fixed inset-0 z-40"
               onClick={() => setIsOpen(false)}
+              role="presentation"
             />
 
             {/* Gift Picker */}
-            <div className="absolute bottom-full left-0 z-50 mb-2 w-80 rounded-2xl border border-white/10 bg-neutral-900/95 p-4 shadow-2xl backdrop-blur-xl">
+            <div
+              role="dialog"
+              aria-modal="true"
+              aria-label={t("chooseGift")}
+              onKeyDown={(e) => {
+                if (e.key === "Escape") setIsOpen(false);
+              }}
+              className="absolute bottom-full left-0 z-50 mb-2 w-80 rounded-2xl border border-white/10 bg-neutral-900/95 p-4 shadow-2xl backdrop-blur-xl"
+            >
               <h3 className="mb-3 text-center text-sm font-semibold text-white">{t("chooseGift")}</h3>
 
               {error && (
@@ -89,6 +98,7 @@ export function GiftButton({ uploadId, disabled }: GiftButtonProps) {
                     key={gift.id}
                     onClick={() => void handleSendGift(gift.id)}
                     disabled={sending !== null}
+                    aria-label={`${gift.name} - ${gift.costInCredits} ${t("credits")}`}
                     className="group flex flex-col items-center gap-1 rounded-xl border border-white/10 bg-white/5 p-3 transition-all hover:scale-110 hover:border-amber-500/50 hover:bg-amber-500/10 hover:shadow-lg hover:shadow-amber-500/20 disabled:cursor-not-allowed disabled:opacity-50"
                   >
                     <span className="text-3xl transition-transform group-hover:scale-125">

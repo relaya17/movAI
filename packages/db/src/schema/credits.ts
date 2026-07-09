@@ -11,6 +11,7 @@ export const transactionTypeEnum = pgEnum("transaction_type", [
   "refund",
   "gift",
   "promo",
+  "subscription",
 ]);
 
 /** AI creation types */

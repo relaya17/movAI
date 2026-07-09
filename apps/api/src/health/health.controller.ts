@@ -55,7 +55,13 @@ export class HealthController {
 
   private async checkRedis(): Promise<ServiceStatus> {
     try {
-      const reply = await this.redis.ping();
+      // createRedisClient uses lazyConnect - first command opens the socket.
+      const reply = await Promise.race([
+        this.redis.ping(),
+        new Promise<string>((_, reject) => {
+          setTimeout(() => reject(new Error("redis ping timeout")), 2_000);
+        })
+      ]);
       return reply === "PONG" ? "ok" : "down";
     } catch {
       return "down";

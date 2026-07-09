@@ -1,3 +1,4 @@
+import "./load-env";
 import "reflect-metadata";
 import { NestFactory } from "@nestjs/core";
 import { Logger } from "@nestjs/common";
@@ -37,8 +38,8 @@ import { initSentry, captureMessage } from "./monitoring/alerting";
  * WorkerModule (not AppModule) on purpose - WorkerModule pulls in
  * DATABASE/SEARCH_CLIENT/REDIS_CLIENT via the same @Global() InfraModule
  * AppModule uses (so the connection setup logic still only lives in one
- * place), plus AICreationProcessor, but none of the HTTP-only modules -
- * see worker.module.ts for why that separation matters.
+ * place), but none of the HTTP-only modules - see worker.module.ts for why
+ * that separation matters.
  */
 async function bootstrap(): Promise<void> {
   initSentry("worker");
@@ -56,7 +57,7 @@ async function bootstrap(): Promise<void> {
   // silently broken against a freshly-created index.
   await ensureMoviesIndex(search);
 
-  const connection = createQueueConnection({ url: process.env.REDIS_URL ?? "redis://localhost:6380" });
+  const connection = createQueueConnection({ url: process.env.REDIS_URL ?? "redis://127.0.0.1:6380" });
 
   const youtubeApiKey = process.env.YOUTUBE_API_KEY;
   const adapters: ContentAdapter[] = [
@@ -79,7 +80,12 @@ async function bootstrap(): Promise<void> {
       const processed: PublicMovie[] = [];
 
       for (const rawMovie of movies) {
-        const enriched = tmdbEnricher ? await tmdbEnricher.enrich(rawMovie) : rawMovie;
+        // TMDB is a *film* database - matching a standup special or a music
+        // performance against it would at best do nothing and at worst
+        // attach a wrong film's poster/synopsis/tmdbId to unrelated content.
+        // Only ever enrich actual movies.
+        const enriched =
+          tmdbEnricher && rawMovie.contentType === "movie" ? await tmdbEnricher.enrich(rawMovie) : rawMovie;
 
         // Verify the link right away instead of leaving every freshly
         // ingested movie stuck as "unchecked" (and therefore invisible -

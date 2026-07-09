@@ -5,9 +5,11 @@
     "upload": "Subir",
     "profile": "Mi Perfil",
     "buyCredits": "Comprar Créditos",
+    "subscription": "Suscripción premium",
     "giftWallet": "Billetera de Regalos",
     "signOut": "Cerrar Sesión",
-    "menuLabel": "Menú de navegación"
+    "menuLabel": "Menú de navegación",
+    "watchlist": "Lista"
   },
   "footer": {
     "tagline": "Plataforma de descubrimiento de contenido con IA. Encuentra películas, comedia, música y canto.",
@@ -45,7 +47,8 @@
       "and": "y la",
       "privacyLink": "Política de Privacidad",
       "submit": "Iniciar Sesión",
-      "submitting": "Un momento..."
+      "submitting": "Un momento...",
+      "forgotPasswordLink": "¿Olvidaste tu contraseña?"
     },
     "signUp": {
       "titlePrefix": "Regístrate en ",
@@ -69,6 +72,39 @@
     "credentialsForm": {
       "email": "Correo Electrónico",
       "password": "Contraseña"
+    },
+    "forgotPassword": {
+      "title": "¿Olvidaste tu contraseña?",
+      "subtitle": "Introduce tu correo electrónico y te enviaremos un enlace para restablecer tu contraseña.",
+      "email": "Correo Electrónico",
+      "submit": "Enviar enlace",
+      "submitting": "Enviando...",
+      "submitted": "Si existe una cuenta con ese correo, te hemos enviado un enlace para restablecer la contraseña.",
+      "backToSignIn": "Volver a iniciar sesión"
+    },
+    "resetPassword": {
+      "title": "Restablecer contraseña",
+      "subtitle": "Elige una nueva contraseña para tu cuenta.",
+      "newPassword": "Nueva contraseña",
+      "confirmPassword": "Confirmar contraseña",
+      "submit": "Actualizar contraseña",
+      "submitting": "Actualizando...",
+      "mismatch": "Las contraseñas no coinciden",
+      "missingToken": "Este enlace de restablecimiento no es válido.",
+      "requestNewLink": "Solicitar un nuevo enlace",
+      "success": "Contraseña actualizada correctamente. Ya puedes iniciar sesión."
+    },
+    "verifyEmail": {
+      "title": "Verificación de correo",
+      "success": "¡Tu correo electrónico se verificó correctamente!",
+      "failure": "Este enlace de verificación no es válido o ha expirado.",
+      "continueToApp": "Continuar a la aplicación",
+      "banner": {
+        "message": "Verifica tu dirección de correo electrónico.",
+        "resend": "Reenviar enlace de verificación",
+        "sending": "Enviando...",
+        "resent": "Enlace de verificación enviado - revisa tu bandeja de entrada."
+      }
     }
   },
   "gifts": {
@@ -77,7 +113,8 @@
     "creatorShare": "💰 El 50% del regalo va al creador",
     "genericError": "Error al enviar el regalo",
     "epicSentMessage": "🎉 ¡Se envió un regalo increíble! 🎉",
-    "sentMessage": "¡Enviado con éxito!"
+    "sentMessage": "¡Enviado con éxito!",
+    "credits": "Créditos"
   },
   "contentTypes": {
     "standup": "Comedia",
@@ -130,18 +167,39 @@
       "buyMore": "Comprar Más Créditos"
     },
     "tabs": {
-      "video": { "label": "Video", "description": "Crea un video a partir de texto o una imagen" },
-      "music": { "label": "Música", "description": "Crea música original" },
-      "voice": { "label": "Voz y Canto", "description": "Crea narración o canto" }
+      "video": {
+        "label": "Video",
+        "description": "Crea un video a partir de texto o una imagen"
+      },
+      "music": {
+        "label": "Música",
+        "description": "Crea música original"
+      },
+      "voice": {
+        "label": "Voz y Canto",
+        "description": "Crea narración o canto"
+      }
     },
     "video": {
       "promptLabel": "Describe el video que quieres crear",
       "promptPlaceholder": "Ej: Una calle urbana de noche con lluvia, luces de neón parpadeantes, un auto deportivo negro pasando lentamente...",
       "promptHint": "Consejo: cuanto más detallada sea la descripción, mejor será el resultado",
       "styleLabel": "Estilo",
-      "styles": { "cinematic": "Cinematográfico", "anime": "Anime", "realistic": "Realista", "3d": "3D", "cartoon": "Caricatura", "noir": "Noir" },
+      "styles": {
+        "cinematic": "Cinematográfico",
+        "anime": "Anime",
+        "realistic": "Realista",
+        "3d": "3D",
+        "cartoon": "Caricatura",
+        "noir": "Noir"
+      },
       "durationLabel": "Duración",
-      "durations": { "5": "5 segundos", "15": "15 segundos", "30": "30 segundos", "60": "60 segundos" },
+      "durations": {
+        "5": "5 segundos",
+        "15": "15 segundos",
+        "30": "30 segundos",
+        "60": "60 segundos"
+      },
       "proLabel": "PRO",
       "baseImageLabel": "Imagen Base (opcional)",
       "baseImagePrompt": "Arrastra una imagen aquí o haz clic para subir",
@@ -154,9 +212,25 @@
       "promptLabel": "Describe la música que quieres crear",
       "promptPlaceholder": "Ej: Una canción pop ligera con guitarra acústica, ritmo animado, perfecta para un viaje por carretera...",
       "genreLabel": "Género",
-      "genres": { "pop": "Pop", "rock": "Rock", "electronic": "Electrónica", "jazz": "Jazz", "classical": "Clásica", "hiphop": "Hip Hop", "ambient": "Ambient", "cinematic": "Cinematográfica" },
+      "genres": {
+        "pop": "Pop",
+        "rock": "Rock",
+        "electronic": "Electrónica",
+        "jazz": "Jazz",
+        "classical": "Clásica",
+        "hiphop": "Hip Hop",
+        "ambient": "Ambient",
+        "cinematic": "Cinematográfica"
+      },
       "moodLabel": "Estado de Ánimo",
-      "moods": { "happy": "Feliz", "sad": "Triste", "energetic": "Enérgico", "calm": "Tranquilo", "dramatic": "Dramático", "romantic": "Romántico" },
+      "moods": {
+        "happy": "Feliz",
+        "sad": "Triste",
+        "energetic": "Enérgico",
+        "calm": "Tranquilo",
+        "dramatic": "Dramático",
+        "romantic": "Romántico"
+      },
       "addLyricsHeading": "Añadir Canto",
       "addLyricsDescription": "Crea una canción con letra y voz",
       "lyricsLabel": "Letra (opcional - si está vacío, la IA la escribirá)",
@@ -168,13 +242,32 @@
     "voice": {
       "typeLabel": "Tipo de Voz",
       "types": {
-        "narrator": { "label": "Narrador", "description": "Voz profesional para narración" },
-        "singer_male": { "label": "Cantante Masculino", "description": "Voz masculina para canto" },
-        "singer_female": { "label": "Cantante Femenina", "description": "Voz femenina para canto" },
-        "character": { "label": "Personaje", "description": "Voces únicas para personajes" }
+        "narrator": {
+          "label": "Narrador",
+          "description": "Voz profesional para narración"
+        },
+        "singer_male": {
+          "label": "Cantante Masculino",
+          "description": "Voz masculina para canto"
+        },
+        "singer_female": {
+          "label": "Cantante Femenina",
+          "description": "Voz femenina para canto"
+        },
+        "character": {
+          "label": "Personaje",
+          "description": "Voces únicas para personajes"
+        }
       },
       "languageLabel": "Idioma",
-      "languages": { "he": "Hebreo", "en": "Inglés", "ar": "Árabe", "ru": "Ruso", "fr": "Francés", "es": "Español" },
+      "languages": {
+        "he": "Hebreo",
+        "en": "Inglés",
+        "ar": "Árabe",
+        "ru": "Ruso",
+        "fr": "Francés",
+        "es": "Español"
+      },
       "lyricsTextLabel": "Letra de la Canción",
       "narrationTextLabel": "Texto de Narración",
       "lyricsPlaceholder": "Escribe la letra de la canción aquí...",
@@ -233,5 +326,26 @@
   },
   "language": {
     "label": "Idioma"
+  },
+  "watchlist": {
+    "title": "Mi lista",
+    "subtitle": "Títulos que guardaste para ver más tarde.",
+    "gridTitle": "Guardados",
+    "empty": "Tu lista está vacía. Abre un título y pulsa Añadir a la lista.",
+    "add": "Añadir a la lista",
+    "remove": "En la lista",
+    "saving": "Guardando...",
+    "authRequired": "Inicia sesión para guardar títulos.",
+    "error": "No se pudo actualizar la lista. Inténtalo de nuevo."
+  },
+  "recommendations": {
+    "title": "Recomendado para ti",
+    "similar": "Más como esto",
+    "empty": ""
+  },
+  "share": {
+    "share": "Compartir",
+    "copied": "Enlace copiado",
+    "copyFailed": "No se pudo copiar el enlace"
   }
 }

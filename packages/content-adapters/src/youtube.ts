@@ -1,8 +1,22 @@
 import { randomUUID } from "node:crypto";
 import { z } from "zod";
-import type { PublicMovie } from "@movai/types";
+import type { ContentType, PublicMovie } from "@movai/types";
 import type { ContentAdapter } from "./adapter";
 import { CircuitBreaker } from "./resilience";
+
+/**
+ * YouTube's own (coarse, fixed) video category IDs - not something we
+ * control, just what videoCategoryId accepts. "singing" has no dedicated
+ * YouTube category of its own; it shares "Music" (10) with "music" and is
+ * distinguished purely by the search query text (e.g. "cover song" vs.
+ * "live band performance") and by the contentType tag we attach ourselves.
+ */
+const CONTENT_TYPE_TO_YOUTUBE_CATEGORY: Record<ContentType, string> = {
+  movie: "1", // Film & Animation
+  standup: "23", // Comedy
+  music: "10", // Music
+  singing: "10" // Music
+};
 
 /**
  * YouTube Data API adapter.
@@ -41,13 +55,13 @@ export function createYoutubeAdapter(options: YoutubeAdapterOptions): ContentAda
   return {
     name: "youtube",
 
-    async search(query: string): Promise<PublicMovie[]> {
+    async search(query: string, contentType: ContentType = "movie"): Promise<PublicMovie[]> {
       return breaker.execute(
         async () => {
           const url = new URL("https://www.googleapis.com/youtube/v3/search");
           url.searchParams.set("part", "snippet");
           url.searchParams.set("type", "video");
-          url.searchParams.set("videoCategoryId", "1"); // Film & Animation
+          url.searchParams.set("videoCategoryId", CONTENT_TYPE_TO_YOUTUBE_CATEGORY[contentType]);
           // Without this, "search" returns arbitrary videos regardless of
           // license - including full copyrighted films re-uploaded without
           // permission, which is exactly what this app cannot legally show.
@@ -67,7 +81,7 @@ export function createYoutubeAdapter(options: YoutubeAdapterOptions): ContentAda
           const raw: unknown = await response.json();
           const parsed = YOUTUBE_SEARCH_RESPONSE_SCHEMA.parse(raw);
 
-          return parsed.items.map((item) => mapToPublicMovie(item));
+          return parsed.items.map((item) => mapToPublicMovie(item, contentType));
         },
         () => [] // fallback: empty results beat a crashed page
       );
@@ -89,7 +103,10 @@ export function createYoutubeAdapter(options: YoutubeAdapterOptions): ContentAda
   };
 }
 
-function mapToPublicMovie(item: z.infer<typeof YOUTUBE_SEARCH_RESPONSE_SCHEMA>["items"][number]): PublicMovie {
+function mapToPublicMovie(
+  item: z.infer<typeof YOUTUBE_SEARCH_RESPONSE_SCHEMA>["items"][number],
+  contentType: ContentType
+): PublicMovie {
   const year = new Date(item.snippet.publishedAt).getFullYear();
   return {
     id: randomUUID(),
@@ -98,6 +115,7 @@ function mapToPublicMovie(item: z.infer<typeof YOUTUBE_SEARCH_RESPONSE_SCHEMA>["
     year,
     genres: [],
     synopsis: item.snippet.description,
+    contentType,
     watchSource: { kind: "youtube", videoId: item.id.videoId, channelTitle: item.snippet.channelTitle },
     linkStatus: "unchecked"
   };

@@ -1,4 +1,5 @@
 import type { Queue } from "bullmq";
+import type { ContentType } from "@movai/types";
 import type { IngestionJob } from "./queues";
 
 /**
@@ -14,6 +15,8 @@ import type { IngestionJob } from "./queues";
 export interface CatalogQuerySeed {
   source: IngestionJob["source"];
   query: string;
+  /** Defaults to "movie" (see IngestionJobSchema) - only set explicitly below for the standup/music/singing seeds. */
+  contentType?: ContentType;
 }
 
 export const DAILY_INGESTION_QUERIES: readonly CatalogQuerySeed[] = [
@@ -30,7 +33,18 @@ export const DAILY_INGESTION_QUERIES: readonly CatalogQuerySeed[] = [
   { source: "archive", query: "musical" },
   { source: "archive", query: "mystery" },
   { source: "youtube", query: "public domain movie" },
-  { source: "youtube", query: "classic film full movie" }
+  { source: "youtube", query: "classic film full movie" },
+  // Standup/music/singing (architecture plan browse categories) - youtube
+  // only, since archive.org's catalog is filtered to mediatype:(movies) and
+  // has no equivalent for these. Kept as multiple narrower queries (like the
+  // archive genre seeds above) rather than one broad one, so the daily sweep
+  // surfaces a varied slice of each category over time.
+  { source: "youtube", query: "stand up comedy special full set", contentType: "standup" },
+  { source: "youtube", query: "amateur stand up comedy open mic", contentType: "standup" },
+  { source: "youtube", query: "live music performance full concert", contentType: "music" },
+  { source: "youtube", query: "independent musician original song performance", contentType: "music" },
+  { source: "youtube", query: "acoustic cover song performance", contentType: "singing" },
+  { source: "youtube", query: "singing competition cover performance", contentType: "singing" }
 ];
 
 /**
@@ -50,7 +64,7 @@ export async function scheduleDailyIngestion(
     const jobId = `daily-ingest-${seed.source}-${slugify(seed.query)}`;
     await queue.add(
       "daily-catalog-sweep",
-      { source: seed.source, query: seed.query },
+      { source: seed.source, query: seed.query, contentType: seed.contentType ?? "movie" },
       { repeat: { pattern: "0 2 * * *" }, jobId } // 02:00 server time, ahead of the 03:00 link-check
     );
   }
