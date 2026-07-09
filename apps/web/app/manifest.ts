@@ -6,7 +6,7 @@ export default function manifest(): MetadataRoute.Manifest {
     name: "MoVAI — סרטים חוקיים וחינמיים",
     short_name: "MoVAI",
     description: "מנוע גילוי סרטים חוקיים וחינמיים עם המלצות AI וחיפוש סמנטי.",
-    start_url: "/browse",
+    start_url: "/",
     display: "standalone",
     background_color: "#0a0a0a",
     theme_color: "#083344",

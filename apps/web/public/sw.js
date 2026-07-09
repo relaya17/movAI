@@ -1,6 +1,6 @@
 /* Minimal PWA service worker: network-first navigations, cache-first static assets. */
-const CACHE_NAME = "movai-static-v1";
-const PRECACHE = ["/", "/browse", "/manifest.webmanifest"];
+const CACHE_NAME = "movai-static-v2";
+const PRECACHE = ["/", "/manifest.webmanifest"];
 
 self.addEventListener("install", (event) => {
   event.waitUntil(

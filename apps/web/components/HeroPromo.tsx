@@ -24,6 +24,13 @@ export function HeroPromo({ authButtons }: HeroPromoProps): React.ReactElement {
   const videoRef = useRef<HTMLVideoElement | null>(null);
   const [phase, setPhase] = useState<PromoPhase>("promo");
   const [prefersReducedMotion, setPrefersReducedMotion] = useState(false);
+  const [videoUnavailable, setVideoUnavailable] = useState(false);
+
+  const markVideoUnavailable = useCallback((): void => {
+    setVideoUnavailable(true);
+    // Keep the cinematic backdrop for the full promo window — don't jump
+    // straight to auth buttons when Cloudinary/autoplay hiccups.
+  }, []);
 
   const beginLandingTransition = useCallback((): void => {
     setPhase((current) => {
@@ -54,8 +61,8 @@ export function HeroPromo({ authButtons }: HeroPromoProps): React.ReactElement {
     video.muted = true;
     video.playbackRate = PLAYBACK_RATE;
     video.defaultPlaybackRate = PLAYBACK_RATE;
-    void video.play().catch(() => beginLandingTransition());
-  }, [beginLandingTransition, phase, prefersReducedMotion]);
+    void video.play().catch(() => markVideoUnavailable());
+  }, [markVideoUnavailable, phase, prefersReducedMotion]);
 
   useEffect(() => {
     if (phase !== "promo" || prefersReducedMotion) return;
@@ -71,7 +78,7 @@ export function HeroPromo({ authButtons }: HeroPromoProps): React.ReactElement {
     return () => window.clearTimeout(timeoutId);
   }, [phase]);
 
-  const showVideo = phase === "promo" || phase === "transition";
+  const showVideo = !videoUnavailable && (phase === "promo" || phase === "transition");
   const videoFading = phase === "transition";
   const showButtons = phase === "transition" || phase === "landing";
 
@@ -103,8 +110,8 @@ export function HeroPromo({ authButtons }: HeroPromoProps): React.ReactElement {
           preload="metadata"
           autoPlay={phase === "promo"}
           onEnded={beginLandingTransition}
-          onError={beginLandingTransition}
-          onStalled={beginLandingTransition}
+          onError={markVideoUnavailable}
+          onStalled={markVideoUnavailable}
           aria-label="פרומו MoVAI"
         />
       )}
