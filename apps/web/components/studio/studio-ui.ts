@@ -9,4 +9,5 @@ export const studioNavLinkIdle = "text-neutral-300 hover:text-white";
 
 export const studioNavLinkActive = "text-cyan-300";
 
-export const studioPanelClass = "w-full";
+export const studioPanelClass =
+  "w-full rounded-2xl border border-white/10 bg-black/25 p-6 shadow-lg shadow-black/30 backdrop-blur-xl";

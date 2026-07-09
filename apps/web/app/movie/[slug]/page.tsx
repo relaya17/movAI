@@ -5,8 +5,10 @@ import { isEmbeddable } from "@movai/types";
 import { Button } from "@movai/ui";
 import { auth } from "@/auth";
 import { ContentGrid } from "@/components/dashboard/ContentGrid";
+import { InstagramEmbed } from "@/components/InstagramEmbed";
 import { ShareButton } from "@/components/ShareButton";
 import { WatchlistButton } from "@/components/WatchlistButton";
+import { resolveInstagramEmbed } from "@/lib/instagram";
 import { getMovieBySlug, listMovies, listContentByType } from "@/lib/movies";
 import { getIsInWatchlist } from "@/lib/watchlist-actions";
 import { getSimilarMovies } from "@/lib/recommendations";
@@ -59,6 +61,7 @@ export default async function MoviePage({ params }: MoviePageProps): Promise<Rea
   ]);
 
   const embeddable = isEmbeddable(movie.watchSource);
+  const instagramEmbed = resolveInstagramEmbed(movie.watchSource);
   const appUrl = process.env.NEXT_PUBLIC_APP_URL ?? "http://localhost:3100";
   const shareUrl = `${appUrl}/movie/${movie.slug}`;
 
@@ -97,6 +100,15 @@ export default async function MoviePage({ params }: MoviePageProps): Promise<Rea
       </div>
 
       <div className="mt-6">
+        {instagramEmbed ? (
+          <InstagramEmbed
+            embedUrl={instagramEmbed.embedUrl}
+            title={movie.title}
+            mediaType={instagramEmbed.mediaType}
+            canonicalUrl={instagramEmbed.canonicalUrl}
+          />
+        ) : null}
+
         {embeddable && movie.watchSource.kind === "youtube" && (
           <div className="aspect-video w-full overflow-hidden rounded-lg">
             <iframe
@@ -120,10 +132,17 @@ export default async function MoviePage({ params }: MoviePageProps): Promise<Rea
           </div>
         )}
 
-        {!embeddable && movie.watchSource.kind === "external-link" && (
+        {!embeddable && !instagramEmbed && movie.watchSource.kind === "external-link" && (
           <Button asChild>
             <a href={movie.watchSource.url} target="_blank" rel="noopener noreferrer">
-              צפה ב-{movie.watchSource.provider === "tubi" ? "Tubi" : "Pluto TV"} (נפתח באתר החיצוני)
+              {movie.watchSource.provider === "tubi"
+                ? "צפה ב-Tubi"
+                : movie.watchSource.provider === "pluto-tv"
+                  ? "צפה ב-Pluto TV"
+                  : movie.watchSource.provider === "instagram"
+                    ? "צפה באינסטגרם"
+                    : "צפה במקור החיצוני"}{" "}
+              (נפתח באתר החיצוני)
             </a>
           </Button>
         )}
@@ -133,7 +152,9 @@ export default async function MoviePage({ params }: MoviePageProps): Promise<Rea
         מקור התוכן:{" "}
         {movie.watchSource.kind === "youtube" && `YouTube — ${movie.watchSource.channelTitle}`}
         {movie.watchSource.kind === "archive" && `Internet Archive (רישיון: ${movie.watchSource.license})`}
-        {movie.watchSource.kind === "external-link" && "קישור חיצוני למקור מורשה"}
+        {movie.watchSource.kind === "instagram" && "Instagram (הטמעה רשמית)"}
+        {movie.watchSource.kind === "external-link" &&
+          (movie.watchSource.provider === "instagram" ? "Instagram" : "קישור חיצוני למקור מורשה")}
         . MoVAI אינו מארח את הקובץ ואינו קשור למקור.
       </p>
 

@@ -5,6 +5,7 @@ import { useTranslations } from "next-intl";
 import { Button } from "@movai/ui";
 import { generateVideoAction } from "@/lib/ai-studio-actions";
 import { useAiGeneration } from "@/lib/use-ai-generation";
+import { StudioResultShare } from "./StudioResultShare";
 
 const STYLE_IDS = ["cinematic", "anime", "realistic", "3d", "cartoon", "noir"] as const;
 const STYLE_EMOJIS: Record<(typeof STYLE_IDS)[number], string> = {
@@ -141,6 +142,9 @@ export function VideoCreator(): React.ReactElement {
       {phase === "done" && resultUrl ? (
         <div className="overflow-hidden rounded-xl border border-white/10 bg-black/30">
           <video src={resultUrl} controls className="w-full" />
+          <div className="p-3">
+            <StudioResultShare resultUrl={resultUrl} mediaType="video" />
+          </div>
         </div>
       ) : (
         <div className="rounded-xl border border-white/10 bg-black/30 p-8 text-center">

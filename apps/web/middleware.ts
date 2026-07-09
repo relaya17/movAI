@@ -39,7 +39,7 @@ export function middleware(request: NextRequest): NextResponse {
   const csp = [
     "default-src 'self'",
     "base-uri 'self'",
-    "frame-src https://www.youtube.com https://archive.org",
+    "frame-src https://www.youtube.com https://archive.org https://www.instagram.com",
     "img-src 'self' https://image.tmdb.org https://res.cloudinary.com data:",
     "media-src 'self' https://res.cloudinary.com",
     "style-src 'self' 'unsafe-inline'",

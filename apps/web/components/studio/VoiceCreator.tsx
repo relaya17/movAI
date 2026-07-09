@@ -5,6 +5,7 @@ import { useTranslations } from "next-intl";
 import { Button } from "@movai/ui";
 import { generateVoiceAction } from "@/lib/ai-studio-actions";
 import { useAiGeneration } from "@/lib/use-ai-generation";
+import { StudioResultShare } from "./StudioResultShare";
 
 const VOICE_TYPE_IDS = ["narrator", "singer_male", "singer_female", "character"] as const;
 const VOICE_TYPE_EMOJIS: Record<(typeof VOICE_TYPE_IDS)[number], string> = {
@@ -138,6 +139,7 @@ export function VoiceCreator(): React.ReactElement {
       {phase === "done" && resultUrl ? (
         <div className="rounded-xl border border-white/10 bg-black/30 p-6">
           <audio src={resultUrl} controls className="w-full" />
+          <StudioResultShare resultUrl={resultUrl} mediaType="audio" />
         </div>
       ) : (
         <div className="rounded-xl border border-white/10 bg-black/30 p-6">

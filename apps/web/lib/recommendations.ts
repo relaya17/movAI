@@ -2,6 +2,7 @@ import { diversify } from "@movai/recommendation-engine";
 import type { PublicMovie } from "@movai/types";
 import {
   getMovieEmbedding,
+  getUserPreferences,
   listMovies,
   listMoviesWithEmbeddings,
   listWatchlistMovieIds,
@@ -52,7 +53,13 @@ export async function getRecommendationsForUser(userId: string | undefined, limi
       }
     }
 
-    return genreOverlapRecommendations(seedMovies, catalog, seedIds, limit);
+    // True cold start (no watchlist yet): fall back to the onboarding-quiz
+    // genres (packages/db/src/repositories/preferences.ts) instead of a
+    // blank "popular" list, if the user answered the quiz.
+    const preferenceSeeds =
+      seedMovies.length === 0 && userId ? await onboardingGenreSeeds(userId) : [];
+
+    return genreOverlapRecommendations([...seedMovies, ...preferenceSeeds], catalog, seedIds, limit);
   } catch {
     const mocks = await listMoviesCatalog(limit * 2);
     return mocks.slice(0, limit).map((movie) => withReason(movie, REASON_POPULAR));
@@ -93,6 +100,13 @@ function buildGenreReason(movieGenres: readonly string[], seeds: readonly Pick<P
   const seedGenres = new Set(seeds.flatMap((movie) => movie.genres));
   const shared = movieGenres.find((genre) => seedGenres.has(genre));
   return shared ? `כי אהבת סרטי ${shared}` : REASON_TASTE;
+}
+
+/** A synthetic "seed movie" carrying only the genres the user picked in the onboarding quiz - id is unused by genreOverlapRecommendations, only .genres is read. */
+async function onboardingGenreSeeds(userId: string): Promise<Pick<PublicMovie, "id" | "genres">[]> {
+  const prefs = await getUserPreferences(db, userId);
+  if (!prefs || prefs.favoriteGenres.length === 0) return [];
+  return [{ id: "onboarding-quiz", genres: prefs.favoriteGenres }];
 }
 
 async function averageSeedEmbedding(seedIds: readonly string[]): Promise<number[] | undefined> {

@@ -353,7 +353,13 @@
   "share": {
     "share": "Share",
     "copied": "Link copied",
-    "copyFailed": "Could not copy link"
+    "copyFailed": "Could not copy link",
+    "instagram": {
+      "share": "Share to Instagram",
+      "download": "Download",
+      "hint": "Download the file, then upload as a Reel in the Instagram app",
+      "opened": "Share menu opened"
+    }
   },
   "contact": {
     "title": "Contact Us",
@@ -384,5 +390,28 @@
     },
     "thanks": "Thanks, we received your report and will review it soon.",
     "error": "Failed to send the report. Please try again."
+  },
+  "onboarding": {
+    "title": "What do you like to watch?",
+    "subtitle": "Pick a few genres so we can recommend better from the start - you can skip and update this later.",
+    "submit": "Save and continue",
+    "submitting": "Saving...",
+    "skip": "Skip for now",
+    "errorNone": "Pick at least one genre.",
+    "errorGeneric": "Something went wrong. Try again.",
+    "promptText": "You haven't told us what you like yet - it takes 10 seconds and improves your recommendations.",
+    "promptCta": "Pick genres",
+    "genres": {
+      "Action": "Action",
+      "Comedy": "Comedy",
+      "Drama": "Drama",
+      "Horror": "Horror",
+      "Thriller": "Thriller",
+      "Romance": "Romance",
+      "Documentary": "Documentary",
+      "Crime": "Crime",
+      "Animation": "Animation",
+      "History": "History"
+    }
   }
 }

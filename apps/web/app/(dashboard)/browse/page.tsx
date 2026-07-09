@@ -6,6 +6,7 @@ import { BrowseHero } from "@/components/dashboard/BrowseHero";
 import { BrowsePageClient } from "@/components/dashboard/BrowsePageClient";
 import { ContentGrid } from "@/components/dashboard/ContentGrid";
 import { RealUploadsSection } from "@/components/dashboard/RealUploadsSection";
+import { OnboardingPrompt } from "@/components/dashboard/OnboardingPrompt";
 import { listMovies, listContentByType } from "@/lib/movies";
 import { getRecommendationsForUser } from "@/lib/recommendations";
 
@@ -99,6 +100,7 @@ export default async function BrowsePage({ searchParams }: BrowsePageProps): Pro
       <BrowseHero activeCategory={activeCategory} />
       <div className="mt-10 px-4 pb-16 sm:px-6 lg:px-8">
         <div className="mx-auto max-w-7xl space-y-10">
+          {activeCategory === "all" ? <OnboardingPrompt /> : null}
           {activeCategory === "all" && recommended.length > 0 ? (
             <ContentGrid
               id="recommended"

@@ -5,6 +5,7 @@ import { useTranslations } from "next-intl";
 import { Button } from "@movai/ui";
 import { generateMusicAction } from "@/lib/ai-studio-actions";
 import { useAiGeneration } from "@/lib/use-ai-generation";
+import { StudioResultShare } from "./StudioResultShare";
 
 const GENRE_IDS = ["pop", "rock", "electronic", "jazz", "classical", "hiphop", "ambient", "cinematic"] as const;
 const GENRE_EMOJIS: Record<(typeof GENRE_IDS)[number], string> = {
@@ -154,6 +155,7 @@ export function MusicCreator(): React.ReactElement {
       {phase === "done" && resultUrl ? (
         <div className="rounded-xl border border-white/10 bg-black/30 p-6">
           <audio src={resultUrl} controls className="w-full" />
+          <StudioResultShare resultUrl={resultUrl} mediaType="audio" />
         </div>
       ) : (
         <div className="rounded-xl border border-white/10 bg-black/30 p-6">
