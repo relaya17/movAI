@@ -1,7 +1,7 @@
 import type { NextRequest } from "next/server";
 import { NextResponse } from "next/server";
 import type Stripe from "stripe";
-import { stripe } from "@/lib/stripe";
+import { getStripe, StripeNotConfiguredError } from "@/lib/stripe";
 import { db } from "@/lib/db";
 import {
   grantPurchasedCredits,
@@ -19,6 +19,17 @@ export async function POST(req: NextRequest) {
   if (!webhookSecret) {
     console.error("STRIPE_WEBHOOK_SECRET not configured");
     return NextResponse.json({ error: "Webhook not configured" }, { status: 500 });
+  }
+
+  let stripe: Stripe;
+  try {
+    stripe = getStripe();
+  } catch (error) {
+    if (error instanceof StripeNotConfiguredError) {
+      console.error("STRIPE_SECRET_KEY not configured");
+      return NextResponse.json({ error: "Stripe not configured" }, { status: 503 });
+    }
+    throw error;
   }
 
   const body = await req.text();
@@ -42,7 +53,7 @@ export async function POST(req: NextRequest) {
     case "checkout.session.completed": {
       const session = event.data.object as Stripe.Checkout.Session;
       if (session.mode === "subscription") {
-        await handleSubscriptionCheckoutCompleted(session);
+        await handleSubscriptionCheckoutCompleted(session, stripe);
       } else {
         await handleCreditPurchaseCompleted(session);
       }
@@ -56,7 +67,7 @@ export async function POST(req: NextRequest) {
     }
     case "invoice.paid": {
       const invoice = event.data.object as Stripe.Invoice;
-      await handleInvoicePaid(invoice);
+      await handleInvoicePaid(invoice, stripe);
       break;
     }
     case "customer.subscription.updated":
@@ -120,7 +131,10 @@ async function handleCreditPurchaseCompleted(session: Stripe.Checkout.Session): 
  * more fragile than just granting it here and letting invoice.paid own
  * every *subsequent* renewal only).
  */
-async function handleSubscriptionCheckoutCompleted(session: Stripe.Checkout.Session): Promise<void> {
+async function handleSubscriptionCheckoutCompleted(
+  session: Stripe.Checkout.Session,
+  stripe: Stripe
+): Promise<void> {
   const { userId, planId } = session.metadata ?? {};
   const stripeSubscriptionId = typeof session.subscription === "string" ? session.subscription : session.subscription?.id;
 
@@ -167,7 +181,7 @@ async function handleSubscriptionCheckoutCompleted(session: Stripe.Checkout.Sess
 }
 
 /** Every renewal after the first (see handleSubscriptionCheckoutCompleted above for why the first is granted separately). */
-async function handleInvoicePaid(invoice: Stripe.Invoice): Promise<void> {
+async function handleInvoicePaid(invoice: Stripe.Invoice, stripe: Stripe): Promise<void> {
   // Stripe API 2025-03-31+ moved the subscription id off Invoice.subscription
   // onto Invoice.parent.subscription_details.subscription.
   const parentSubscription = invoice.parent?.subscription_details?.subscription;

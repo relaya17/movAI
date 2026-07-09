@@ -1,12 +1,29 @@
 import Stripe from "stripe";
 
-if (!process.env.STRIPE_SECRET_KEY) {
-  console.warn("STRIPE_SECRET_KEY not set - payments will not work");
+/** Thrown when Stripe is used without STRIPE_SECRET_KEY configured. */
+export class StripeNotConfiguredError extends Error {
+  constructor() {
+    super("Stripe is not configured (missing STRIPE_SECRET_KEY)");
+    this.name = "StripeNotConfiguredError";
+  }
 }
 
-export const stripe = new Stripe(process.env.STRIPE_SECRET_KEY ?? "", {
-  apiVersion: "2026-06-24.dahlia",
-  typescript: true,
-});
+let cachedClient: Stripe | null = null;
+
+export function getStripe(): Stripe {
+  const key = process.env.STRIPE_SECRET_KEY;
+  if (!key) throw new StripeNotConfiguredError();
+  if (!cachedClient) {
+    cachedClient = new Stripe(key, {
+      apiVersion: "2026-06-24.dahlia",
+      typescript: true,
+    });
+  }
+  return cachedClient;
+}
+
+export function isStripeConfigured(): boolean {
+  return Boolean(process.env.STRIPE_SECRET_KEY);
+}
 
 export const STRIPE_PUBLISHABLE_KEY = process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY ?? "";

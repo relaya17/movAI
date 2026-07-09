@@ -1,7 +1,7 @@
 "use server";
 
 import { auth } from "@/auth";
-import { stripe } from "./stripe";
+import { getStripe } from "./stripe";
 import { db } from "./db";
 import { creditPackages, payments } from "@movai/db";
 import { eq } from "drizzle-orm";
@@ -63,7 +63,7 @@ export async function createCheckoutSession(
     }
 
     // Create Stripe checkout session
-    const checkoutSession = await stripe.checkout.sessions.create({
+    const checkoutSession = await getStripe().checkout.sessions.create({
       payment_method_types: ["card"],
       line_items: [
         {
@@ -112,7 +112,7 @@ export async function verifyCheckoutSession(
   sessionId: string
 ): Promise<{ success: boolean; credits?: number }> {
   try {
-    const checkoutSession = await stripe.checkout.sessions.retrieve(sessionId);
+    const checkoutSession = await getStripe().checkout.sessions.retrieve(sessionId);
 
     if (checkoutSession.payment_status === "paid") {
       const credits = parseInt(checkoutSession.metadata?.credits ?? "0", 10);

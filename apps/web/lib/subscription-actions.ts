@@ -1,7 +1,7 @@
 "use server";
 
 import { auth } from "@/auth";
-import { stripe } from "./stripe";
+import { getStripe } from "./stripe";
 import { db } from "./db";
 import { getPlanByInterval, getActiveSubscription, type SubscriptionInterval } from "@movai/db";
 
@@ -49,7 +49,7 @@ export async function createSubscriptionCheckoutSession(
   }
 
   try {
-    const checkoutSession = await stripe.checkout.sessions.create({
+    const checkoutSession = await getStripe().checkout.sessions.create({
       payment_method_types: ["card"],
       line_items: [{ price: plan.stripePriceId, quantity: 1 }],
       mode: "subscription",
@@ -84,10 +84,15 @@ export async function createBillingPortalSession(): Promise<CreateCheckoutResult
     return { error: "לא נמצא מנוי פעיל" };
   }
 
-  const portalSession = await stripe.billingPortal.sessions.create({
-    customer: active.subscription.stripeCustomerId,
-    return_url: `${APP_URL}/pricing/subscription`
-  });
+  try {
+    const portalSession = await getStripe().billingPortal.sessions.create({
+      customer: active.subscription.stripeCustomerId,
+      return_url: `${APP_URL}/pricing/subscription`
+    });
 
-  return { url: portalSession.url };
+    return { url: portalSession.url };
+  } catch (error) {
+    console.error("Stripe billing portal error:", error);
+    return { error: "שגיאה בפתיחת פורטל החיוב" };
+  }
 }
