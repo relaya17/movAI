@@ -13,3 +13,5 @@ export * from "./repositories/watchlist";
 export * from "./repositories/free-tier";
 export * from "./repositories/preferences";
 export * from "./repositories/admin-stats";
+export * from "./repositories/subtitles";
+export * from "./repositories/dubbing";

@@ -105,6 +105,9 @@ importers:
       reflect-metadata:
         specifier: 0.2.2
         version: 0.2.2
+      replicate:
+        specifier: 1.0.1
+        version: 1.0.1
       rxjs:
         specifier: 7.8.1
         version: 7.8.1
@@ -145,6 +148,9 @@ importers:
       '@movai/db':
         specifier: workspace:*
         version: link:../../packages/db
+      '@movai/queue':
+        specifier: workspace:*
+        version: link:../../packages/queue
       '@movai/recommendation-engine':
         specifier: workspace:*
         version: link:../../packages/recommendation-engine

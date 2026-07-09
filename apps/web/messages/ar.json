@@ -185,6 +185,10 @@
       "voice": {
         "label": "صوت وغناء",
         "description": "أنشئ تعليقًا صوتيًا أو غناءً"
+      },
+      "image": {
+        "label": "صور",
+        "description": "أنشئ صورًا من نص بأساليب مختلفة"
       }
     },
     "video": {
@@ -208,6 +212,11 @@
         "60": "60 ثانية"
       },
       "proLabel": "PRO",
+      "qualityLabel": "الجودة",
+      "qualityStandard": "عادي",
+      "qualityStandardCost": "MiniMax · حسب المدة",
+      "qualityPro": "احترافي",
+      "qualityProCost": "Luma Ray · ×2 أرصدة",
       "baseImageLabel": "صورة أساسية (اختياري)",
       "baseImagePrompt": "اسحب صورة هنا أو انقر للرفع",
       "generating": "جارٍ إنشاء الفيديو... (قد يستغرق ذلك حوالي دقيقة)",
@@ -230,6 +239,11 @@
         "cinematic": "سينمائية"
       },
       "moodLabel": "المزاج",
+      "qualityLabel": "الجودة",
+      "qualityStandard": "عادي",
+      "qualityStandardCost": "رصيدان · MusicGen",
+      "qualityPro": "احترافي",
+      "qualityProCost": "6 أرصدة · stereo-large",
       "moods": {
         "happy": "سعيد",
         "sad": "حزين",
@@ -285,6 +299,39 @@
       "generating": "جارٍ إنشاء الصوت...",
       "generate": "🎤 إنشاء صوت",
       "resultPlaceholder": "ستظهر تسجيلاتك هنا"
+    },
+    "image": {
+      "promptLabel": "صف الصورة التي تريد إنشاءها",
+      "promptPlaceholder": "مثال: ملصق سينمائي لفيلم خيال علمي، مدينة مستقبلية عند الغروب، ألوان دافئة...",
+      "styleLabel": "النمط",
+      "styles": {
+        "cinematic": "سينمائي",
+        "photorealistic": "واقعي",
+        "illustration": "رسم توضيحي",
+        "anime": "أنمي",
+        "poster": "ملصق",
+        "3d": "ثلاثي الأبعاد"
+      },
+      "qualityLabel": "الجودة",
+      "qualityStandard": "عادي",
+      "qualityStandardCost": "رصيد واحد · Flux Schnell",
+      "qualityPro": "احترافي",
+      "qualityProCost": "5 أرصدة · Flux Pro",
+      "generating": "جارٍ إنشاء الصورة...",
+      "generate": "🖼️ إنشاء صورة",
+      "resultPlaceholder": "ستظهر صورتك هنا"
+    },
+    "gallery": {
+      "link": "المعرض",
+      "title": "معرض الإبداعات",
+      "subtitle": "كل إبداعاتك في AI Studio",
+      "loading": "جارٍ التحميل...",
+      "empty": "لا توجد إبداعات بعد",
+      "emptyCta": "اذهب إلى الاستوديو",
+      "download": "تنزيل",
+      "filterAll": "الكل", "filterVideo": "فيديو", "filterMusic": "موسيقى", "filterVoice": "صوت", "filterImage": "صور",
+      "type": { "video": "فيديو", "music": "موسيقى", "voice": "صوت", "image": "صورة" },
+      "status": { "pending": "قيد الانتظار", "processing": "قيد المعالجة", "completed": "مكتمل", "failed": "فشل", "cancelled": "ملغى" }
     }
   },
   "wallet": {
@@ -333,6 +380,24 @@
   },
   "language": {
     "label": "اللغة"
+  },
+  "movie": {
+    "subtitles": {
+      "title": "ترجمة تلقائية", "description": "ترجمة عبر Whisper", "language": "اللغة",
+      "langHe": "العبرية", "langEn": "الإنجليزية", "langAr": "العربية", "langRu": "الروسية",
+      "request": "طلب ترجمة", "requested": "تم إرسال الطلب", "loading": "جارٍ التحميل...",
+      "status": { "pending": "في الانتظار", "processing": "قيد المعالجة", "ready": "جاهز", "failed": "فشل" }
+    },
+    "dubbing": {
+      "title": "دبلجة AI", "blocked": "الدبلجة غير متاحة", "permissionStatus": "الحالة",
+      "requestPermission": "طلب إذن", "permissionSent": "تم إرسال الطلب",
+      "reasonPlaceholder": "لماذا تحتاج الدبلجة؟", "start": "بدء الدبلجة (30 رصيدًا)",
+      "jobStarted": "تم إنشاء المهمة", "jobStatus": "حالة الدبلجة", "download": "تنزيل",
+      "langHe": "العبرية", "langEn": "الإنجليزية",
+      "gate": { "publicDomain": "ملكية عامة", "ccLicense": "CC — يتطلب إذنًا", "unknownLicense": "ترخيص غير معروف", "youtubeNoRights": "YouTube — لا حقوق", "instagramNoRights": "Instagram — لا حقوق", "externalNoRights": "رابط خارجي" },
+      "permission": { "none": "لم يُرسل", "pending": "قيد المراجعة", "approved": "موافق", "denied": "مرفوض" },
+      "job": { "none": "لم يبدأ", "pending": "في الانتظار", "processing": "قيد المعالجة", "completed": "مكتمل", "failed": "فشل" }
+    }
   },
   "watchlist": {
     "title": "قائمة مشاهدتي",

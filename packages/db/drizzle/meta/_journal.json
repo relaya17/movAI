@@ -64,6 +64,13 @@
       "when": 1783720800000,
       "tag": "0008_subscriptions_sponsors",
       "breakpoints": true
+    },
+    {
+      "idx": 9,
+      "version": "7",
+      "when": 1783720801000,
+      "tag": "0009_add_image_creation_type",
+      "breakpoints": true
     }
   ]
 }

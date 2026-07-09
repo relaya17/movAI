@@ -185,6 +185,10 @@
       "voice": {
         "label": "Голос и пение",
         "description": "Создать озвучку или пение"
+      },
+      "image": {
+        "label": "Изображения",
+        "description": "Создавайте изображения из текста в разных стилях"
       }
     },
     "video": {
@@ -208,6 +212,11 @@
         "60": "60 секунд"
       },
       "proLabel": "PRO",
+      "qualityLabel": "Качество",
+      "qualityStandard": "Стандарт",
+      "qualityStandardCost": "MiniMax · по длительности",
+      "qualityPro": "Pro",
+      "qualityProCost": "Luma Ray · ×2 кредита",
       "baseImageLabel": "Базовое изображение (необязательно)",
       "baseImagePrompt": "Перетащите изображение сюда или нажмите для загрузки",
       "generating": "Создание видео... (это может занять около минуты)",
@@ -230,6 +239,11 @@
         "cinematic": "Кинематографичная"
       },
       "moodLabel": "Настроение",
+      "qualityLabel": "Качество",
+      "qualityStandard": "Стандарт",
+      "qualityStandardCost": "2 кредита · MusicGen",
+      "qualityPro": "Pro",
+      "qualityProCost": "6 кредитов · stereo-large",
       "moods": {
         "happy": "Радостное",
         "sad": "Грустное",
@@ -285,6 +299,39 @@
       "generating": "Создание голоса...",
       "generate": "🎤 Создать голос",
       "resultPlaceholder": "Ваша запись появится здесь"
+    },
+    "image": {
+      "promptLabel": "Опишите изображение, которое хотите создать",
+      "promptPlaceholder": "Например: кинематографический постер фантастического фильма, футуристический город на закате, тёплые цвета...",
+      "styleLabel": "Стиль",
+      "styles": {
+        "cinematic": "Кинематографичный",
+        "photorealistic": "Фотореалистичный",
+        "illustration": "Иллюстрация",
+        "anime": "Аниме",
+        "poster": "Постер",
+        "3d": "3D"
+      },
+      "qualityLabel": "Качество",
+      "qualityStandard": "Стандарт",
+      "qualityStandardCost": "1 кредит · Flux Schnell",
+      "qualityPro": "Pro",
+      "qualityProCost": "5 кредитов · Flux Pro",
+      "generating": "Создание изображения...",
+      "generate": "🖼️ Создать изображение",
+      "resultPlaceholder": "Ваше изображение появится здесь"
+    },
+    "gallery": {
+      "link": "Галерея",
+      "title": "Галерея работ",
+      "subtitle": "Все ваши работы AI Studio",
+      "loading": "Загрузка...",
+      "empty": "Пока нет работ. Начните в Студии!",
+      "emptyCta": "В AI Studio",
+      "download": "Скачать",
+      "filterAll": "Все", "filterVideo": "Видео", "filterMusic": "Музыка", "filterVoice": "Голос", "filterImage": "Изображения",
+      "type": { "video": "Видео", "music": "Музыка", "voice": "Голос", "image": "Изображение" },
+      "status": { "pending": "Ожидание", "processing": "Обработка", "completed": "Готово", "failed": "Ошибка", "cancelled": "Отменено" }
     }
   },
   "wallet": {
@@ -333,6 +380,24 @@
   },
   "language": {
     "label": "Язык"
+  },
+  "movie": {
+    "subtitles": {
+      "title": "Автосубтитры", "description": "Перевод через Whisper", "language": "Язык",
+      "langHe": "Иврит", "langEn": "Английский", "langAr": "Арабский", "langRu": "Русский",
+      "request": "Запросить", "requested": "Запрос отправлен", "loading": "Загрузка...",
+      "status": { "pending": "В очереди", "processing": "Обработка", "ready": "Готово", "failed": "Ошибка" }
+    },
+    "dubbing": {
+      "title": "AI-дубляж", "blocked": "Дубляж недоступен", "permissionStatus": "Статус",
+      "requestPermission": "Запросить разрешение", "permissionSent": "Запрос отправлен",
+      "reasonPlaceholder": "Зачем вам нужен дубляж?", "start": "Начать (30 кредитов)",
+      "jobStarted": "Задача создана", "jobStatus": "Статус", "download": "Скачать",
+      "langHe": "Иврит", "langEn": "Английский",
+      "gate": { "publicDomain": "Общественное достояние", "ccLicense": "CC — нужно разрешение", "unknownLicense": "Неизвестная лицензия", "youtubeNoRights": "YouTube — нет прав", "instagramNoRights": "Instagram — нет прав", "externalNoRights": "Внешняя ссылка" },
+      "permission": { "none": "Не отправлено", "pending": "Ожидание", "approved": "Одобрено", "denied": "Отклонено" },
+      "job": { "none": "Не начато", "pending": "В очереди", "processing": "Обработка", "completed": "Готово", "failed": "Ошибка" }
+    }
   },
   "watchlist": {
     "title": "Мой список",

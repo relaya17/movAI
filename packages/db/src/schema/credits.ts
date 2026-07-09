@@ -19,6 +19,7 @@ export const creationTypeEnum = pgEnum("creation_type", [
   "video",
   "music",
   "voice",
+  "image",
 ]);
 
 /** Creation status */

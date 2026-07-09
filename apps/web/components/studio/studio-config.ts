@@ -5,6 +5,7 @@ export const STUDIO_TYPES = [
   { id: "video", href: "/studio/video", icon: "🎬" },
   { id: "music", href: "/studio/music", icon: "🎵" },
   { id: "voice", href: "/studio/voice", icon: "🎤" },
+  { id: "image", href: "/studio/image", icon: "🖼️" },
 ] as const;
 
 export type StudioTypeId = (typeof STUDIO_TYPES)[number]["id"];

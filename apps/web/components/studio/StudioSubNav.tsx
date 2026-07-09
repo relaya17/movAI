@@ -39,6 +39,15 @@ export function StudioSubNav(): React.ReactElement {
             </Link>
           );
         })}
+        <Link
+          href="/studio/gallery"
+          prefetch
+          aria-current={pathname === "/studio/gallery" ? "page" : undefined}
+          className={`${studioNavLinkBase} ${pathname === "/studio/gallery" ? studioNavLinkActive : studioNavLinkIdle}`}
+        >
+          <span aria-hidden="true">📁</span>
+          {t("gallery.link")}
+        </Link>
       </div>
     </nav>
   );

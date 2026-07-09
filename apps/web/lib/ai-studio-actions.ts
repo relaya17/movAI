@@ -9,18 +9,27 @@ import {
   spendCredits,
   refundCredits,
   getFreeCreationsRemaining,
+  getUserAiCreations,
   InsufficientCreditsError,
   type CreationType
 } from "@movai/db";
 import { REPLICATE_MODELS, startPrediction, getPredictionStatus, AiGenerationNotConfiguredError } from "./replicate";
 
-/** 12 credits / 30s of video (matches the rate advertised on /pricing), rounded up so a partial slice never rounds down to free. */
-function videoCreditCost(durationSeconds: number): number {
-  return Math.max(1, Math.ceil((durationSeconds * 12) / 30));
+/** 12 credits / 30s standard; Pro tier doubles the rate (higher-fidelity model). */
+function videoCreditCost(durationSeconds: number, quality: "standard" | "pro"): number {
+  const base = Math.max(1, Math.ceil((durationSeconds * 12) / 30));
+  return quality === "pro" ? base * 2 : base;
 }
 
-/** Flat rate per music generation (matches /pricing). */
-const MUSIC_CREDIT_COST = 2;
+/** Standard MusicGen vs Pro (stereo-large, longer render). */
+function musicCreditCost(quality: "standard" | "pro"): number {
+  return quality === "pro" ? 6 : 2;
+}
+
+/** Standard tier (Flux Schnell) vs Pro tier (Flux 1.1 Pro) - same split as the Studio pricing plan discussion (Stage A). */
+function imageCreditCost(quality: "standard" | "pro"): number {
+  return quality === "pro" ? 5 : 1;
+}
 
 /** 1 credit / 1000 characters of narration or lyrics (matches /pricing), minimum 1 so a short line still costs something. */
 function voiceCreditCost(textLength: number): number {
@@ -53,7 +62,8 @@ async function chargeAndStart(
 
   if (effectiveCost > 0) {
     try {
-      await spendCredits(db, userId, effectiveCost, `יצירת ${type === "video" ? "וידאו" : type === "music" ? "מוזיקה" : "קול"} ב-AI Studio`);
+      const typeLabel = type === "video" ? "וידאו" : type === "music" ? "מוזיקה" : type === "image" ? "תמונה" : "קול";
+      await spendCredits(db, userId, effectiveCost, `יצירת ${typeLabel} ב-AI Studio`);
     } catch (err) {
       if (err instanceof InsufficientCreditsError) {
         return { error: `אין מספיק קרדיטים (נדרשים ${err.required}, יש לך ${err.available})` };
@@ -89,6 +99,7 @@ export interface GenerateVideoInput {
   prompt: string;
   style: string;
   durationSeconds: number;
+  quality: "standard" | "pro";
   baseImageUrl?: string | undefined;
 }
 
@@ -97,13 +108,22 @@ export async function generateVideoAction(input: GenerateVideoInput): Promise<St
   if (typeof userId !== "string") return userId;
   if (!input.prompt.trim()) return { error: "כתבו תיאור לסרטון" };
 
-  const cost = videoCreditCost(input.durationSeconds);
+  const cost = videoCreditCost(input.durationSeconds, input.quality);
   const fullPrompt = `${input.prompt.trim()}, ${input.style} style`;
+  const model = input.quality === "pro" ? REPLICATE_MODELS.videoPro : REPLICATE_MODELS.video;
 
-  return chargeAndStart(userId, "video", cost, input.prompt.trim(), { style: input.style, durationSeconds: input.durationSeconds }, REPLICATE_MODELS.video, {
-    prompt: fullPrompt,
-    ...(input.baseImageUrl ? { first_frame_image: input.baseImageUrl } : {})
-  });
+  return chargeAndStart(
+    userId,
+    "video",
+    cost,
+    input.prompt.trim(),
+    { style: input.style, durationSeconds: input.durationSeconds, quality: input.quality },
+    model,
+    {
+      prompt: fullPrompt,
+      ...(input.baseImageUrl ? { first_frame_image: input.baseImageUrl } : {})
+    }
+  );
 }
 
 export interface GenerateMusicInput {
@@ -111,6 +131,7 @@ export interface GenerateMusicInput {
   genre: string;
   mood: string;
   withLyrics: boolean;
+  quality: "standard" | "pro";
   lyrics?: string | undefined;
 }
 
@@ -119,19 +140,21 @@ export async function generateMusicAction(input: GenerateMusicInput): Promise<St
   if (typeof userId !== "string") return userId;
   if (!input.prompt.trim()) return { error: "כתבו תיאור למוזיקה" };
 
+  const cost = musicCreditCost(input.quality);
   const fullPrompt = `${input.prompt.trim()}, ${input.genre} genre, ${input.mood} mood`;
+  const model = input.quality === "pro" ? REPLICATE_MODELS.musicPro : REPLICATE_MODELS.music;
 
   return chargeAndStart(
     userId,
     "music",
-    MUSIC_CREDIT_COST,
+    cost,
     input.prompt.trim(),
-    { genre: input.genre, mood: input.mood, withLyrics: input.withLyrics },
-    REPLICATE_MODELS.music,
+    { genre: input.genre, mood: input.mood, withLyrics: input.withLyrics, quality: input.quality },
+    model,
     {
       prompt: fullPrompt,
-      duration: 30,
-      model_version: "stereo-melody-large"
+      duration: input.quality === "pro" ? 60 : 30,
+      model_version: input.quality === "pro" ? "stereo-large" : "stereo-melody-large"
     }
   );
 }
@@ -152,6 +175,28 @@ export async function generateVoiceAction(input: GenerateVoiceInput): Promise<St
   return chargeAndStart(userId, "voice", cost, input.text.trim(), { voiceType: input.voiceType, language: input.language }, REPLICATE_MODELS.voice, {
     text: input.text.trim(),
     language: input.language
+  });
+}
+
+export interface GenerateImageInput {
+  prompt: string;
+  style: string;
+  quality: "standard" | "pro";
+}
+
+export async function generateImageAction(input: GenerateImageInput): Promise<StartGenerationResult> {
+  const userId = await requireUserId();
+  if (typeof userId !== "string") return userId;
+  if (!input.prompt.trim()) return { error: "כתבו תיאור לתמונה" };
+
+  const cost = imageCreditCost(input.quality);
+  const fullPrompt = `${input.prompt.trim()}, ${input.style} style`;
+  const model = input.quality === "pro" ? REPLICATE_MODELS.imagePro : REPLICATE_MODELS.image;
+
+  return chargeAndStart(userId, "image", cost, input.prompt.trim(), { style: input.style, quality: input.quality }, model, {
+    prompt: fullPrompt,
+    aspect_ratio: "1:1",
+    output_format: "webp"
   });
 }
 
@@ -198,4 +243,33 @@ export async function getGenerationStatusAction(creationId: string): Promise<Gen
   } catch {
     return { status: "processing" };
   }
+}
+
+export interface CreationListItem {
+  id: string;
+  type: CreationType;
+  status: string;
+  prompt: string;
+  resultUrl: string | null;
+  creditsUsed: number;
+  createdAt: string;
+}
+
+/** Gallery page — lists the signed-in user's past AI Studio creations. */
+export async function listCreationsAction(type?: CreationType): Promise<{ items: CreationListItem[]; error?: string }> {
+  const userId = await requireUserId();
+  if (typeof userId !== "string") return { items: [], error: userId.error };
+
+  const rows = await getUserAiCreations(db, userId, type, 50);
+  return {
+    items: rows.map((row) => ({
+      id: row.id,
+      type: row.type,
+      status: row.status,
+      prompt: row.prompt,
+      resultUrl: row.resultUrl,
+      creditsUsed: row.creditsUsed,
+      createdAt: row.createdAt.toISOString()
+    }))
+  };
 }

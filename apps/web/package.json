@@ -20,6 +20,7 @@
     "@auth/drizzle-adapter": "1.11.2",
     "@movai/cache": "workspace:*",
     "@movai/db": "workspace:*",
+    "@movai/queue": "workspace:*",
     "@movai/recommendation-engine": "workspace:*",
     "@movai/types": "workspace:*",
     "@movai/ui": "workspace:*",

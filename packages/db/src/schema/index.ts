@@ -6,3 +6,4 @@ export * from "./creator";
 export * from "./password-reset";
 export * from "./subscriptions";
 export * from "./sponsors";
+export * from "./media-features";

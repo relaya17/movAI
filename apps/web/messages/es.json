@@ -185,6 +185,10 @@
       "voice": {
         "label": "Voz y Canto",
         "description": "Crea narración o canto"
+      },
+      "image": {
+        "label": "Imágenes",
+        "description": "Crea imágenes a partir de texto en distintos estilos"
       }
     },
     "video": {
@@ -208,6 +212,11 @@
         "60": "60 segundos"
       },
       "proLabel": "PRO",
+      "qualityLabel": "Calidad",
+      "qualityStandard": "Estándar",
+      "qualityStandardCost": "MiniMax · por duración",
+      "qualityPro": "Pro",
+      "qualityProCost": "Luma Ray · ×2 créditos",
       "baseImageLabel": "Imagen Base (opcional)",
       "baseImagePrompt": "Arrastra una imagen aquí o haz clic para subir",
       "generating": "Creando video... (puede tardar aprox. un minuto)",
@@ -230,6 +239,11 @@
         "cinematic": "Cinematográfica"
       },
       "moodLabel": "Estado de Ánimo",
+      "qualityLabel": "Calidad",
+      "qualityStandard": "Estándar",
+      "qualityStandardCost": "2 créditos · MusicGen",
+      "qualityPro": "Pro",
+      "qualityProCost": "6 créditos · stereo-large",
       "moods": {
         "happy": "Feliz",
         "sad": "Triste",
@@ -285,6 +299,43 @@
       "generating": "Creando voz...",
       "generate": "🎤 Crear Voz",
       "resultPlaceholder": "Tu grabación aparecerá aquí"
+    },
+    "image": {
+      "promptLabel": "Describe la imagen que quieres crear",
+      "promptPlaceholder": "Ej.: Un póster cinematográfico de ciencia ficción, ciudad futurista al atardecer, colores cálidos...",
+      "styleLabel": "Estilo",
+      "styles": {
+        "cinematic": "Cinematográfico",
+        "photorealistic": "Fotorrealista",
+        "illustration": "Ilustración",
+        "anime": "Anime",
+        "poster": "Póster",
+        "3d": "3D"
+      },
+      "qualityLabel": "Calidad",
+      "qualityStandard": "Estándar",
+      "qualityStandardCost": "1 crédito · Flux Schnell",
+      "qualityPro": "Pro",
+      "qualityProCost": "5 créditos · Flux Pro",
+      "generating": "Generando imagen...",
+      "generate": "🖼️ Crear imagen",
+      "resultPlaceholder": "Tu imagen aparecerá aquí"
+    },
+    "gallery": {
+      "link": "Galería",
+      "title": "Galería de creaciones",
+      "subtitle": "Todas tus creaciones de AI Studio",
+      "loading": "Cargando...",
+      "empty": "Aún no hay creaciones. ¡Empieza en el Estudio!",
+      "emptyCta": "Ir al Estudio AI",
+      "download": "Descargar",
+      "filterAll": "Todo",
+      "filterVideo": "Video",
+      "filterMusic": "Música",
+      "filterVoice": "Voz",
+      "filterImage": "Imágenes",
+      "type": { "video": "Video", "music": "Música", "voice": "Voz", "image": "Imagen" },
+      "status": { "pending": "Pendiente", "processing": "Procesando", "completed": "Completado", "failed": "Fallido", "cancelled": "Cancelado" }
     }
   },
   "wallet": {
@@ -333,6 +384,26 @@
   },
   "language": {
     "label": "Idioma"
+  },
+  "movie": {
+    "subtitles": {
+      "title": "Subtítulos automáticos",
+      "description": "Traducción y subtítulos con Whisper",
+      "language": "Idioma",
+      "langHe": "Hebreo", "langEn": "Inglés", "langAr": "Árabe", "langRu": "Ruso",
+      "request": "Solicitar subtítulos", "requested": "Solicitud enviada", "loading": "Cargando...",
+      "status": { "pending": "En cola", "processing": "Procesando", "ready": "Listo", "failed": "Fallido" }
+    },
+    "dubbing": {
+      "title": "Doblaje AI", "blocked": "Doblaje no disponible", "permissionStatus": "Estado",
+      "requestPermission": "Solicitar permiso", "permissionSent": "Solicitud enviada",
+      "reasonPlaceholder": "¿Por qué necesitas doblar este contenido?",
+      "start": "Iniciar doblaje (30 créditos)", "jobStarted": "Trabajo creado", "jobStatus": "Estado",
+      "download": "Descargar", "langHe": "Hebreo", "langEn": "Inglés",
+      "gate": { "publicDomain": "Dominio público — permitido", "ccLicense": "CC — requiere permiso", "unknownLicense": "Licencia desconocida", "youtubeNoRights": "YouTube — sin derechos", "instagramNoRights": "Instagram — sin derechos", "externalNoRights": "Enlace externo — sin derechos" },
+      "permission": { "none": "No enviado", "pending": "Pendiente", "approved": "Aprobado", "denied": "Denegado" },
+      "job": { "none": "No iniciado", "pending": "En cola", "processing": "Procesando", "completed": "Completado", "failed": "Fallido" }
+    }
   },
   "watchlist": {
     "title": "Mi lista",

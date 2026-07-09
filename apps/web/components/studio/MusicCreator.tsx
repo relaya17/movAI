@@ -24,12 +24,15 @@ export function MusicCreator(): React.ReactElement {
   const [mood, setMood] = useState("happy");
   const [withLyrics, setWithLyrics] = useState(false);
   const [lyrics, setLyrics] = useState("");
+  const [quality, setQuality] = useState<"standard" | "pro">("standard");
   const { phase, resultUrl, error, start } = useAiGeneration();
   const isGenerating = phase === "starting" || phase === "processing";
 
   const handleGenerate = async (): Promise<void> => {
     if (!prompt.trim()) return;
-    await start(() => generateMusicAction({ prompt, genre, mood, withLyrics, lyrics: withLyrics ? lyrics : undefined }));
+    await start(() =>
+      generateMusicAction({ prompt, genre, mood, withLyrics, quality, lyrics: withLyrics ? lyrics : undefined })
+    );
   };
 
   return (
@@ -87,6 +90,37 @@ export function MusicCreator(): React.ReactElement {
               {m.label}
             </button>
           ))}
+        </div>
+      </div>
+
+      {/* Quality tier */}
+      <div className="rounded-xl border border-white/10 bg-black/20 p-4">
+        <p className="mb-3 text-sm font-medium text-neutral-300">{t("qualityLabel")}</p>
+        <div className="grid grid-cols-2 gap-2">
+          <button
+            type="button"
+            onClick={() => setQuality("standard")}
+            className={`rounded-lg px-3 py-3 text-sm transition-all ${
+              quality === "standard"
+                ? "bg-cyan-500/20 text-cyan-300 ring-1 ring-cyan-500/50"
+                : "bg-white/5 text-neutral-400 hover:bg-white/10"
+            }`}
+          >
+            <div className="font-semibold">{t("qualityStandard")}</div>
+            <div className="text-xs opacity-80">{t("qualityStandardCost")}</div>
+          </button>
+          <button
+            type="button"
+            onClick={() => setQuality("pro")}
+            className={`rounded-lg px-3 py-3 text-sm transition-all ${
+              quality === "pro"
+                ? "bg-gradient-to-r from-amber-500/20 to-orange-500/20 text-amber-300 ring-1 ring-amber-500/50"
+                : "bg-white/5 text-neutral-400 hover:bg-white/10"
+            }`}
+          >
+            <div className="font-semibold">{t("qualityPro")}</div>
+            <div className="text-xs opacity-80">{t("qualityProCost")}</div>
+          </button>
         </div>
       </div>
 

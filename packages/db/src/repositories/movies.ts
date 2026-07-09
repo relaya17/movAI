@@ -96,6 +96,12 @@ export async function getMovieBySlug(db: Database, slug: string): Promise<Public
   return row ? rowToPublicMovie(row) : undefined;
 }
 
+/** Internal lookups (subtitle/dubbing workers) — includes non-active catalog rows. */
+export async function getMovieById(db: Database, id: string): Promise<PublicMovie | undefined> {
+  const [row] = await db.select().from(movies).where(eq(movies.id, id)).limit(1);
+  return row ? rowToPublicMovie(row) : undefined;
+}
+
 export interface ListMoviesOptions {
   limit?: number;
   offset?: number;

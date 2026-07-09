@@ -185,6 +185,10 @@
       "voice": {
         "label": "Voice & Singing",
         "description": "Create narration or singing"
+      },
+      "image": {
+        "label": "Images",
+        "description": "Create images from text in different styles"
       }
     },
     "video": {
@@ -208,6 +212,11 @@
         "60": "60 seconds"
       },
       "proLabel": "PRO",
+      "qualityLabel": "Quality",
+      "qualityStandard": "Standard",
+      "qualityStandardCost": "MiniMax · by duration",
+      "qualityPro": "Pro",
+      "qualityProCost": "Luma Ray · 2× credits",
       "baseImageLabel": "Base Image (optional)",
       "baseImagePrompt": "Drag an image here or click to upload",
       "generating": "Creating video... (this may take about a minute)",
@@ -230,6 +239,11 @@
         "cinematic": "Cinematic"
       },
       "moodLabel": "Mood",
+      "qualityLabel": "Quality",
+      "qualityStandard": "Standard",
+      "qualityStandardCost": "2 credits · MusicGen",
+      "qualityPro": "Pro",
+      "qualityProCost": "6 credits · stereo-large",
       "moods": {
         "happy": "Happy",
         "sad": "Sad",
@@ -285,6 +299,54 @@
       "generating": "Creating voice...",
       "generate": "🎤 Create Voice",
       "resultPlaceholder": "Your recording will appear here"
+    },
+    "image": {
+      "promptLabel": "Describe the image you want to create",
+      "promptPlaceholder": "e.g.: A cinematic sci-fi movie poster, futuristic city at sunset, warm colors...",
+      "styleLabel": "Style",
+      "styles": {
+        "cinematic": "Cinematic",
+        "photorealistic": "Photorealistic",
+        "illustration": "Illustration",
+        "anime": "Anime",
+        "poster": "Poster",
+        "3d": "3D"
+      },
+      "qualityLabel": "Quality",
+      "qualityStandard": "Standard",
+      "qualityStandardCost": "1 credit · Flux Schnell",
+      "qualityPro": "Pro",
+      "qualityProCost": "5 credits · Flux Pro",
+      "generating": "Generating image...",
+      "generate": "🖼️ Generate image",
+      "resultPlaceholder": "Your image will appear here"
+    },
+    "gallery": {
+      "link": "Gallery",
+      "title": "Creation Gallery",
+      "subtitle": "All your AI Studio creations",
+      "loading": "Loading...",
+      "empty": "No creations yet. Start in the Studio!",
+      "emptyCta": "Go to AI Studio",
+      "download": "Download",
+      "filterAll": "All",
+      "filterVideo": "Video",
+      "filterMusic": "Music",
+      "filterVoice": "Voice",
+      "filterImage": "Images",
+      "type": {
+        "video": "Video",
+        "music": "Music",
+        "voice": "Voice",
+        "image": "Image"
+      },
+      "status": {
+        "pending": "Pending",
+        "processing": "Processing",
+        "completed": "Completed",
+        "failed": "Failed",
+        "cancelled": "Cancelled"
+      }
     }
   },
   "wallet": {
@@ -333,6 +395,62 @@
   },
   "language": {
     "label": "Language"
+  },
+  "movie": {
+    "subtitles": {
+      "title": "Auto subtitles",
+      "description": "Translation and captions via Whisper — legal catalog content only",
+      "language": "Subtitle language",
+      "langHe": "Hebrew",
+      "langEn": "English",
+      "langAr": "Arabic",
+      "langRu": "Russian",
+      "request": "Request subtitles",
+      "requested": "Request submitted — subtitles will appear when ready",
+      "loading": "Loading subtitles...",
+      "status": {
+        "pending": "Queued",
+        "processing": "Processing",
+        "ready": "Ready",
+        "failed": "Failed"
+      },
+      "download": "Download VTT file"
+    },
+    "dubbing": {
+      "title": "AI Dubbing",
+      "blocked": "Dubbing not available for this content — no legal rights",
+      "permissionStatus": "Request status",
+      "requestPermission": "Request dubbing permission",
+      "permissionSent": "Request submitted for review",
+      "reasonPlaceholder": "Why do you need to dub this content?",
+      "start": "Start dubbing (30 credits)",
+      "jobStarted": "Dubbing job created",
+      "jobStatus": "Dubbing status",
+      "download": "Download result",
+      "langHe": "Hebrew",
+      "langEn": "English",
+      "gate": {
+        "publicDomain": "Public domain — dubbing allowed",
+        "ccLicense": "Creative Commons — permission request required",
+        "unknownLicense": "Unknown license — permission request required",
+        "youtubeNoRights": "YouTube — no dubbing rights",
+        "instagramNoRights": "Instagram — no dubbing rights",
+        "externalNoRights": "External link — no dubbing rights"
+      },
+      "permission": {
+        "none": "Not submitted",
+        "pending": "Pending approval",
+        "approved": "Approved",
+        "denied": "Denied"
+      },
+      "job": {
+        "none": "Not started",
+        "pending": "Queued",
+        "processing": "Processing",
+        "completed": "Completed",
+        "failed": "Failed"
+      }
+    }
   },
   "watchlist": {
     "title": "My Watchlist",

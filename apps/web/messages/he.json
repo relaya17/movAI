@@ -185,6 +185,10 @@
       "voice": {
         "label": "קול ושירה",
         "description": "צור קריינות או שירה"
+      },
+      "image": {
+        "label": "תמונות",
+        "description": "צור תמונות מטקסט בסגנונות שונים"
       }
     },
     "video": {
@@ -208,6 +212,11 @@
         "60": "60 שניות"
       },
       "proLabel": "PRO",
+      "qualityLabel": "איכות",
+      "qualityStandard": "רגיל",
+      "qualityStandardCost": "MiniMax · לפי אורך",
+      "qualityPro": "פרו",
+      "qualityProCost": "Luma Ray · ×2 קרדיטים",
       "baseImageLabel": "תמונת בסיס (אופציונלי)",
       "baseImagePrompt": "גרור תמונה או לחץ להעלאה",
       "generating": "יוצר וידאו... (זה עשוי לקחת כדקה)",
@@ -230,6 +239,11 @@
         "cinematic": "קולנועי"
       },
       "moodLabel": "מצב רוח",
+      "qualityLabel": "איכות",
+      "qualityStandard": "רגיל",
+      "qualityStandardCost": "2 קרדיטים · MusicGen",
+      "qualityPro": "פרו",
+      "qualityProCost": "6 קרדיטים · stereo-large",
       "moods": {
         "happy": "שמח",
         "sad": "עצוב",
@@ -285,6 +299,54 @@
       "generating": "יוצר קול...",
       "generate": "🎤 צור קול",
       "resultPlaceholder": "ההקלטה שלך תופיע כאן"
+    },
+    "image": {
+      "promptLabel": "תאר את התמונה שתרצי ליצור",
+      "promptPlaceholder": "לדוגמה: פוסטר קולנועי לסרט מדע בדיוני, עיר עתידנית בשקיעה, צבעים חמים...",
+      "styleLabel": "סגנון",
+      "styles": {
+        "cinematic": "קולנועי",
+        "photorealistic": "ריאליסטי",
+        "illustration": "איור",
+        "anime": "אנימה",
+        "poster": "פוסטר",
+        "3d": "תלת מימד"
+      },
+      "qualityLabel": "איכות",
+      "qualityStandard": "רגיל",
+      "qualityStandardCost": "1 קרדיט · Flux Schnell",
+      "qualityPro": "פרו",
+      "qualityProCost": "5 קרדיטים · Flux Pro",
+      "generating": "יוצר תמונה...",
+      "generate": "🖼️ צור תמונה",
+      "resultPlaceholder": "התמונה שלך תופיע כאן"
+    },
+    "gallery": {
+      "link": "גלריה",
+      "title": "גלריית יצירות",
+      "subtitle": "כל היצירות שלך מ-AI Studio",
+      "loading": "טוען...",
+      "empty": "עדיין אין יצירות. התחילי בסטודיו!",
+      "emptyCta": "לסטודיו AI",
+      "download": "הורדה",
+      "filterAll": "הכל",
+      "filterVideo": "וידאו",
+      "filterMusic": "מוזיקה",
+      "filterVoice": "קול",
+      "filterImage": "תמונות",
+      "type": {
+        "video": "וידאו",
+        "music": "מוזיקה",
+        "voice": "קול",
+        "image": "תמונה"
+      },
+      "status": {
+        "pending": "ממתין",
+        "processing": "בתהליך",
+        "completed": "הושלם",
+        "failed": "נכשל",
+        "cancelled": "בוטל"
+      }
     }
   },
   "wallet": {
@@ -333,6 +395,62 @@
   },
   "language": {
     "label": "שפה"
+  },
+  "movie": {
+    "subtitles": {
+      "title": "כתוביות אוטומטיות",
+      "description": "תרגום וכתוביות עם Whisper — לתוכן חוקי בקטלוג בלבד",
+      "language": "שפת כתוביות",
+      "langHe": "עברית",
+      "langEn": "אנגלית",
+      "langAr": "ערבית",
+      "langRu": "רוסית",
+      "request": "בקש כתוביות",
+      "requested": "הבקשה נשלחה — הכתוביות יופיעו כשיהיו מוכנות",
+      "loading": "טוען כתוביות...",
+      "status": {
+        "pending": "בתור",
+        "processing": "מעבד",
+        "ready": "מוכן",
+        "failed": "נכשל"
+      },
+      "download": "הורד קובץ VTT"
+    },
+    "dubbing": {
+      "title": "דיבוב AI",
+      "blocked": "דיבוב לא זמין לתוכן זה — אין הרשאה משפטית",
+      "permissionStatus": "סטטוס בקשה",
+      "requestPermission": "בקש הרשאה לדיבוב",
+      "permissionSent": "הבקשה נשלחה לבדיקה",
+      "reasonPlaceholder": "למה אתה צריך דיבוב לתוכן זה?",
+      "start": "התחל דיבוב (30 קרדיטים)",
+      "jobStarted": "משימת דיבוב נוצרה",
+      "jobStatus": "סטטוס דיבוב",
+      "download": "הורד תוצאה",
+      "langHe": "עברית",
+      "langEn": "אנגלית",
+      "gate": {
+        "publicDomain": "תוכן בנחלת הכלל — דיבוב מותר",
+        "ccLicense": "רישיון Creative Commons — נדרשת בקשת הרשאה",
+        "unknownLicense": "רישיון לא ידוע — נדרשת בקשת הרשאה",
+        "youtubeNoRights": "YouTube — אין זכויות דיבוב",
+        "instagramNoRights": "Instagram — אין זכויות דיבוב",
+        "externalNoRights": "קישור חיצוני — אין זכויות דיבוב"
+      },
+      "permission": {
+        "none": "לא נשלחה",
+        "pending": "ממתין לאישור",
+        "approved": "אושר",
+        "denied": "נדחה"
+      },
+      "job": {
+        "none": "לא התחיל",
+        "pending": "בתור",
+        "processing": "מעבד",
+        "completed": "הושלם",
+        "failed": "נכשל"
+      }
+    }
   },
   "watchlist": {
     "title": "רשימת הצפייה שלי",

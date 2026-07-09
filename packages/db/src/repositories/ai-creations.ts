@@ -2,7 +2,7 @@ import { and, desc, eq } from "drizzle-orm";
 import type { Database } from "../client";
 import { aiCreations } from "../schema/index";
 
-export type CreationType = "video" | "music" | "voice";
+export type CreationType = "video" | "music" | "voice" | "image";
 export type CreationStatus = "pending" | "processing" | "completed" | "failed" | "cancelled";
 
 export interface CreateAiCreationInput {
@@ -45,6 +45,11 @@ export async function getAiCreationById(db: Database, id: string, userId: string
 export async function getUserAiCreations(db: Database, userId: string, type?: CreationType, limit = 20) {
   const conditions = type ? and(eq(aiCreations.userId, userId), eq(aiCreations.type, type)) : eq(aiCreations.userId, userId);
   return db.select().from(aiCreations).where(conditions).orderBy(desc(aiCreations.createdAt)).limit(limit);
+}
+
+export async function countUserAiCreations(db: Database, userId: string): Promise<number> {
+  const rows = await db.select({ id: aiCreations.id }).from(aiCreations).where(eq(aiCreations.userId, userId));
+  return rows.length;
 }
 
 export interface UpdateAiCreationInput {

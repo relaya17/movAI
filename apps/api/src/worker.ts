@@ -9,6 +9,7 @@ import {
   createIngestionWorker,
   createLinkCheckQueue,
   createLinkCheckWorker,
+  createSubtitleWorker,
   createQueueConnection,
   scheduleDailyIngestion,
   scheduleDailyLinkCheck,
@@ -30,6 +31,7 @@ import type { Redis } from "ioredis";
 import { WorkerModule } from "./worker.module";
 import { DATABASE, SEARCH_CLIENT, REDIS_CLIENT } from "./infra/tokens";
 import { initSentry, captureMessage } from "./monitoring/alerting";
+import { processSubtitleJob } from "./subtitles/process-subtitle";
 
 /**
  * Separate process from the HTTP API (apps/api/src/main.ts) - BullMQ
@@ -128,6 +130,16 @@ async function bootstrap(): Promise<void> {
     captureMessage(`Link-check job exhausted all retries: ${entry.failedReason}`, entry)
   );
 
+  const subtitleWorker = createSubtitleWorker({
+    connection,
+    processSubtitle: async (subtitleId) => {
+      await processSubtitleJob(db, subtitleId);
+    }
+  });
+  attachDeadLetterRouting(subtitleWorker, deadLetterQueue, QUEUE_NAMES.subtitles, (entry) =>
+    captureMessage(`Subtitle job exhausted all retries: ${entry.failedReason}`, entry)
+  );
+
   const linkCheckQueue = createLinkCheckQueue(connection);
   await scheduleDailyLinkCheck(linkCheckQueue);
 
@@ -140,13 +152,14 @@ async function bootstrap(): Promise<void> {
     adapters.map((adapter) => adapter.name) as ("youtube" | "archive")[]
   );
 
-  logger.log("MoVAI workers running (ingestion, daily catalog sweep, link-check, dead-letter routing active)");
+  logger.log("MoVAI workers running (ingestion, daily catalog sweep, link-check, subtitles, dead-letter routing active)");
 
   const shutdown = async (): Promise<void> => {
     logger.log("Shutting down workers...");
     await Promise.all([
       ingestionWorker.close(),
       linkCheckWorker.close(),
+      subtitleWorker.close(),
       linkCheckQueue.close(),
       ingestionQueue.close(),
       deadLetterQueue.close()

@@ -18,8 +18,13 @@ export const ESTIMATED_PROVIDER_USD_PER_CREDIT = 0.03;
 /** Studio generation costs (must match ai-studio-actions.ts). */
 export const CREDIT_COSTS = {
   music: 2,
+  musicPro: 6,
+  image: 1,
+  imagePro: 5,
   voicePer1kChars: 1,
   videoPer30s: 12,
+  videoProMultiplier: 2,
+  dubbingPerJob: 30,
 } as const;
 
 export const INVESTOR_PITCH_HE =

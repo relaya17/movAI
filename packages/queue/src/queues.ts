@@ -15,6 +15,7 @@ export const QUEUE_PREFIX = "movai";
 export const QUEUE_NAMES = {
   ingestion: "ingestion",
   linkCheck: "link-check",
+  subtitles: "subtitles",
   deadLetter: "dead-letter"
 } as const;
 
@@ -39,6 +40,11 @@ export const LinkCheckJobSchema = z.object({
   batchSize: z.number().int().positive().max(500).default(100)
 });
 export type LinkCheckJob = z.infer<typeof LinkCheckJobSchema>;
+
+export const SubtitleJobSchema = z.object({
+  subtitleId: z.string().uuid()
+});
+export type SubtitleJob = z.infer<typeof SubtitleJobSchema>;
 
 export const DeadLetterJobSchema = z.object({
   originalQueue: z.string(),
@@ -79,6 +85,26 @@ export function createLinkCheckQueue(connection: ConnectionOptions): Queue<LinkC
   });
   attachQuietErrorHandler(queue);
   return queue;
+}
+
+export function createSubtitleQueue(connection: ConnectionOptions): Queue<SubtitleJob> {
+  const queue = new Queue<SubtitleJob>(QUEUE_NAMES.subtitles, {
+    connection,
+    prefix: QUEUE_PREFIX,
+    defaultJobOptions: { ...DEFAULT_JOB_OPTIONS, attempts: 2 }
+  });
+  attachQuietErrorHandler(queue);
+  return queue;
+}
+
+export function createLazySubtitleQueue(connection: ConnectionOptions): Pick<Queue<SubtitleJob>, "add"> {
+  let queue: Queue<SubtitleJob> | undefined;
+  return {
+    add: (...args: Parameters<Queue<SubtitleJob>["add"]>) => {
+      queue ??= createSubtitleQueue(connection);
+      return queue.add(...args);
+    }
+  };
 }
 
 export function createDeadLetterQueue(connection: ConnectionOptions): Queue<DeadLetterJob> {

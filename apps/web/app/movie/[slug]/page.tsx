@@ -8,6 +8,8 @@ import { ContentGrid } from "@/components/dashboard/ContentGrid";
 import { InstagramEmbed } from "@/components/InstagramEmbed";
 import { ShareButton } from "@/components/ShareButton";
 import { WatchlistButton } from "@/components/WatchlistButton";
+import { MovieDubbingPanel } from "@/components/movie/MovieDubbingPanel";
+import { MovieSubtitlesPanel } from "@/components/movie/MovieSubtitlesPanel";
 import { resolveInstagramEmbed } from "@/lib/instagram";
 import { getMovieBySlug, listMovies, listContentByType } from "@/lib/movies";
 import { getIsInWatchlist } from "@/lib/watchlist-actions";
@@ -157,6 +159,9 @@ export default async function MoviePage({ params }: MoviePageProps): Promise<Rea
           (movie.watchSource.provider === "instagram" ? "Instagram" : "קישור חיצוני למקור מורשה")}
         . MoVAI אינו מארח את הקובץ ואינו קשור למקור.
       </p>
+
+      <MovieSubtitlesPanel movieSlug={movie.slug} />
+      {session?.user?.id ? <MovieDubbingPanel movieSlug={movie.slug} /> : null}
 
       {similarItems.length > 0 ? (
         <div className="mt-10">

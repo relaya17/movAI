@@ -25,8 +25,17 @@ function getClient(): Replicate {
  */
 export const REPLICATE_MODELS = {
   video: process.env.REPLICATE_VIDEO_MODEL ?? "minimax/video-01",
+  videoPro: process.env.REPLICATE_VIDEO_MODEL_PRO ?? "luma/ray-flash-2-720p",
   music: process.env.REPLICATE_MUSIC_MODEL ?? "meta/musicgen",
-  voice: process.env.REPLICATE_VOICE_MODEL ?? "lucataco/xtts-v2"
+  musicPro: process.env.REPLICATE_MUSIC_MODEL_PRO ?? "meta/musicgen",
+  voice: process.env.REPLICATE_VOICE_MODEL ?? "lucataco/xtts-v2",
+  whisper: process.env.REPLICATE_WHISPER_MODEL ?? "openai/whisper",
+  // Schnell = standard tier (fast, cheap); Pro = paid tier, noticeably
+  // higher fidelity (see imageCreditCost in ai-studio-actions.ts) - both
+  // from the same Black Forest Labs family so prompts behave consistently
+  // between tiers.
+  image: process.env.REPLICATE_IMAGE_MODEL ?? "black-forest-labs/flux-schnell",
+  imagePro: process.env.REPLICATE_IMAGE_MODEL_PRO ?? "black-forest-labs/flux-1.1-pro"
 } as const;
 
 export interface StartPredictionResult {

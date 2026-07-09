@@ -5,7 +5,7 @@ import { useTranslations } from "next-intl";
 
 interface StudioResultShareProps {
   resultUrl: string;
-  mediaType: "video" | "audio";
+  mediaType: "video" | "audio" | "image";
 }
 
 export function StudioResultShare({ resultUrl, mediaType }: StudioResultShareProps): React.ReactElement {
@@ -19,8 +19,8 @@ export function StudioResultShare({ resultUrl, mediaType }: StudioResultSharePro
       if (typeof navigator !== "undefined" && typeof navigator.share === "function") {
         const response = await fetch(resultUrl);
         const blob = await response.blob();
-        const ext = mediaType === "video" ? "mp4" : "mp3";
-        const mime = mediaType === "video" ? "video/mp4" : "audio/mpeg";
+        const ext = mediaType === "video" ? "mp4" : mediaType === "image" ? "webp" : "mp3";
+        const mime = mediaType === "video" ? "video/mp4" : mediaType === "image" ? "image/webp" : "audio/mpeg";
         const file = new File([blob], `movai-creation.${ext}`, { type: mime });
 
         if (typeof navigator.canShare === "function" && navigator.canShare({ files: [file] })) {
