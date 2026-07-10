@@ -12,7 +12,8 @@ export default [
       "**/*.config.js",
       "**/*.config.mjs",
       "**/*.config.ts",
-      "apps/web/scripts/**"
+      "apps/web/scripts/**",
+      "**/public/sw.js"
     ]
   },
   ...baseConfig

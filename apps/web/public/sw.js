@@ -2,7 +2,7 @@
 const CACHE_NAME = "movai-static-v3";
 const PRECACHE = ["/", "/manifest.webmanifest"];
 
-function isCacheableAssetResponse(response: Response): boolean {
+function isCacheableAssetResponse(response) {
   if (!response.ok) return false;
   const type = response.headers.get("content-type") ?? "";
   if (urlLooksLikeScript(response.url) && !type.includes("javascript")) return false;
@@ -10,7 +10,7 @@ function isCacheableAssetResponse(response: Response): boolean {
   return true;
 }
 
-function urlLooksLikeScript(url: string): boolean {
+function urlLooksLikeScript(url) {
   return url.includes("/_next/static/chunks/") || url.endsWith(".js");
 }
 
