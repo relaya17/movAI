@@ -10,7 +10,7 @@
     "lint": "eslint ."
   },
   "peerDependencies": {
-    "react": "19.0.0"
+    "react": "19.0.1"
   },
   "dependencies": {
     "@movai/types": "workspace:*",
