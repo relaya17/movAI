@@ -1,6 +1,6 @@
 import { and, desc, eq } from "drizzle-orm";
 import type { Database } from "../client";
-import { subscriptionPlans, userSubscriptions, subscriptionIntervalEnum } from "../schema/subscriptions";
+import { subscriptionPlans, userSubscriptions, type subscriptionIntervalEnum } from "../schema/subscriptions";
 import { isUniqueViolation } from "../errors";
 
 export type SubscriptionInterval = (typeof subscriptionIntervalEnum.enumValues)[number];
