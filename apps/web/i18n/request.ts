@@ -20,5 +20,5 @@ export default getRequestConfig(async () => {
   const imported = (await import(`../messages/${locale}.json`)) as { default: AbstractIntlMessages };
   const messages = imported.default;
 
-  return { locale, messages };
+  return { locale, messages, timeZone: "Asia/Jerusalem" };
 });

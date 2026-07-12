@@ -14,11 +14,14 @@ export async function getArchivePlayback(
   identifier: string,
   preferredLanguage = "he"
 ): Promise<ArchivePlaybackData | null> {
-  const [videoUrl, subtitleRows] = await Promise.all([
-    resolveArchiveAudioUrl(identifier),
-    listMovieSubtitles(db, movieId)
-  ]);
+  let subtitleRows: Awaited<ReturnType<typeof listMovieSubtitles>> = [];
+  try {
+    subtitleRows = await listMovieSubtitles(db, movieId);
+  } catch {
+    // CI / offline: no Postgres — fall back to Archive.org iframe embed.
+  }
 
+  const videoUrl = await resolveArchiveAudioUrl(identifier).catch(() => null);
   if (!videoUrl) return null;
 
   const readyTracks = subtitleRows.filter((row) => row.status === "ready" && row.content);
