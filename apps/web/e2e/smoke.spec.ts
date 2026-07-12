@@ -21,8 +21,10 @@ test.describe("smoke", () => {
 
   test("movie page loads from mock catalog", async ({ page }) => {
     // Mock catalog slug from lib/movies.ts - available when DB is empty/unreachable.
-    await page.goto("/movie/night-of-the-living-dead-1968");
-    await expect(page.locator("body")).toBeVisible();
-    await expect(page.getByRole("heading", { level: 1 })).toContainText(/Night of the Living Dead|Living Dead/i);
+    // CI cold-compiles this route on next dev; allow time for first paint.
+    await page.goto("/movie/night-of-the-living-dead-1968", { waitUntil: "domcontentloaded" });
+    const heading = page.getByRole("heading", { level: 1 });
+    await expect(heading).toBeVisible({ timeout: 30_000 });
+    await expect(heading).toContainText(/Night of the Living Dead|Living Dead/i, { timeout: 30_000 });
   });
 });

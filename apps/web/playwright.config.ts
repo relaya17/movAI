@@ -22,9 +22,12 @@ export default defineConfig({
     ...devices["Desktop Chrome"]
   },
   webServer: {
-    // Dev server avoids depending on a fresh `.next` artifact for smoke paths.
-    // CI still runs `pnpm build` earlier; this only needs home/sign-in/movie routes.
-    command: `pnpm exec next dev -p ${PORT} -H 127.0.0.1`,
+    // CI already ran `pnpm build`; production server avoids cold compile
+    // timeouts on the movie route. Locally prefer next start if .next exists,
+    // else fall back to next dev via reuseExistingServer / manual.
+    command: process.env.CI
+      ? `pnpm exec next start -p ${PORT} -H 127.0.0.1`
+      : `pnpm exec next dev -p ${PORT} -H 127.0.0.1`,
     url: BASE_URL,
     reuseExistingServer: !process.env.CI,
     timeout: 180_000,
