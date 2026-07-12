@@ -17,8 +17,9 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const repoRoot = path.resolve(__dirname, "..");
 const nextDir = path.join(repoRoot, "apps", "web", ".next");
 const productionBuildMarker = path.join(nextDir, "BUILD_ID");
+const isHostedRuntime = Boolean(process.env.RENDER || process.env.CI || process.env.NODE_ENV === "production");
 
-if (fs.existsSync(productionBuildMarker)) {
+if (!isHostedRuntime && fs.existsSync(productionBuildMarker)) {
   fs.rmSync(nextDir, { recursive: true, force: true });
   console.log("Removed production .next output — dev needs a fresh compile.");
 }
