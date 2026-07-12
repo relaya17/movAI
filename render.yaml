@@ -1,0 +1,14 @@
+# Render.com — production web only. Do NOT use `pnpm dev` on Render:
+# turbo dev + next dev compile on the fly and exceed the 512Mi free-tier RAM.
+services:
+  - type: web
+    name: movai-web
+    runtime: node
+    plan: free
+    buildCommand: corepack enable && pnpm install --frozen-lockfile && pnpm build:web
+    startCommand: pnpm start:web
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: NODE_VERSION
+        value: 22.22.3

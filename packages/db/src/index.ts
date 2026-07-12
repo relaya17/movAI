@@ -16,3 +16,4 @@ export * from "./repositories/admin-stats";
 export * from "./repositories/subtitles";
 export * from "./repositories/dubbing";
 export * from "./repositories/referrals";
+export * from "./repositories/moderation";
