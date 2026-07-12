@@ -15,6 +15,13 @@ import { fileURLToPath } from "node:url";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const repoRoot = path.resolve(__dirname, "..");
+
+// Hosted runtimes (Render, CI) must use `pnpm start`, not `pnpm dev`.
+if (process.env.RENDER || process.env.CI) {
+  console.log("Skipping local dev port cleanup on hosted runtime.");
+  process.exit(0);
+}
+
 const nextDir = path.join(repoRoot, "apps", "web", ".next");
 const productionBuildMarker = path.join(nextDir, "BUILD_ID");
 const isHostedRuntime = Boolean(process.env.RENDER || process.env.CI || process.env.NODE_ENV === "production");

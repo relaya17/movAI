@@ -6,7 +6,7 @@ services:
     runtime: node
     plan: free
     buildCommand: corepack enable && pnpm install --frozen-lockfile && pnpm build:web
-    startCommand: pnpm start:web
+    startCommand: pnpm start
     envVars:
       - key: NODE_ENV
         value: production
